@@ -28,8 +28,6 @@ const buyerRoutes = [
 const guestRoutes = [
   { path: "/", title: "Home", icon: "🏠" },
   { path: "/products", title: "Products", icon: "🛒" },
-  { path: "/login", title: "Login", icon: "🔐" },
-  { path: "/register", title: "Register", icon: "📝" },
 ];
 
 /**
