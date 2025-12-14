@@ -43,7 +43,7 @@ const Navbar = () => {
 
   const navLinks = [
     { to: "/", label: "Home" },
-    { to: "/products", label: "Products" },
+    { to: "/all-products", label: "Products" },
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
   ];
@@ -171,10 +171,10 @@ const Navbar = () => {
                   >
                     <Link
                       onClick={() => setIsProfileOpen(false)}
-                      to="/my-profile"
+                      to="/dashboard"
                       className="block px-4 py-2 hover:text-red-300 hover:underline"
                     >
-                      My Profile
+                      Dashboard
                     </Link>
 
                     <button

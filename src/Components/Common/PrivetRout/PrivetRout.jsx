@@ -1,23 +1,21 @@
-import React, { useContext } from "react";
-import { Navigate, useLocation } from "react-router";
-import { AuthContext } from "../../../Provider/AuthContext";
+import { Navigate, useLocation } from "react-router-dom";
+import useAuth from "../../../Hooks/useAuth";
 
-
-const PrivetRoute = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
-
+const PrivetRoute = ({ children, allowedRoles }) => {
+  const { user, role, loading } = useAuth();
   const location = useLocation();
-  console.log(location);
 
-  if (loading) {
-    return <span className="loading loading-spinner text-success"></span>;
+  if (loading) return null;
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (user) {
-    return children;
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    return <Navigate to="/" replace />;
   }
 
-  return <Navigate state={location?.pathname} to="/login"></Navigate>;
+  return children;
 };
 
 export default PrivetRoute;

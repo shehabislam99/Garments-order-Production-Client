@@ -20,12 +20,13 @@ import ManagerProfile from "../Pages/MainDashboard/Manager/ManagerProfile";
 import BuyerDashboard from "../Pages/MainDashboard/Buyer/BuyerDashboard";
 import TrackOrder from "../Pages/MainDashboard/Buyer/TrackOrder";
 import BookingForm from "../Pages/MainDashboard/Buyer/BookingForm";
-import BuyerProfile from "../Pages/MainDashboard/Buyer/BuyerProfile";
+import BuyerProfile from "../Pages/MainDashboard/Buyer/MyProfile";
 import Allorders from "../Pages/MainDashboard/Admin/Allorders";
 import ManageProducts from "../Pages/MainDashboard/Manager/ManageProducts";
 import ApproveOrders from "../Pages/MainDashboard/Manager/ApproveOrders";
 import MyOrder from "../Pages/MainDashboard/Buyer/MyOrder";
 import PrivetRoute from "../Components/Common/PrivetRout/PrivetRout";
+import DashboardLayout from "../DashboardLayout/DashboardLayout";
 
 const router = createBrowserRouter([
   {
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "/products",
+        path: "/all-products",
         element: <AllProducts />,
       },
       {
@@ -69,9 +70,14 @@ const router = createBrowserRouter([
         path: "/payment-cancel",
         element: <Contact />,
       },
-
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout></DashboardLayout>,
+    children: [
       {
-        path: "/admin/dashboard",
+        path: "admin",
         element: (
           <PrivetRoute allowedRoles={["admin"]}>
             <AdminDashboard />
@@ -79,7 +85,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/admin/users",
+        path: "admin/Manage-users",
         element: (
           <PrivetRoute allowedRoles={["admin"]}>
             <ManageUsers />
@@ -87,7 +93,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/admin/products",
+        path: "admin/products",
         element: (
           <PrivetRoute allowedRoles={["admin"]}>
             <AllProductAdmin />
@@ -95,7 +101,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/admin/orders",
+        path: "admin/all-orders",
         element: (
           <PrivetRoute allowedRoles={["admin"]}>
             <Allorders />
@@ -103,7 +109,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/admin/analytics",
+        path: "admin/analytics",
         element: (
           <PrivetRoute allowedRoles={["admin"]}>
             <Analytic />
@@ -113,7 +119,7 @@ const router = createBrowserRouter([
 
       // Manager routes
       {
-        path: "/manager/dashboard",
+        path: "manager",
         element: (
           <PrivetRoute allowedRoles={["manager"]}>
             <ManagerDashboard />
@@ -121,7 +127,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/manager/add-product",
+        path: "manager/add-product",
         element: (
           <PrivetRoute allowedRoles={["manager"]}>
             <AddProduct />
@@ -129,7 +135,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/manager/products",
+        path: "manager/manage-products",
         element: (
           <PrivetRoute allowedRoles={["manager"]}>
             <ManageProducts />
@@ -137,7 +143,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/manager/orders/pending",
+        path: "manager/orders/pending",
         element: (
           <PrivetRoute allowedRoles={["manager"]}>
             <PendingOrders />
@@ -145,7 +151,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/manager/orders/approved",
+        path: "manager/orders/approved",
         element: (
           <PrivetRoute allowedRoles={["manager"]}>
             <ApproveOrders />
@@ -153,7 +159,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/manager/profile",
+        path: "manager/profile",
         element: (
           <PrivetRoute allowedRoles={["manager"]}>
             <ManagerProfile />
@@ -163,7 +169,7 @@ const router = createBrowserRouter([
 
       // Buyer routes
       {
-        path: "/buyer/dashboard",
+        path: "buyer",
         element: (
           <PrivetRoute allowedRoles={["buyer"]}>
             <BuyerDashboard />
@@ -171,7 +177,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/buyer/orders",
+        path: "buyer/my-orders",
         element: (
           <PrivetRoute allowedRoles={["buyer"]}>
             <MyOrder />
@@ -179,7 +185,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/buyer/track-order",
+        path: "buyer/track-order",
         element: (
           <PrivetRoute allowedRoles={["buyer"]}>
             <TrackOrder />
@@ -187,7 +193,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/buyer/booking",
+        path: "buyer/booking-order",
         element: (
           <PrivetRoute allowedRoles={["buyer"]}>
             <BookingForm />
@@ -195,15 +201,13 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/buyer/profile",
+        path: "buyer/my-profile",
         element: (
           <PrivetRoute allowedRoles={["buyer"]}>
             <BuyerProfile />
           </PrivetRoute>
         ),
       },
-
-      // 404 route
       {
         path: "*",
         element: <ErrorPage />,
