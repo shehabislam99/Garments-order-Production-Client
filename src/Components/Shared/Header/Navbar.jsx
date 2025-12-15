@@ -3,12 +3,11 @@ import { Link, useNavigate, NavLink } from "react-router-dom";
 import { HiOutlineMenuAlt1, HiMoon, HiSun, HiX } from "react-icons/hi";
 import { FaSearch } from "react-icons/fa";
 import MenuSideBar from "./MenuSideBar";
-import { ROLES } from "../../../utils/constant";
-import useAuth from "../../../Hooks/useAuth";
 import Logo from "../../Common/Logo/Logo";
+import useAuth from "../../../Hooks/useAuth";
 
 const Navbar = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -17,21 +16,6 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
     navigate("/");
-  };
-
-  const getDashboardLink = () => {
-    if (!user) return "/login";
-
-    switch (user.role) {
-      case ROLES.ADMIN:
-        return "/admin/dashboard";
-      case ROLES.MANAGER:
-        return "/manager/dashboard";
-      case ROLES.BUYER:
-        return "/buyer/dashboard";
-      default:
-        return "/";
-    }
   };
 
   const handleToggleTheme = () => {
@@ -48,11 +32,6 @@ const Navbar = () => {
     { to: "/contact", label: "Contact" },
   ];
 
-  // Add dashboard link for authenticated users
-  if (isAuthenticated) {
-    navLinks.push({ to: getDashboardLink(), label: "Dashboard" });
-  }
-
   const links = (
     <>
       {navLinks.map((link, index) => (
@@ -60,9 +39,9 @@ const Navbar = () => {
           <NavLink
             to={link.to}
             className={({ isActive }) =>
-              `text-[16px] font-medium hover:text-red-300 transition-all
+              `text-[16px] font-medium hover:text-red-800 transition-all
               duration-500 transform hover:scale-105 ${
-                isActive ? "text-red-300 font-medium underline" : ""
+                isActive ? "text-red-800 font-medium underline" : ""
               }`
             }
           >
@@ -118,7 +97,7 @@ const Navbar = () => {
 
             {/* Mobile search button */}
             <div className="lg:hidden md:hidden">
-              <button className="mt-2 hover:text-amber-500">
+              <button className="mt-2 hover:text-red-800">
                 <FaSearch />
               </button>
             </div>
@@ -126,7 +105,7 @@ const Navbar = () => {
             <button
               placeholder="Search Product..."
               className=" 
-            hover:text-red-300
+            hover:text-red-800
              transition-all
             duration-500 transform font-semibold hover:scale-105 hidden md:flex  "
               title="Search"
@@ -150,7 +129,6 @@ const Navbar = () => {
               )}
             </button>
 
-            {/* User authentication section */}
             {user ? (
               <div className="relative">
                 <button
@@ -172,7 +150,7 @@ const Navbar = () => {
                     <Link
                       onClick={() => setIsProfileOpen(false)}
                       to="/dashboard"
-                      className="block px-4 py-2 hover:text-red-300 hover:underline"
+                      className="block px-4 py-2 hover:text-red-800 hover:underline"
                     >
                       Dashboard
                     </Link>
@@ -183,7 +161,7 @@ const Navbar = () => {
 
                         handleLogout();
                       }}
-                      className="w-full text-left px-4 py-2 hover:text-red-300 text-red-600"
+                      className="w-full text-left px-4 py-2 hover:text-red-800 text-red-600"
                     >
                       Logout
                     </button>
@@ -193,8 +171,8 @@ const Navbar = () => {
             ) : (
               <div className="flex gap-2">
                 <Link
-                  className="bg-blue-500 border-none
-               rounded-lg text-white  hover:bg-red-600 
+                  className="bg-indigo-600 border-none
+               rounded-full text-white  hover:bg-purple-600 
                btn p py-4 duration-300 
                font-medium  transition-all
                  transform hover:scale-105"
@@ -204,8 +182,8 @@ const Navbar = () => {
                 </Link>
 
                 <Link
-                  className="bg-green-500 border-none
-               rounded-lg text-white hover:bg-red-600 
+                  className="bg-green-600 border-none
+               rounded-full text-white hover:bg-purple-600 
                btn px-3 duration-300 
                font-medium  transition-all
                  transform hover:scale-105"

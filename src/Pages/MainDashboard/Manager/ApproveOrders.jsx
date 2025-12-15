@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../../Hooks/useAxios';
+import { axiosInstance } from '../../../Hooks/useAxios';
+
 
 const ApproveOrders = () => {
   const [orders, setOrders] = useState([]);

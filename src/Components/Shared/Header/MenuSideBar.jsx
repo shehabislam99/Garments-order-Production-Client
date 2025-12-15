@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { TiDeleteOutline } from "react-icons/ti";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const MenuSideBar = ({ links, isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -17,9 +17,9 @@ const MenuSideBar = ({ links, isOpen, onClose }) => {
         <div className="p-6">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-red-700 hover:text-amber-300 text-2xl"
+            className="absolute top-4 right-4 text-red-600 hover:text-red-800 text-2xl"
           >
-            <TiDeleteOutline className="h-7 w-7 " />
+            <RiDeleteBinLine className="h-5 w-5 " />
           </button>
 
           <ul className="mt-8 space-y-4 font-semibold">
@@ -30,8 +30,8 @@ const MenuSideBar = ({ links, isOpen, onClose }) => {
                   className={({ isActive }) =>
                     `block py-3 px-4 rounded-lg transition-all duration-200 ${
                       isActive
-                        ? " hover:text-amber-500 "
-                        : " hover:text-amber-500 hover:underline"
+                        ? " hover:text-red-800 hover:underline"
+                        : " hover:text-red-800 "
                     }`
                   }
                   onClick={onClose}

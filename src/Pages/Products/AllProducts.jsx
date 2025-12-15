@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import { useProduct } from "../../Hooks/useProduct";
+
  // Adjust path as needed
 
 const AllProducts = ({

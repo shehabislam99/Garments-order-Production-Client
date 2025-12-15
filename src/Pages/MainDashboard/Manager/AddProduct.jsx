@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { FaUpload, FaImage, FaSpinner, FaCheck, FaTimes } from "react-icons/fa";
+import  { axiosInstance } from "../../../Hooks/useAxios";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -146,8 +147,8 @@ const AddProduct = () => {
       };
 
       // Send to backend
-      const response = await axios.post(
-        "http://localhost:5000/products",
+      const response = await axiosInstance.post(
+        "/products",
         productData
       );
 

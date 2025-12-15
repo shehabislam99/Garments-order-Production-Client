@@ -16,6 +16,7 @@ import useAuth from "../../Hooks/useAuth";
 import axios from "axios";
 import Logo from "../../Components/Common/Logo/Logo";
 import SocialLogin from "./SocialLogIn";
+import { axiosInstance } from "../../Hooks/useAxios";
 
 const Register = () => {
   const { createUser, updateUserProfile, user } = useAuth();
@@ -178,14 +179,14 @@ const Register = () => {
         displayName: fullName,
         photoURL: imageUrl,
       });
-      const userData = {
+      const userInfo = {
         name: fullName,
         email: registerData.email,
         password: registerData.password,
         photoURL: imageUrl,
         role: registerData.role,
       };
-      await axios.post("http://localhost:5000/user", userData);
+      await axiosInstance.post("/users", userInfo);
 
       toast.success("Account created successfully!", {
         position: "top-right",
