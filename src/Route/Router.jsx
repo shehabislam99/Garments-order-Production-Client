@@ -1,8 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-// import Layout from "../components/Layout/Layout";
 import Home from "../Pages/Home/Home";
-import ErrorPage from "../Pages/ErrorPage/ErrorPage";
-import MainLayout from "../MainLAyout/MainLayout";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
 import ProductDetailsPage from "../Pages/Products/ProductDetailsPage";
@@ -21,30 +18,28 @@ import BuyerDashboard from "../Pages/MainDashboard/Buyer/BuyerDashboard";
 import TrackOrder from "../Pages/MainDashboard/Buyer/TrackOrder";
 import BookingForm from "../Pages/MainDashboard/Buyer/BookingForm";
 import BuyerProfile from "../Pages/MainDashboard/Buyer/MyProfile";
-import Allorders from "../Pages/MainDashboard/Admin/Allorders";
 import ManageProducts from "../Pages/MainDashboard/Manager/ManageProducts";
 import ApproveOrders from "../Pages/MainDashboard/Manager/ApproveOrders";
 import MyOrder from "../Pages/MainDashboard/Buyer/MyOrder";
-import PrivetRoute from "../Components/Common/PrivetRout/PrivetRout";
-import DashboardLayout from "../DashboardLayout/DashboardLayout";
+import PrivetRoute from "./PrivetRout";
+import ErrorPage from "../Components/Common/ErrorBoundary/ErrorPage";
+import AuthLayout from "../Layout/AuthLayout/AuthLayout";
+import MainLayout from "../Layout/MainLayout/MainLayout";
+import DashBoardLayout from "../Layout/DashBoardLayout/DashBoardLayout";
+import Forbidden from "../Components/Common/ErrorBoundary/Forbidden";
+import AdminRout from "./AdminRout";
+import AllOrders from "../Pages/MainDashboard/Admin/Allorders";
+import ManagerRout from "./ManagerRout";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
         element: <Home />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
       },
       {
         path: "/all-products",
@@ -63,154 +58,160 @@ const router = createBrowserRouter([
         element: <Contact />,
       },
       {
-        path: "/payment-success",
-        element: <Contact />,
+        path: "*",
+        element: <Forbidden></Forbidden>,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <AuthLayout></AuthLayout>,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
       },
       {
-        path: "/payment-cancel",
-        element: <Contact />,
+        path: "/register",
+        element: <Register />,
       },
     ],
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout></DashboardLayout>,
+    element: (
+      <PrivetRoute>
+        <DashBoardLayout></DashBoardLayout>,
+      </PrivetRoute>
+    ),
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "admin",
         element: (
-          <PrivetRoute allowedRoles={["admin"]}>
+          <AdminRout>
             <AdminDashboard />
-          </PrivetRoute>
+          </AdminRout>
         ),
       },
       {
-        path: "admin/Manage-users",
+        path: "admin/manage-users",
         element: (
-          <PrivetRoute allowedRoles={["admin"]}>
+          <AdminRout>
             <ManageUsers />
-          </PrivetRoute>
+          </AdminRout>
         ),
       },
       {
         path: "admin/products",
         element: (
-          <PrivetRoute allowedRoles={["admin"]}>
+          <AdminRout>
             <AllProductAdmin />
-          </PrivetRoute>
+          </AdminRout>
         ),
       },
       {
         path: "admin/all-orders",
         element: (
-          <PrivetRoute allowedRoles={["admin"]}>
-            <Allorders />
-          </PrivetRoute>
+          <AdminRout>
+            <AllOrders />
+          </AdminRout>
         ),
       },
       {
         path: "admin/analytics",
         element: (
-          <PrivetRoute allowedRoles={["admin"]}>
+          <AdminRout>
             <Analytic />
-          </PrivetRoute>
+          </AdminRout>
         ),
       },
+      // {
+      //   path: "admin/order/:id",
+      //   element: (
+      //     <AdminRout>
+      //       <OrderDetails />
+      //     </AdminRout>
+      //   ),
+      // },
 
-      // Manager routes
       {
         path: "manager",
         element: (
-          <PrivetRoute allowedRoles={["manager"]}>
+          <ManagerRout>
             <ManagerDashboard />
-          </PrivetRoute>
+          </ManagerRout>
         ),
       },
       {
         path: "manager/add-product",
         element: (
-          <PrivetRoute allowedRoles={["manager"]}>
+          <ManagerRout>
             <AddProduct />
-          </PrivetRoute>
+          </ManagerRout>
         ),
       },
       {
         path: "manager/manage-products",
         element: (
-          <PrivetRoute allowedRoles={["manager"]}>
+          <ManagerRout>
             <ManageProducts />
-          </PrivetRoute>
+          </ManagerRout>
         ),
       },
       {
         path: "manager/orders/pending",
         element: (
-          <PrivetRoute allowedRoles={["manager"]}>
+          <ManagerRout>
             <PendingOrders />
-          </PrivetRoute>
+          </ManagerRout>
         ),
       },
       {
         path: "manager/orders/approved",
         element: (
-          <PrivetRoute allowedRoles={["manager"]}>
+          <ManagerRout>
             <ApproveOrders />
-          </PrivetRoute>
+          </ManagerRout>
         ),
       },
       {
         path: "manager/profile",
         element: (
-          <PrivetRoute allowedRoles={["manager"]}>
+          <ManagerRout>
             <ManagerProfile />
-          </PrivetRoute>
+          </ManagerRout>
         ),
       },
 
       // Buyer routes
       {
         path: "buyer",
-        element: (
-          <PrivetRoute allowedRoles={["buyer"]}>
-            <BuyerDashboard />
-          </PrivetRoute>
-        ),
+        element: <BuyerDashboard />,
       },
       {
         path: "buyer/my-orders",
-        element: (
-          <PrivetRoute allowedRoles={["buyer"]}>
-            <MyOrder />
-          </PrivetRoute>
-        ),
+        element: <MyOrder />,
       },
       {
         path: "buyer/track-order",
-        element: (
-          <PrivetRoute allowedRoles={["buyer"]}>
-            <TrackOrder />
-          </PrivetRoute>
-        ),
+        element: <TrackOrder />,
       },
       {
         path: "buyer/booking-order",
-        element: (
-          <PrivetRoute allowedRoles={["buyer"]}>
-            <BookingForm />
-          </PrivetRoute>
-        ),
+        element: <BookingForm />,
       },
       {
         path: "buyer/my-profile",
-        element: (
-          <PrivetRoute allowedRoles={["buyer"]}>
-            <BuyerProfile />
-          </PrivetRoute>
-        ),
+        element: <BuyerProfile />,
       },
       {
-        path: "*",
-        element: <ErrorPage />,
+        path: "payment-success",
+        element: <Contact />,
+      },
+      {
+        path: "payment-cancel",
+        element: <Contact />,
       },
     ],
   },
