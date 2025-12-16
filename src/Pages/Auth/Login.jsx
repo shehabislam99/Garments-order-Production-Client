@@ -57,11 +57,11 @@ const Login = () => {
       <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8">
         <div className="w-1/2 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
           <div className=" text-center  mb-8">
-            <Link to="/">
-              <span className="flex justify-center hover:underline  transition-all duration-300 hover:scale-105">
-                {" "}
-                <Logo></Logo>
-              </span>
+            <Link
+              className="flex justify-center hover:underline  transition-all duration-300 hover:scale-105"
+              to="/"
+            >
+              <Logo></Logo>
             </Link>
             <h2 className=" text-2xl font-bold text-gray-800">Welcome Back!</h2>
             <p className="text-gray-600 text-base mt-2">

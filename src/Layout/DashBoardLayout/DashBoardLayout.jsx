@@ -10,12 +10,12 @@ const DashBoardLayout = () => {
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <nav className="navbar bg-base-300 px-4">
-          <div className="navbar-start">
+          <div className="navbar-start ">
             <label
               htmlFor="dashboard-drawer"
               className="btn btn-ghost btn-square"
             >
-              <TbSquareToggle className="w-5 h-5" />
+              <TbSquareToggle className="w-5 h-5 lg:hidden" />
             </label>
           </div>
           <div className="navbar-center">

@@ -29,7 +29,6 @@ const Navbar = () => {
     { to: "/", label: "Home" },
     { to: "/all-products", label: "Products" },
     { to: "/about", label: "About" },
-    { to: "/contact", label: "Contact" },
   ];
 
   const links = (
@@ -54,7 +53,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar bg-gray-200 py-4">
+      <nav className="text-black navbar bg-gray-200 py-4">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-20">
             {/* Mobile menu button */}

@@ -1,691 +1,813 @@
-import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../../Hooks/useAxios';
+import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
+import {
+  FaEdit,
+  FaBan,
+  FaCheckCircle,
+  FaUser,
+  FaSearch,
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+import { MdEmail, MdPerson, MdWarning, MdInfo } from "react-icons/md";
+
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import useRole from "../../../Hooks/useRole";
+import toast from "react-hot-toast";
+import ReactPaginate from "react-paginate";
+import Loader from "../../../Components/Common/Loader/Loader";
 
 const ManageUsers = () => {
-  const [activeTab, setActiveTab] = useState("general");
-  const [settings, setSettings] = useState({});
+  const { role } = useRole();
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterRole, setFilterRole] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [currentPage, setCurrentPage] = useState(0); 
+  const usersPerPage = 2;
+  const [editingUser, setEditingUser] = useState(null);
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [suspendModalOpen, setSuspendModalOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("");
+    const navigate = useNavigate();
+  const [updating, setUpdating] = useState(false);
+  const [suspending, setSuspending] = useState(false);
+  const [suspendReason, setSuspendReason] = useState("");
+  const [suspendFeedback, setSuspendFeedback] = useState("");
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [error, setError] = useState("");
-
-  // General Settings
-  const [generalSettings, setGeneralSettings] = useState({
-    storeName: "",
-    storeEmail: "",
-    storePhone: "",
-    storeAddress: "",
-    currency: "USD",
-    timezone: "UTC",
-  });
-
-  // Email Settings
-  const [emailSettings, setEmailSettings] = useState({
-    smtpHost: "",
-    smtpPort: "",
-    smtpUsername: "",
-    smtpPassword: "",
-    fromEmail: "",
-    fromName: "",
-  });
-
-  // Notification Settings
-  const [notificationSettings, setNotificationSettings] = useState({
-    newOrder: true,
-    orderStatus: true,
-    lowStock: true,
-    newCustomer: true,
-    marketingEmails: false,
-  });
-
-  // Security Settings
-  const [securitySettings, setSecuritySettings] = useState({
-    twoFactorAuth: false,
-    sessionTimeout: 30,
-    passwordPolicy: "medium",
-  });
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    fetchSettings();
-  }, []);
+    if (role !== "admin") {
+      navigate("/", { replace: true });
+      toast.error('Unauthorized user')
+    }
+  }, [role, navigate]);
 
-  const fetchSettings = async () => {
+  // Fetch users with pagination and filters
+  useEffect(() => {
+    fetchUsers();
+  }, [currentPage, searchTerm, filterRole, filterStatus]);
+
+  const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/settings");
-      const data = response.data.data || {};
-      setSettings(data);
+    
+      const res = await axiosSecure.get(
+        `/users?searchText=${searchTerm}&page=${
+          currentPage + 1
+        }&limit=${usersPerPage}&role=${filterRole}&status=${filterStatus}`
+      );
 
-      // Set individual settings from response
-      setGeneralSettings(data.general || generalSettings);
-      setEmailSettings(data.email || emailSettings);
-      setNotificationSettings(data.notifications || notificationSettings);
-      setSecuritySettings(data.security || securitySettings);
+      if (res.data && res.data.success) {
+        // Handle response with pagination metadata
+        setUsers(res.data.data || []);
+        setTotalUsers(res.data.total || 0);
+        setTotalPages(
+          res.data.totalPages || Math.ceil((res.data.total || 0) / usersPerPage)
+        );
+      } else if (Array.isArray(res.data)) {
+        // Fallback for non-paginated response
+        setUsers(res.data);
+        setTotalUsers(res.data.length);
+        setTotalPages(Math.ceil(res.data.length / usersPerPage));
+      } else {
+        setUsers([]);
+        setTotalUsers(0);
+        setTotalPages(0);
+        console.error("Unexpected API response structure:", res.data);
+      }
     } catch (error) {
-      setError("Failed to load settings");
-      console.error("Error fetching settings:", error);
+      console.error("Error fetching users:", error);
+      toast.error("Failed to fetch users");
+      setUsers([]);
+      setTotalUsers(0);
+      setTotalPages(0);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSave = async (section) => {
+  // Handle role update
+  const handleRoleUpdate = async () => {
+    if (!editingUser || !selectedRole) return;
+
     try {
-      setSaving(true);
-      setError("");
-      setSuccessMessage("");
+      setUpdating(true);
+      const response = await axiosSecure.patch(
+        `/users/role/${editingUser._id}`,
+        { role: selectedRole }
+      );
 
-      let dataToSave = {};
-      switch (section) {
-        case "general":
-          dataToSave = { general: generalSettings };
-          break;
-        case "email":
-          dataToSave = { email: emailSettings };
-          break;
-        case "notifications":
-          dataToSave = { notifications: notificationSettings };
-          break;
-        case "security":
-          dataToSave = { security: securitySettings };
-          break;
-        default:
-          dataToSave = {
-            general: generalSettings,
-            email: emailSettings,
-            notifications: notificationSettings,
-            security: securitySettings,
-          };
-      }
-
-      const response = await axiosInstance.put("/settings", dataToSave);
-
-      if (response.data.success) {
-        setSuccessMessage(
-          `${
-            section.charAt(0).toUpperCase() + section.slice(1)
-          } settings saved successfully!`
+      if (response.data.modifiedCount > 0 || response.data.success) {
+        setUsers(
+          users.map((user) =>
+            user._id === editingUser._id
+              ? { ...user, role: selectedRole }
+              : user
+          )
         );
-        setTimeout(() => setSuccessMessage(""), 3000);
+        toast.success(`User role updated to ${selectedRole}`);
+        setRoleModalOpen(false);
+        setEditingUser(null);
+        setSelectedRole("");
       }
     } catch (error) {
-      setError("Failed to save settings");
-      console.error("Error saving settings:", error);
+      console.error("Error updating user role:", error);
+      toast.error("Failed to update user role");
     } finally {
-      setSaving(false);
+      setUpdating(false);
     }
   };
 
-  const handleGeneralChange = (e) => {
-    setGeneralSettings({
-      ...generalSettings,
-      [e.target.name]: e.target.value,
-    });
+  // Handle page change with react-paginate
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected); // react-paginate provides selected page index (0-based)
   };
 
-  const handleEmailChange = (e) => {
-    setEmailSettings({
-      ...emailSettings,
-      [e.target.name]: e.target.value,
+  // Filter users locally (fallback if backend doesn't support filtering)
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) => {
+      const matchesSearch =
+        user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.displayName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        searchTerm === "";
+
+      const matchesRole = filterRole === "all" || user.role === filterRole;
+      const matchesStatus =
+        filterStatus === "all" || (user.status || "active") === filterStatus;
+
+      return matchesSearch && matchesRole && matchesStatus;
     });
+  }, [users, searchTerm, filterRole, filterStatus]);
+
+  // Calculate current page users for display
+  const currentUsers = useMemo(() => {
+    const startIndex = currentPage * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+    return filteredUsers.slice(startIndex, endIndex);
+  }, [filteredUsers, currentPage, usersPerPage]);
+
+  // Handle user suspension with modal
+  const openSuspendModal = (user) => {
+    setEditingUser(user);
+    setSuspendReason("");
+    setSuspendFeedback("");
+    setSuspendModalOpen(true);
   };
 
-  const handleNotificationChange = (e) => {
-    setNotificationSettings({
-      ...notificationSettings,
-      [e.target.name]: e.target.checked,
-    });
+  const handleSuspendUser = async () => {
+    if (!editingUser || !suspendReason.trim()) {
+      toast.error("Please provide a suspension reason");
+      return;
+    }
+
+    try {
+      setSuspending(true);
+
+      const response = await axiosSecure.patch(
+        `/users/suspend/${editingUser._id}`,
+        {
+          status: "suspended",
+          suspendReason: suspendReason.trim(),
+          suspendFeedback: suspendFeedback.trim(),
+          suspendedBy: role,
+          suspendedAt: new Date().toISOString(),
+        }
+      );
+
+      if (response.data.success) {
+        setUsers(
+          users.map((user) =>
+            user._id === editingUser._id
+              ? {
+                  ...user,
+                  status: "suspended",
+                  suspendReason: suspendReason.trim(),
+                  suspendFeedback: suspendFeedback.trim(),
+                  suspendedAt: new Date().toISOString(),
+                }
+              : user
+          )
+        );
+        toast.success("User suspended successfully");
+        setSuspendModalOpen(false);
+        setEditingUser(null);
+        setSuspendReason("");
+        setSuspendFeedback("");
+      }
+    } catch (error) {
+      console.error("Error suspending user:", error);
+      toast.error("Failed to suspend user");
+    } finally {
+      setSuspending(false);
+    }
   };
 
-  const handleSecurityChange = (e) => {
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    setSecuritySettings({
-      ...securitySettings,
-      [e.target.name]: value,
-    });
+  // Handle user activation
+  const handleActivateUser = async (userId) => {
+    if (!window.confirm("Are you sure you want to activate this user?")) {
+      return;
+    }
+
+    try {
+      setSuspending(userId);
+
+      const response = await axiosSecure.patch(`/users/status/${userId}`, {
+        status: "active",
+        suspendReason: "",
+        suspendFeedback: "",
+      });
+
+      if (response.data.success) {
+        setUsers(
+          users.map((user) =>
+            user._id === userId
+              ? {
+                  ...user,
+                  status: "active",
+                  suspendReason: "",
+                  suspendFeedback: "",
+                }
+              : user
+          )
+        );
+        toast.success("User activated successfully");
+      }
+    } catch (error) {
+      console.error("Error activating user:", error);
+      toast.error("Failed to activate user");
+    } finally {
+      setSuspending(null);
+    }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  const getRoleColor = (userRole) => {
+    switch (userRole) {
+      case "admin":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "manager":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "buyer":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "suspended":
+        return "bg-red-100 text-red-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const openRoleModal = (user) => {
+    setEditingUser(user);
+    setSelectedRole(user?.role || "buyer");
+    setRoleModalOpen(true);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setFilterRole("all");
+    setFilterStatus("all");
+    setCurrentPage(0); 
+  };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Settings</h2>
-        <div className="text-sm text-gray-500">
-          Configure your store settings
+    <div className="p-3">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-800">Manage Users</h2>
         </div>
-      </div>
-
-      {successMessage && (
-        <div className="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
-          {successMessage}
-        </div>
-      )}
-
-      {error && (
-        <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      )}
-
-      {/* Tabs */}
-      <div className="border-b border-gray-200 mb-6">
-        <nav className="-mb-px flex space-x-8">
-          <button
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === "general"
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            }`}
-            onClick={() => setActiveTab("general")}
-          >
-            General
-          </button>
-          <button
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === "email"
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            }`}
-            onClick={() => setActiveTab("email")}
-          >
-            Email
-          </button>
-          <button
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === "notifications"
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            }`}
-            onClick={() => setActiveTab("notifications")}
-          >
-            Notifications
-          </button>
-          <button
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === "security"
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            }`}
-            onClick={() => setActiveTab("security")}
-          >
-            Security
-          </button>
-        </nav>
-      </div>
-
-      {/* General Settings */}
-      {activeTab === "general" && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            General Settings
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Store Name
-              </label>
-              <input
-                type="text"
-                name="storeName"
-                value={generalSettings.storeName}
-                onChange={handleGeneralChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter store name"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Store Email
-              </label>
-              <input
-                type="email"
-                name="storeEmail"
-                value={generalSettings.storeEmail}
-                onChange={handleGeneralChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="contact@store.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Store Phone
-              </label>
-              <input
-                type="tel"
-                name="storePhone"
-                value={generalSettings.storePhone}
-                onChange={handleGeneralChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="+1 (555) 123-4567"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Currency
-              </label>
-              <select
-                name="currency"
-                value={generalSettings.currency}
-                onChange={handleGeneralChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="USD">USD ($)</option>
-                <option value="EUR">EUR (€)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="CAD">CAD ($)</option>
-                <option value="AUD">AUD ($)</option>
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Store Address
-              </label>
-              <textarea
-                name="storeAddress"
-                value={generalSettings.storeAddress}
-                onChange={handleGeneralChange}
-                rows="3"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter store address"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Timezone
-              </label>
-              <select
-                name="timezone"
-                value={generalSettings.timezone}
-                onChange={handleGeneralChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="UTC">UTC</option>
-                <option value="America/New_York">Eastern Time (ET)</option>
-                <option value="America/Chicago">Central Time (CT)</option>
-                <option value="America/Denver">Mountain Time (MT)</option>
-                <option value="America/Los_Angeles">Pacific Time (PT)</option>
-                <option value="Europe/London">London (GMT)</option>
-                <option value="Europe/Paris">Paris (CET)</option>
-                <option value="Asia/Tokyo">Tokyo (JST)</option>
-              </select>
-            </div>
-          </div>
-          <div className="mt-6">
-            <button
-              onClick={() => handleSave("general")}
-              disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {saving ? "Saving..." : "Save General Settings"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Email Settings */}
-      {activeTab === "email" && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Email Settings
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                SMTP Host
-              </label>
-              <input
-                type="text"
-                name="smtpHost"
-                value={emailSettings.smtpHost}
-                onChange={handleEmailChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="smtp.gmail.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                SMTP Port
-              </label>
-              <input
-                type="number"
-                name="smtpPort"
-                value={emailSettings.smtpPort}
-                onChange={handleEmailChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="587"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                SMTP Username
-              </label>
-              <input
-                type="text"
-                name="smtpUsername"
-                value={emailSettings.smtpUsername}
-                onChange={handleEmailChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="your-email@gmail.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                SMTP Password
-              </label>
-              <input
-                type="password"
-                name="smtpPassword"
-                value={emailSettings.smtpPassword}
-                onChange={handleEmailChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="••••••••"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                From Email
-              </label>
-              <input
-                type="email"
-                name="fromEmail"
-                value={emailSettings.fromEmail}
-                onChange={handleEmailChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="noreply@store.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                From Name
-              </label>
-              <input
-                type="text"
-                name="fromName"
-                value={emailSettings.fromName}
-                onChange={handleEmailChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Store Name"
-              />
-            </div>
-          </div>
-          <div className="mt-6">
-            <button
-              onClick={() => handleSave("email")}
-              disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {saving ? "Saving..." : "Save Email Settings"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Notification Settings */}
-      {activeTab === "notifications" && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Notification Settings
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  New Order Notifications
-                </p>
-                <p className="text-sm text-gray-500">
-                  Get notified when a new order is placed
-                </p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="newOrder"
-                  checked={notificationSettings.newOrder}
-                  onChange={handleNotificationChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  Order Status Updates
-                </p>
-                <p className="text-sm text-gray-500">
-                  Get notified when order status changes
-                </p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="orderStatus"
-                  checked={notificationSettings.orderStatus}
-                  onChange={handleNotificationChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  Low Stock Alerts
-                </p>
-                <p className="text-sm text-gray-500">
-                  Get notified when product stock is low
-                </p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="lowStock"
-                  checked={notificationSettings.lowStock}
-                  onChange={handleNotificationChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  New Customer Notifications
-                </p>
-                <p className="text-sm text-gray-500">
-                  Get notified when a new customer registers
-                </p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="newCustomer"
-                  checked={notificationSettings.newCustomer}
-                  onChange={handleNotificationChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  Marketing Emails
-                </p>
-                <p className="text-sm text-gray-500">
-                  Receive marketing and promotional emails
-                </p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="marketingEmails"
-                  checked={notificationSettings.marketingEmails}
-                  onChange={handleNotificationChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-          </div>
-          <div className="mt-6">
-            <button
-              onClick={() => handleSave("notifications")}
-              disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {saving ? "Saving..." : "Save Notification Settings"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Security Settings */}
-      {activeTab === "security" && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Security Settings
-          </h3>
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  Two-Factor Authentication
-                </p>
-                <p className="text-sm text-gray-500">
-                  Add an extra layer of security to your account
-                </p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="twoFactorAuth"
-                  checked={securitySettings.twoFactorAuth}
-                  onChange={handleSecurityChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Session Timeout (minutes)
-              </label>
-              <select
-                name="sessionTimeout"
-                value={securitySettings.sessionTimeout}
-                onChange={handleSecurityChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="15">15 minutes</option>
-                <option value="30">30 minutes</option>
-                <option value="60">1 hour</option>
-                <option value="120">2 hours</option>
-                <option value="240">4 hours</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password Policy
-              </label>
-              <select
-                name="passwordPolicy"
-                value={securitySettings.passwordPolicy}
-                onChange={handleSecurityChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="low">Low (6+ characters)</option>
-                <option value="medium">
-                  Medium (8+ characters, mixed case)
-                </option>
-                <option value="high">
-                  High (10+ characters, mixed case, numbers, symbols)
-                </option>
-              </select>
-              <p className="mt-1 text-sm text-gray-500">
-                {securitySettings.passwordPolicy === "low" &&
-                  "Minimum 6 characters"}
-                {securitySettings.passwordPolicy === "medium" &&
-                  "Minimum 8 characters with uppercase and lowercase letters"}
-                {securitySettings.passwordPolicy === "high" &&
-                  "Minimum 10 characters with uppercase, lowercase, numbers, and symbols"}
-              </p>
-            </div>
-
-            <div className="border-t pt-6">
-              <h4 className="text-sm font-medium text-gray-900 mb-4">
-                Security Logs
-              </h4>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Last login:</span>
-                  <span className="text-gray-900">
-                    {settings.lastLogin
-                      ? new Date(settings.lastLogin).toLocaleString()
-                      : "Never"}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Failed login attempts:</span>
-                  <span className="text-gray-900">
-                    {settings.failedAttempts || 0}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Account created:</span>
-                  <span className="text-gray-900">
-                    {settings.createdAt
-                      ? new Date(settings.createdAt).toLocaleDateString()
-                      : "N/A"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-6">
-            <button
-              onClick={() => handleSave("security")}
-              disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {saving ? "Saving..." : "Save Security Settings"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Save All Settings */}
-      <div className="mt-8 bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">
-          Save All Settings
-        </h3>
-        <p className="text-sm text-gray-600 mb-4">
-          Click the button below to save all settings at once. This will update
-          all configuration sections.
-        </p>
         <button
-          onClick={() => handleSave("all")}
-          disabled={saving}
-          className="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
+          onClick={fetchUsers}
+          disabled={loading}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center disabled:opacity-50"
         >
-          {saving ? "Saving All Settings..." : "Save All Settings"}
+          {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
+      {/* Stats Summary */}
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-center">
+            <p className="text-sm font-medium text-gray-600">Total Users</p>
+            <p className="text-2xl font-semibold text-gray-900">{totalUsers}</p>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-center">
+            <p className="text-sm font-medium text-gray-600">Active</p>
+            <p className="text-2xl font-semibold text-green-600">
+              {users.filter((u) => (u.status || "active") === "active").length}
+            </p>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-center">
+            <p className="text-sm font-medium text-gray-600">Suspended</p>
+            <p className="text-2xl font-semibold text-red-600">
+              {users.filter((u) => u.status === "suspended").length}
+            </p>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-center">
+            <p className="text-sm font-medium text-gray-600">Admins</p>
+            <p className="text-2xl font-semibold text-red-600">
+              {users.filter((u) => u.role === "admin").length}
+            </p>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-center">
+            <p className="text-sm font-medium text-gray-600">Managers</p>
+            <p className="text-2xl font-semibold text-blue-600">
+              {users.filter((u) => u.role === "manager").length}
+            </p>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-center">
+            <p className="text-sm font-medium text-gray-600">Buyer</p>
+            <p className="text-2xl font-semibold text-blue-600">
+              {users.filter((u) => u.role === "buyer").length}
+            </p>
+          </div>
+        </div>
+      </div>
+      {/* Filters and Search */}
+      <div className="mt-4 bg-white rounded-lg shadow p-4">
+        <div className="flex items-center justify-between mb-4">
+          {(searchTerm || filterRole !== "all" || filterStatus !== "all") && (
+            <button
+              onClick={clearFilters}
+              className="text-sm text-gray-600 hover:text-red-800 flex items-center"
+            >
+              <FaTimes className="mr-1" />
+              Clear Filters
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Search */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Search Users
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaSearch className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(0);
+                }}
+                placeholder="Search by name or email..."
+                className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Role Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Role
+            </label>
+            <select
+              value={filterRole}
+              onChange={(e) => {
+                setFilterRole(e.target.value);
+                setCurrentPage(0);
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="manager">Manager</option>
+              <option value="buyer">Buyer</option>
+            </select>
+          </div>
+
+          {/* Status Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Status
+            </label>
+            <select
+              value={filterStatus}
+              onChange={(e) => {
+                setFilterStatus(e.target.value);
+                setCurrentPage(0);
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="flex justify-center items-center py-12">
+          <Loader></Loader>
+          <span className="text-gray-600">Loading users...</span>
+        </div>
+      )}
+
+      {/* Users Table */}
+      {!loading && (
+        <>
+          <div className="mt-4 bg-white rounded-lg shadow overflow-hidden ">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      User
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Role
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Created
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Manage Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {users.map((user) => (
+                    <tr
+                      key={user._id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      {/* User Info */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          {user.photoURL ? (
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={user.photoURL}
+                              alt={user.name || user.email}
+                            />
+                          ) : (
+                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                              <MdPerson className="h-6 w-6 text-blue-600" />
+                            </div>
+                          )}
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {user.name || user.displayName || "No Name"}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              ID: {user._id?.substring(0, 8)}...
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Email */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <MdEmail className="h-4 w-4 text-gray-400 mr-2" />
+                          <div className="text-sm text-gray-900">
+                            {user?.email}
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Role */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${getRoleColor(
+                            user?.role
+                          )}`}
+                        >
+                          {user?.role || "buyer"}
+                        </span>
+                      </td>
+
+                      {/* Status */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex flex-col">
+                          <span
+                            className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
+                              user?.status || "active"
+                            )} mb-1 w-fit`}
+                          >
+                            {user?.status || "active"}
+                          </span>
+                          {user?.status === "suspended" &&
+                            user?.suspendReason && (
+                              <span className="text-xs text-gray-500 flex items-center">
+                                <MdInfo className="mr-1" />
+                                {user?.suspendReason}
+                              </span>
+                            )}
+                        </div>
+                      </td>
+
+                      {/* Created Date */}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {user?.createdAt
+                          ? new Date(user?.createdAt).toLocaleDateString()
+                          : "N/A"}
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-3">
+                          {/* Update Role Button */}
+                          <button
+                            onClick={() => openRoleModal(user)}
+                            className="text-blue-600 hover:text-blue-900 flex items-center"
+                            title="Update Role"
+                          >
+                            <FaEdit className="mr-1" />
+                            Role
+                          </button>
+
+                          {/* Suspend/Activate Button */}
+                          {user.status === "suspended" ? (
+                            <button
+                              onClick={() => handleActivateUser(user?._id)}
+                              disabled={suspending === user?._id}
+                              className={`text-green-600 hover:text-green-900 flex items-center ${
+                                suspending === user?._id
+                                  ? "opacity-50 cursor-not-allowed"
+                                  : ""
+                              }`}
+                              title="Activate User"
+                            >
+                              {suspending === user._id ? (
+                                <Loader className="animate-spin mr-1" />
+                              ) : (
+                                <FaCheckCircle className="mr-1" />
+                              )}
+                              Activate
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => openSuspendModal(user)}
+                              className="text-red-600 hover:text-red-900 flex items-center"
+                              title="Suspend User"
+                            >
+                              <FaBan className="mr-1" />
+                              Suspend
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Empty State */}
+            {users.length === 0 && !loading && (
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <FaUser className="mx-auto h-12 w-12" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No users found here
+                </h3>
+                <p className="text-gray-500">
+                  Try to find your search or filter criteria
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* React Paginate Component */}
+          {totalPages > 1 && (
+            <div className="flex flex-col md:flex-row justify-center items-center mt-6">
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={
+                  <div className="flex items-center">
+                    Next
+                    <FaChevronRight className="ml-1 h-3 w-3" />
+                  </div>
+                }
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                pageCount={totalPages}
+                forcePage={currentPage} // This keeps the pagination in sync
+                previousLabel={
+                  <div className="flex items-center">
+                    <FaChevronLeft className="mr-1 h-3 w-3" />
+                    Previous
+                  </div>
+                }
+                renderOnZeroPageCount={null}
+                containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
+                pageClassName="hidden sm:block"
+                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                activeClassName="hidden sm:block"
+                activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                previousClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+                previousLinkClassName="flex items-center px-2 py-1"
+                nextClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+                nextLinkClassName="flex items-center px-2 py-1"
+                breakClassName="hidden sm:block"
+                breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
+                disabledClassName="opacity-50 cursor-not-allowed"
+                disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
+              />
+
+              {/* Page info */}
+              <div className="ml-0 md:ml-4 text-sm text-gray-700">
+                Page <span className="font-medium">{currentPage + 1}</span> of{" "}
+                <span className="font-medium">{totalPages}</span>
+                <span className="ml-2 text-gray-500">
+                  ({totalUsers} total users)
+                </span>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Role Update Modal */}
+      {roleModalOpen && editingUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div className="p-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Update User Role
+              </h3>
+
+              <div className="mb-6">
+                <p className="text-sm text-gray-600 mb-2">
+                  User: {editingUser.name || editingUser.email}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Current Role:{" "}
+                  <span className="font-medium">
+                    {editingUser.role || "buyer"}
+                  </span>
+                </p>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select New Role
+                </label>
+                <select
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="buyer">Buyer</option>
+                  <option value="manager">Manager</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => {
+                    setRoleModalOpen(false);
+                    setEditingUser(null);
+                    setSelectedRole("");
+                  }}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleRoleUpdate}
+                  disabled={updating || !selectedRole}
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updating ? "Updating..." : "Update Role"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Suspend User Modal */}
+      {suspendModalOpen && editingUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                <MdWarning className="h-6 w-6 text-yellow-500 mr-2" />
+                <h3 className="text-lg font-medium text-gray-900">
+                  Suspend User
+                </h3>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-sm text-gray-600 mb-2">
+                  Name: <span className="font-medium">{editingUser?.name}</span>
+                </p>
+                <p className="text-sm text-gray-600">
+                  Role:{" "}
+                  <span className="font-medium">
+                    {editingUser?.role || "buyer"}
+                  </span>
+                </p>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Suspension Reason
+                  </label>
+                  <select
+                    value={suspendReason}
+                    onChange={(e) => setSuspendReason(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">Select a reason</option>
+                    <option value="Violation of terms">
+                      Violation of terms
+                    </option>
+                    <option value="Suspicious activity">
+                      Suspicious activity
+                    </option>
+                    <option value="Payment issues">Payment issues</option>
+                    <option value="Inappropriate content">
+                      Inappropriate content
+                    </option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Additional Feedback
+                  </label>
+                  <textarea
+                    value={suspendFeedback}
+                    onChange={(e) => setSuspendFeedback(e.target.value)}
+                    placeholder="Provide details about the suspension..."
+                    rows="3"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => {
+                    setSuspendModalOpen(false);
+                    setEditingUser(null);
+                    setSuspendReason("");
+                    setSuspendFeedback("");
+                  }}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSuspendUser}
+                  disabled={suspending || !suspendReason.trim()}
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {suspending ? "Suspending..." : "Confirm Suspension"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

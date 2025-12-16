@@ -4,14 +4,13 @@ import {
   FaRegCreditCard,
   FaTasks,
   FaUsers,
-  FaMotorcycle,
   FaHome,
   FaBox,
   FaChartBar,
   FaMapMarkerAlt,
   FaUser,
 } from "react-icons/fa";
-import { RiEBikeFill } from "react-icons/ri";
+import { MdAddShoppingCart } from "react-icons/md";
 import { SiGoogletasks } from "react-icons/si";
 import useAuth from "../../../Hooks/useAuth";
 import useRole from "../../../Hooks/useRole";
@@ -45,16 +44,6 @@ const roleConfig = {
         title: "Manage Users",
         icon: FaUsers,
       },
-      {
-        path: "/dashboard/approve-product",
-        title: "Approve Product",
-        icon: FaMotorcycle,
-      },
-      {
-        path: "/dashboard/track-product",
-        title: "Assign Riders",
-        icon: RiEBikeFill,
-      },
     ],
   },
 
@@ -70,7 +59,7 @@ const roleConfig = {
       {
         path: "/dashboard/manager/add-product",
         title: "Add Product",
-        icon: FaBox,
+        icon: MdAddShoppingCart,
       },
       {
         path: "/dashboard/manager/manage-products",

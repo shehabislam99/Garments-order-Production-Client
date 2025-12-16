@@ -4,7 +4,6 @@ import MyOrders from "./MyOrder";
 import TrackOrder from "./TrackOrder";
 import MyProfile from "./MyProfile";
 import BookingForm from "./BookingForm";
-import axiosInstance from "../../../Hooks/useAxios";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { BsClipboard2X } from "react-icons/bs";
 import { IoNotificationsOffOutline } from "react-icons/io5";
@@ -15,46 +14,35 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { Banknote, CalendarCheck, ClockFading, ShieldCheck } from "lucide-react";
-import Logo from "../../../Components/Common/Logo/Logo";
 import useAuth from "../../../Hooks/useAuth";
+import { axiosInstance } from "../../../Hooks/useAxios";
 
 const BuyerDashboard = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
-  const [users, setUser] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [stats, setStats] = useState({
     totalOrders: 0,
     pendingOrders: 0,
     totalSpent: 0,
     recentBookings: 0,
   });
-  const [notifications, setNotifications] = useState([]);
-  const navigate = useNavigate();
-  const {user} =useAuth();
   
 
   useEffect(() => {
-    fetchUserData();
     fetchDashboardStats();
     fetchNotifications();
   }, []);
 
-  const fetchUserData = async () => {
-    try {
-      const response = await axiosInstance.get("/auth/profile");
-      setUser(response.data.data);
-    } catch (error) {
-      if (error.response?.status === 401) {
-        navigate("/login");
-      }
-    }
-  };
+
 
   const fetchDashboardStats = async () => {
     try {
       const response = await axiosInstance.get("/buyer/stats");
       setStats(response.data.data);
     } catch (error) {
-      console.error("Error fetching dashboard stats?:", error);
+      console.error("Error fetching dashboard stats:", error);
     }
   };
 
@@ -412,5 +400,4 @@ const BuyerDashboard = () => {
     </div>
   );
 };
-
 export default BuyerDashboard;

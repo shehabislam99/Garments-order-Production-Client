@@ -103,7 +103,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin/products",
+        path: "admin/all-products",
         element: (
           <AdminRout>
             <AllProductAdmin />

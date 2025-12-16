@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Loader from "../../../Components/Common/Loader/Loader";
 import useAuth from "../../../Hooks/useAuth";
 import Card from "../../../Components/Common/UI/Card";
 import BarChart from "../../../Components/Chart/Barchart";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
-const AdminDashboard = () => {
+const AdminDashBoard = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
+   const [recentOrders, setRecentOrders] = useState([]);
+   const [usersByRole, setUsersByRole] = useState({});
+   const [productCategories, setProductCategories] = useState({});
   const [stats, setStats] = useState({
     products: 0,
     orders: 0,
@@ -15,84 +18,31 @@ const AdminDashboard = () => {
     revenue: 0,
     pendingOrders: 0,
   });
-  const [recentOrders, setRecentOrders] = useState([]);
-  const [usersByRole, setUsersByRole] = useState({});
-  const [productCategories, setProductCategories] = useState({});
+  const axiosSecure = useAxiosSecure();
+ 
 
   useEffect(() => {
+    fetchDashboardData();
+  },[]);
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-
-        // Fetch all users
-        const usersResponse = await axios.get("http://localhost:5000/users");
-        const users = usersResponse.data || [];
-
-        const roleCount = {
-          admin: 0,
-          manager: 0,
-          buyer: 0,
-        };
-
-        users.forEach((user) => {
-          const role = user.role || "buyer";
-          if (roleCount[role] !== undefined) {
-            roleCount[role]++;
-          } else {
-            roleCount.buyer++; // Default to buyer if role is unknown
-          }
-        });
-
-        // In a real app, you would have endpoints for products and orders
-        // For now, let's use mock data or create these endpoints
-        const productsResponse = await axios.get(
-          "http://localhost:5000/products"
-        );
-        const products = productsResponse.data || [];
-
-        const ordersResponse = await axios.get("http://localhost:5000/orders");
-        const orders = ordersResponse.data || [];
-
-        // Calculate product categories
-        const categories = {};
-        products.forEach((product) => {
-          const category = product.category || "Uncategorized";
-          categories[category] = (categories[category] || 0) + 1;
-        });
-
-        // Calculate pending orders
-        const pendingOrders = orders.filter(
-          (order) => order.status === "pending" || order.status === "Pending"
-        ).length;
-
-        // Calculate total revenue
-        const revenue = orders.reduce((total, order) => {
-          return total + (order.totalAmount || order.amount || 0);
-        }, 0);
-
-        // Get recent orders (last 5)
-        const sortedOrders = [...orders]
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date)
-          )
-          .slice(0, 5);
+        const statsResponse = await axiosSecure.get("/admin/stats");
+        const data = statsResponse.data.data;
 
         setStats({
-          products: products.length,
-          orders: orders.length,
-          users: users.length,
-          revenue: revenue,
-          pendingOrders: pendingOrders,
+          products: data.products || 0,
+          orders: data.orders || 0,
+          users: data.users || 0,
+          revenue: data.revenue || 0,
+          pendingOrders: data.pendingOrders || 0,
         });
 
-        setRecentOrders(sortedOrders);
-        setUsersByRole(roleCount);
-        setProductCategories(categories);
+        setRecentOrders(data.recentOrders || []);
+        setUsersByRole(data.usersByRole || {});
+        setProductCategories(data.productCategories || {});
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-
-        // For development, use mock data if endpoints don't exist
         setStats({
           products: 24,
           orders: 156,
@@ -152,8 +102,8 @@ const AdminDashboard = () => {
       }
     };
 
-    fetchDashboardData();
-  }, []);
+    
+  
 
   if (loading) {
     return (
@@ -554,4 +504,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminDashBoard;
