@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../../Hooks/useAxios";
 import {
   LineChart,
   Line,
@@ -15,13 +14,14 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const Analytics = () => {
   const [analyticsData, setAnalyticsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState("month");
   const [chartType, setChartType] = useState("revenue");
-
+ const axiosSecure = useAxiosSecure();
   useEffect(() => {
     fetchAnalyticsData();
   }, [timeRange]);
@@ -29,7 +29,7 @@ const Analytics = () => {
   const fetchAnalyticsData = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/analytics?range=${timeRange}`);
+      const response = await axiosSecure.get(`/analytics?range=${timeRange}`);
       setAnalyticsData(response.data.data);
     } catch (error) {
       console.error("Error fetching analytics data:", error);

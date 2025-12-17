@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../../Hooks/useAxios";
-
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const axiosSecure = useAxiosSecure();
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +24,7 @@ const AllOrders = () => {
   const fetchAllOrders = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/orders/all");
+      const response = await axiosSecure.get("/orders/all");
       const ordersData = response.data.data || [];
       setOrders(ordersData);
       calculateStats(ordersData);
@@ -66,7 +66,7 @@ const AllOrders = () => {
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      const response = await axiosInstance.put(`/orders/${orderId}/status`, {
+      const response = await axiosSecure.put(`/orders/${orderId}/status`, {
         status: newStatus,
       });
 

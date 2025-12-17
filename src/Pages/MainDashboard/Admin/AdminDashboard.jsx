@@ -27,7 +27,7 @@ const AdminDashBoard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const statsResponse = await axiosSecure.get("/admin/stats");
+        const statsResponse = await axiosSecure.get("/manage-user/stats");
         const data = statsResponse.data.data;
 
         setStats({

@@ -1,6 +1,5 @@
-// src/hooks/useProducts.js
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { axiosInstance } from "./useAxios";
 
 export const useProduct = () => {
   const [products, setProducts] = useState([]);
@@ -10,7 +9,7 @@ export const useProduct = () => {
  const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:5000/products");
+      const response = await axiosInstance.get("/products");
       setProducts(response.data);
       setError(null);
     } catch (err) {
@@ -23,8 +22,8 @@ export const useProduct = () => {
 
   const addProduct = async (productData) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/products",
+      const response = await axiosInstance.post(
+        "/products",
         productData
       );
       setProducts((prev) => [...prev, response.data.product]);
@@ -37,8 +36,8 @@ export const useProduct = () => {
 
   const updateProduct = async (id, productData) => {
     try {
-      const response = await axios.put(
-        `http://localhost:5000/products/${id}`,
+      const response = await axiosInstance.put(
+        `/products/${id}`,
         productData
       );
       setProducts((prev) =>
@@ -55,7 +54,7 @@ export const useProduct = () => {
 
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/products/${id}`);
+      await axiosInstance.delete(`/products/${id}`);
       setProducts((prev) => prev.filter((product) => product._id !== id));
       return { success: true };
     } catch (err) {

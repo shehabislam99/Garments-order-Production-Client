@@ -20,7 +20,7 @@ const ManageUsers = () => {
   const [filterRole, setFilterRole] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [currentPage, setCurrentPage] = useState(0); 
-  const [usersPerPage] = useState(2);
+  const [usersPerPage] = useState(6);
   const [editingUser, setEditingUser] = useState(null);
   const [roleModalOpen, setRoleModalOpen] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -86,7 +86,7 @@ const ManageUsers = () => {
 
 const fetchUserStats = async () => {
   try {
-    const res = await axiosSecure.get("/admin/stats");
+    const res = await axiosSecure.get("/manage-user/stats");
     console.log("Stats response:", res.data);
 
     if (res.data?.success) {
@@ -278,9 +278,12 @@ const fetchUserStats = async () => {
           <h2 className="text-2xl font-bold text-gray-800">Manage Users</h2>
         </div>
         <button
-          onClick={fetchUsers}
+          onClick={() => {
+            fetchUsers();
+            fetchUserStats();
+          }}
           disabled={loading}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center disabled:opacity-50"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-red-800 transition-colors flex items-center disabled:opacity-50"
         >
           {loading ? "Refreshing..." : "Refresh"}
         </button>
@@ -350,7 +353,7 @@ const fetchUserStats = async () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -464,7 +467,7 @@ const fetchUserStats = async () => {
                             <img
                               className="h-10 w-10 rounded-full"
                               src={user?.photoURL}
-                              alt={user?.name || user?.email}
+                              alt={user?.name}
                             />
                           ) : (
                             <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
@@ -493,7 +496,7 @@ const fetchUserStats = async () => {
                       </td>
 
                       {/* Role */}
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${getRoleColor(
                             user?.role
@@ -540,12 +543,12 @@ const fetchUserStats = async () => {
                             className={`flex items-center ${
                               user?.role === "admin"
                                 ? "text-gray-400 cursor-not-allowed"
-                                : "text-indigo-600 hover:text-indigo-800"
+                                : "text-indigo-600 hover:text-red-800 hover:underline transition-all duration-500 transform hover:scale-105"
                             }`}
                             title="Update Role"
                           >
                             <FaEdit className="mr-1" />
-                            Role
+                            Edit Role
                           </button>
 
                           {/*Update status Button */}
@@ -554,7 +557,7 @@ const fetchUserStats = async () => {
                             className={`flex items-center ${
                               user?.role === "admin"
                                 ? "text-gray-400 cursor-not-allowed"
-                                : "text-green-600 hover:text-red-800"
+                                : "text-green-600 hover:text-red-800 hover:underline transition-all duration-500 transform hover:scale-105"
                             }`}
                           >
                             <GrDocumentUpdate className="mr-1" />

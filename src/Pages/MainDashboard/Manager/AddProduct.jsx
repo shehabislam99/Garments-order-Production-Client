@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { FaUpload, FaImage, FaSpinner, FaCheck, FaTimes } from "react-icons/fa";
+import { FaUpload,  FaSpinner, FaCheck, FaTimes } from "react-icons/fa";
 import { axiosInstance } from "../../../Hooks/useAxios";
 import useRole from "../../../Hooks/useRole";
 
@@ -17,15 +17,15 @@ const AddProduct = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
 
   const [product, setProduct] = useState({
-    productName: "",
+    product_name: "",
     description: "",
     category: "Shirt",
-    cost: "",
-    Available_Quantity: "",
-    MOQ: "1",
-    Video_Link: "",
-    paymentOptions: "Cash on Delivery",
-    showOnHomePage: false,
+    price: "",
+    available_quantity: "",
+    moq: "1",
+    video_link: "",
+    payment_options: "Cash on Delivery",
+    show_on_homepage: false,
   });
 
   // Check if user is manager
@@ -127,7 +127,7 @@ const AddProduct = () => {
   const validateForm = () => {
     const errors = [];
 
-    if (!product.productName.trim()) {
+    if (!product.product_name.trim()) {
       errors.push("Product Name is required");
     }
 
@@ -135,15 +135,15 @@ const AddProduct = () => {
       errors.push("Product Description is required");
     }
 
-    if (!product.cost || Number(product.cost) <= 0) {
+    if (!product.price || Number(product.price) <= 0) {
       errors.push("Valid Price is required");
     }
 
-    if (!product.Available_Quantity || Number(product.Available_Quantity) < 0) {
+    if (!product.available_quantity || Number(product.available_quantity) < 0) {
       errors.push("Valid Available Quantity is required");
     }
 
-    if (!product.MOQ || Number(product.MOQ) < 1) {
+    if (!product.moq || Number(product.moq) < 1) {
       errors.push("Minimum Order Quantity must be at least 1");
     }
 
@@ -151,7 +151,7 @@ const AddProduct = () => {
       errors.push("At least one product image is required");
     }
 
-    if (product.Video_Link && !isValidUrl(product.Video_Link)) {
+    if (product.video_link && !isValidUrl(product.video_link)) {
       errors.push("Please enter a valid video URL");
     }
 
@@ -197,22 +197,22 @@ const AddProduct = () => {
 
       // Prepare product data
       const productData = {
-        productName: product.productName,
+        product_name: product.product_name,
         description: product.description,
         category: product.category,
-        cost: Number(product.cost),
-        Available_Quantity: Number(product.Available_Quantity),
-        MOQ: Number(product.MOQ),
-        Video_Link: product.Video_Link || "",
-        paymentOptions: product.paymentOptions,
-        showOnHomePage: product.showOnHomePage,
+        price: Number(product.price),
+        available_quantity: Number(product.available_quantity),
+        moq: Number(product.moq),
+        video_link: product.video_link || "",
+        payment_options: product.payment_options,
+        show_on_homepage: product.show_on_homepage,
         images: imageUrls,
-        mainImage: imageUrls[0],
-        trackingId: generateTrackingId(),
-        createdAt: new Date().toISOString(),
-        status: "active",
-        paymentStatus: "pending",
-        deliveryStatus: "pending",
+        main_image: imageUrls[0],
+        tracking_id: generateTrackingId(),
+        created_at: new Date().toISOString(),
+        status: "pending",
+        payment_status: "pending",
+        delivery_status: "pending",
       };
 
       // Send to backend
@@ -225,15 +225,15 @@ const AddProduct = () => {
 
         // Reset form
         setProduct({
-          productName: "",
+          product_name: "",
           description: "",
           category: "Shirt",
-          cost: "",
-          Available_Quantity: "",
-          MOQ: "1",
-          Video_Link: "",
-          paymentOptions: "Cash on Delivery",
-          showOnHomePage: false,
+          price: "",
+          available_quantity: "",
+          moq: "1",
+          video_link: "",
+          payment_options: "Cash on Delivery",
+          show_on_homepage: false,
         });
         setImages([]);
         setImagePreviews([]);
@@ -296,8 +296,8 @@ const AddProduct = () => {
                   </label>
                   <input
                     type="text"
-                    name="productName"
-                    value={product.productName}
+                    name="product_name"
+                    value={product.product_name}
                     onChange={handleChange}
                     placeholder="Enter product name"
                     required
@@ -336,8 +336,8 @@ const AddProduct = () => {
                     </span>
                     <input
                       type="number"
-                      name="cost"
-                      value={product.cost}
+                      name="price"
+                      value={product.price}
                       onChange={handleChange}
                       placeholder="0.00"
                       min="0"
@@ -355,8 +355,8 @@ const AddProduct = () => {
                   </label>
                   <input
                     type="number"
-                    name="Available_Quantity"
-                    value={product.Available_Quantity}
+                    name="available_quantity"
+                    value={product.available_quantity}
                     onChange={handleChange}
                     placeholder="Enter available quantity"
                     min="0"
@@ -373,8 +373,8 @@ const AddProduct = () => {
                   </label>
                   <input
                     type="number"
-                    name="MOQ"
-                    value={product.MOQ}
+                    name="moq"
+                    value={product.moq}
                     onChange={handleChange}
                     placeholder="Minimum 1"
                     min="1"
@@ -389,8 +389,8 @@ const AddProduct = () => {
                     Payment Options <span className="text-red-500">*</span>
                   </label>
                   <select
-                    name="paymentOptions"
-                    value={product.paymentOptions}
+                    name="payment_options"
+                    value={product.payment_options}
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -411,8 +411,8 @@ const AddProduct = () => {
                 </label>
                 <input
                   type="url"
-                  name="Video_Link"
-                  value={product.Video_Link}
+                  name="video_link"
+                  value={product.video_link}
                   onChange={handleChange}
                   placeholder="https://example.com/video.mp4"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -524,9 +524,9 @@ const AddProduct = () => {
               <div className="flex items-center">
                 <input
                   type="checkbox"
-                  id="showOnHomePage"
-                  name="showOnHomePage"
-                  checked={product.showOnHomePage}
+                  id="show_on_homepage"
+                  name="show_on_homepage"
+                  checked={product.show_on_homepage}
                   onChange={handleChange}
                   className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
                 />
