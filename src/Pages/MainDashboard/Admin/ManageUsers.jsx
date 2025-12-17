@@ -1,57 +1,51 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-
+import React, { useState, useEffect} from "react";
 import {
   FaEdit,
-  FaBan,
-  FaCheckCircle,
   FaUser,
   FaSearch,
   FaTimes,
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import { MdEmail, MdPerson, MdWarning, MdInfo } from "react-icons/md";
-
+import { GrDocumentUpdate } from "react-icons/gr";
+import { MdEmail, MdPerson,MdInfo } from "react-icons/md";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import useRole from "../../../Hooks/useRole";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import Loader from "../../../Components/Common/Loader/Loader";
 
 const ManageUsers = () => {
-  const { role } = useRole();
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [currentPage, setCurrentPage] = useState(0); 
-  const usersPerPage = 2;
+  const [usersPerPage] = useState(2);
   const [editingUser, setEditingUser] = useState(null);
   const [roleModalOpen, setRoleModalOpen] = useState(false);
-  const [suspendModalOpen, setSuspendModalOpen] = useState(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
-    const navigate = useNavigate();
   const [updating, setUpdating] = useState(false);
-  const [suspending, setSuspending] = useState(false);
   const [suspendReason, setSuspendReason] = useState("");
   const [suspendFeedback, setSuspendFeedback] = useState("");
   const [loading, setLoading] = useState(true);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [userStats, setUserStats] = useState({
+    totalUsers: 0,
+    roles: {
+      admin: 0,
+      manager: 0,
+      buyer: 0,
+    },
+    statuses: {
+      active: 0,
+      suspended: 0,
+      pending: 0,
+    },
+  });
   const axiosSecure = useAxiosSecure();
 
-  useEffect(() => {
-    if (role !== "admin") {
-      navigate("/", { replace: true });
-      toast.error('Unauthorized user')
-    }
-  }, [role, navigate]);
-
-  // Fetch users with pagination and filters
-  useEffect(() => {
-    fetchUsers();
-  }, [currentPage, searchTerm, filterRole, filterStatus]);
 
   const fetchUsers = async () => {
     try {
@@ -63,18 +57,16 @@ const ManageUsers = () => {
         }&limit=${usersPerPage}&role=${filterRole}&status=${filterStatus}`
       );
 
-      if (res.data && res.data.success) {
-        // Handle response with pagination metadata
-        setUsers(res.data.data || []);
-        setTotalUsers(res.data.total || 0);
+      if (res.data && res.data?.success) {
+        setUsers(res.data?.data || []);
+        setTotalUsers(res.data?.total || 0);
         setTotalPages(
-          res.data.totalPages || Math.ceil((res.data.total || 0) / usersPerPage)
+          res?.data?.totalPages || Math.ceil((res.data?.total || 0) / usersPerPage)
         );
       } else if (Array.isArray(res.data)) {
-        // Fallback for non-paginated response
         setUsers(res.data);
-        setTotalUsers(res.data.length);
-        setTotalPages(Math.ceil(res.data.length / usersPerPage));
+        setTotalUsers(res.data?.length);
+        setTotalPages(Math.ceil(res.data?.length / usersPerPage));
       } else {
         setUsers([]);
         setTotalUsers(0);
@@ -92,14 +84,40 @@ const ManageUsers = () => {
     }
   };
 
-  // Handle role update
+const fetchUserStats = async () => {
+  try {
+    const res = await axiosSecure.get("/admin/stats");
+    console.log("Stats response:", res.data);
+
+    if (res.data?.success) {
+      setUserStats(res.data);
+    } else {
+      throw new Error("Stats API success:false");
+    }
+  } catch (error) {
+    console.error("Failed to load statistics", error);
+
+    setUserStats({
+      totalUsers: 0,
+      roles: { admin: 0, manager: 0, buyer: 0 },
+      statuses: { active: 0, suspended: 0, pending: 0 },
+    });
+    toast.error("Failed to load statistics");
+  }
+};
+
+ useEffect(() => {
+   fetchUsers();
+   fetchUserStats();
+ }, [currentPage, searchTerm, filterRole, filterStatus]);
+  
   const handleRoleUpdate = async () => {
     if (!editingUser || !selectedRole) return;
 
     try {
       setUpdating(true);
       const response = await axiosSecure.patch(
-        `/users/role/${editingUser._id}`,
+        `/users/role/${editingUser?._id}`,
         { role: selectedRole }
       );
 
@@ -117,134 +135,101 @@ const ManageUsers = () => {
         setSelectedRole("");
       }
     } catch (error) {
-      console.error("Error updating user role:", error);
-      toast.error("Failed to update user role");
+      console.error("Error updating user? role:", error);
+      toast.error("Failed to update user? role");
     } finally {
       setUpdating(false);
     }
   };
 
-  // Handle page change with react-paginate
   const handlePageClick = (event) => {
-    setCurrentPage(event.selected); // react-paginate provides selected page index (0-based)
+    setCurrentPage(event.selected); 
   };
 
-  // Filter users locally (fallback if backend doesn't support filtering)
-  const filteredUsers = useMemo(() => {
-    return users.filter((user) => {
-      const matchesSearch =
-        user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.displayName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        searchTerm === "";
+  const handleApproveUser = async () => {
+    try {
+      const res = await axiosSecure.patch(`/users/status/${editingUser?._id}`, {
+        status: "active",
+      });
 
-      const matchesRole = filterRole === "all" || user.role === filterRole;
-      const matchesStatus =
-        filterStatus === "all" || (user.status || "active") === filterStatus;
-
-      return matchesSearch && matchesRole && matchesStatus;
-    });
-  }, [users, searchTerm, filterRole, filterStatus]);
-
-  // Calculate current page users for display
-  const currentUsers = useMemo(() => {
-    const startIndex = currentPage * usersPerPage;
-    const endIndex = startIndex + usersPerPage;
-    return filteredUsers.slice(startIndex, endIndex);
-  }, [filteredUsers, currentPage, usersPerPage]);
-
-  // Handle user suspension with modal
-  const openSuspendModal = (user) => {
-    setEditingUser(user);
-    setSuspendReason("");
-    setSuspendFeedback("");
-    setSuspendModalOpen(true);
+      if (res?.data?.success) {
+        setUsers(
+          users.map((u) =>
+            u._id === editingUser?._id ? { ...u, status: "active" } : u
+          )
+        );
+        toast.success("User approved");
+        closeUpdateModal();
+      }
+    } catch {
+      toast.error("Approve failed");
+    }
   };
 
   const handleSuspendUser = async () => {
-    if (!editingUser || !suspendReason.trim()) {
-      toast.error("Please provide a suspension reason");
+    if (!suspendReason.trim()) {
+      toast.error("Suspension reason required");
       return;
     }
 
     try {
-      setSuspending(true);
+      const res = await axiosSecure.patch(`/users/status/${editingUser?._id}`, {
+        status: "suspended",
+        suspendReason,
+        suspendFeedback,
+      });
 
-      const response = await axiosSecure.patch(
-        `/users/suspend/${editingUser._id}`,
-        {
-          status: "suspended",
-          suspendReason: suspendReason.trim(),
-          suspendFeedback: suspendFeedback.trim(),
-          suspendedBy: role,
-          suspendedAt: new Date().toISOString(),
-        }
-      );
-
-      if (response.data.success) {
+      if (res?.data.success) {
         setUsers(
-          users.map((user) =>
-            user._id === editingUser._id
-              ? {
-                  ...user,
-                  status: "suspended",
-                  suspendReason: suspendReason.trim(),
-                  suspendFeedback: suspendFeedback.trim(),
-                  suspendedAt: new Date().toISOString(),
-                }
-              : user
+          users.map((u) =>
+            u._id === editingUser?._id
+              ? { ...u, status: "suspended", suspendReason, suspendFeedback }
+              : u
           )
         );
-        toast.success("User suspended successfully");
-        setSuspendModalOpen(false);
-        setEditingUser(null);
-        setSuspendReason("");
-        setSuspendFeedback("");
+        toast.success("User suspended");
+        closeUpdateModal();
       }
-    } catch (error) {
-      console.error("Error suspending user:", error);
-      toast.error("Failed to suspend user");
-    } finally {
-      setSuspending(false);
+    } catch {
+      toast.error("Suspend failed");
     }
   };
 
-  // Handle user activation
-  const handleActivateUser = async (userId) => {
-    if (!window.confirm("Are you sure you want to activate this user?")) {
-      return;
-    }
-
-    try {
-      setSuspending(userId);
-
-      const response = await axiosSecure.patch(`/users/status/${userId}`, {
-        status: "active",
-        suspendReason: "",
-        suspendFeedback: "",
-      });
-
-      if (response.data.success) {
-        setUsers(
-          users.map((user) =>
-            user._id === userId
-              ? {
-                  ...user,
-                  status: "active",
-                  suspendReason: "",
-                  suspendFeedback: "",
-                }
-              : user
-          )
+  const handleActivateUser = async () => {
+      try {
+        const res = await axiosSecure.patch(
+          `/users/status/${editingUser?._id}`,
+          {
+            status: "active",
+            suspendReason: "",
+            suspendFeedback: "",
+          }
         );
-        toast.success("User activated successfully");
+
+        if (res?.data.success) {
+          setUsers(
+            users.map((u) =>
+              u._id === editingUser?._id ? { ...u, status: "active" } : u
+            )
+          );
+          toast.success("User activated");
+          closeUpdateModal();
+        }
+      } catch {
+        toast.error("Activation failed");
       }
-    } catch (error) {
-      console.error("Error activating user:", error);
-      toast.error("Failed to activate user");
-    } finally {
-      setSuspending(null);
-    }
+  };
+
+  const openUpdateModal = (user) => {
+    setEditingUser(user);
+    setSuspendReason("");
+    setSuspendFeedback("");
+    setUpdateModalOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setEditingUser(null);
+    setUpdateModalOpen(false);
   };
 
   const getRoleColor = (userRole) => {
@@ -305,14 +290,16 @@ const ManageUsers = () => {
         <div className="bg-white rounded-lg shadow p-4">
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">Total Users</p>
-            <p className="text-2xl font-semibold text-gray-900">{totalUsers}</p>
+            <p className="text-2xl font-semibold text-gray-900">
+              {userStats.totalUsers}
+            </p>
           </div>
         </div>
         <div className="bg-white rounded-lg shadow p-4">
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">Active</p>
             <p className="text-2xl font-semibold text-green-600">
-              {users.filter((u) => (u.status || "active") === "active").length}
+              {userStats.statuses?.active}
             </p>
           </div>
         </div>
@@ -320,7 +307,7 @@ const ManageUsers = () => {
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">Suspended</p>
             <p className="text-2xl font-semibold text-red-600">
-              {users.filter((u) => u.status === "suspended").length}
+              {userStats.statuses?.suspended}
             </p>
           </div>
         </div>
@@ -328,7 +315,7 @@ const ManageUsers = () => {
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">Admins</p>
             <p className="text-2xl font-semibold text-red-600">
-              {users.filter((u) => u.role === "admin").length}
+              {userStats.roles?.admin}
             </p>
           </div>
         </div>
@@ -336,7 +323,7 @@ const ManageUsers = () => {
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">Managers</p>
             <p className="text-2xl font-semibold text-blue-600">
-              {users.filter((u) => u.role === "manager").length}
+              {userStats.roles?.manager}
             </p>
           </div>
         </div>
@@ -344,7 +331,7 @@ const ManageUsers = () => {
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">Buyer</p>
             <p className="text-2xl font-semibold text-blue-600">
-              {users.filter((u) => u.role === "buyer").length}
+              {userStats.roles?.buyer}
             </p>
           </div>
         </div>
@@ -355,7 +342,7 @@ const ManageUsers = () => {
           {(searchTerm || filterRole !== "all" || filterStatus !== "all") && (
             <button
               onClick={clearFilters}
-              className="text-sm text-gray-600 hover:text-red-800 flex items-center"
+              className="text-sm text-indigo-600 hover:text-red-800 flex items-center"
             >
               <FaTimes className="mr-1" />
               Clear Filters
@@ -460,24 +447,24 @@ const ManageUsers = () => {
                       Created
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                     Manage Actions
+                      Manage Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {users.map((user) => (
                     <tr
-                      key={user._id}
+                      key={user?._id}
                       className="hover:bg-gray-50 transition-colors"
                     >
                       {/* User Info */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          {user.photoURL ? (
+                          {user?.photoURL ? (
                             <img
                               className="h-10 w-10 rounded-full"
-                              src={user.photoURL}
-                              alt={user.name || user.email}
+                              src={user?.photoURL}
+                              alt={user?.name || user?.email}
                             />
                           ) : (
                             <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
@@ -486,10 +473,10 @@ const ManageUsers = () => {
                           )}
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {user.name || user.displayName || "No Name"}
+                              {user?.name || user?.displayName || "No Name"}
                             </div>
                             <div className="text-xs text-gray-500">
-                              ID: {user._id?.substring(0, 8)}...
+                              ID: {user?._id?.substring(0, 8)}...
                             </div>
                           </div>
                         </div>
@@ -549,42 +536,30 @@ const ManageUsers = () => {
                           {/* Update Role Button */}
                           <button
                             onClick={() => openRoleModal(user)}
-                            className="text-blue-600 hover:text-blue-900 flex items-center"
+                            disabled={user?.role === "admin"}
+                            className={`flex items-center ${
+                              user?.role === "admin"
+                                ? "text-gray-400 cursor-not-allowed"
+                                : "text-indigo-600 hover:text-indigo-800"
+                            }`}
                             title="Update Role"
                           >
                             <FaEdit className="mr-1" />
                             Role
                           </button>
 
-                          {/* Suspend/Activate Button */}
-                          {user.status === "suspended" ? (
-                            <button
-                              onClick={() => handleActivateUser(user?._id)}
-                              disabled={suspending === user?._id}
-                              className={`text-green-600 hover:text-green-900 flex items-center ${
-                                suspending === user?._id
-                                  ? "opacity-50 cursor-not-allowed"
-                                  : ""
-                              }`}
-                              title="Activate User"
-                            >
-                              {suspending === user._id ? (
-                                <Loader className="animate-spin mr-1" />
-                              ) : (
-                                <FaCheckCircle className="mr-1" />
-                              )}
-                              Activate
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => openSuspendModal(user)}
-                              className="text-red-600 hover:text-red-900 flex items-center"
-                              title="Suspend User"
-                            >
-                              <FaBan className="mr-1" />
-                              Suspend
-                            </button>
-                          )}
+                          {/*Update status Button */}
+                          <button
+                            onClick={() => openUpdateModal(user)}
+                            className={`flex items-center ${
+                              user?.role === "admin"
+                                ? "text-gray-400 cursor-not-allowed"
+                                : "text-green-600 hover:text-red-800"
+                            }`}
+                          >
+                            <GrDocumentUpdate className="mr-1" />
+                            Update status
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -651,9 +626,6 @@ const ManageUsers = () => {
               <div className="ml-0 md:ml-4 text-sm text-gray-700">
                 Page <span className="font-medium">{currentPage + 1}</span> of{" "}
                 <span className="font-medium">{totalPages}</span>
-                <span className="ml-2 text-gray-500">
-                  ({totalUsers} total users)
-                </span>
               </div>
             </div>
           )}
@@ -665,18 +637,18 @@ const ManageUsers = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Update User Role
+              <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
+                Update User? Role
               </h3>
 
               <div className="mb-6">
                 <p className="text-sm text-gray-600 mb-2">
-                  User: {editingUser.name || editingUser.email}
+                  Name: <span className="font-medium">{editingUser?.name}</span>
                 </p>
                 <p className="text-sm text-gray-600">
-                  Current Role:{" "}
+                  Role:{" "}
                   <span className="font-medium">
-                    {editingUser.role || "buyer"}
+                    {editingUser?.role || "buyer"}
                   </span>
                 </p>
               </div>
@@ -692,7 +664,6 @@ const ManageUsers = () => {
                 >
                   <option value="buyer">Buyer</option>
                   <option value="manager">Manager</option>
-                  <option value="admin">Admin</option>
                 </select>
               </div>
 
@@ -703,7 +674,7 @@ const ManageUsers = () => {
                     setEditingUser(null);
                     setSelectedRole("");
                   }}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-black-700 bg-gray-200 hover:bg-gray-200 rounded-md transition-colors"
                 >
                   Cancel
                 </button>
@@ -720,91 +691,66 @@ const ManageUsers = () => {
         </div>
       )}
 
-      {/* Suspend User Modal */}
-      {suspendModalOpen && editingUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <MdWarning className="h-6 w-6 text-yellow-500 mr-2" />
-                <h3 className="text-lg font-medium text-gray-900">
-                  Suspend User
-                </h3>
-              </div>
+      {/* Suspend User? Modal */}
+      {updateModalOpen && editingUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <h3 className="text-lg font-semibold mb-4">Update Status</h3>
+            {/* STATUS ACTIONS */}
+            {editingUser?.status === "pending" && (
+              <button
+                onClick={handleApproveUser}
+                className="w-full bg-green-600 text-white py-2 rounded mb-2"
+              >
+                Approve User?
+              </button>
+            )}
 
-              <div className="mb-6">
-                <p className="text-sm text-gray-600 mb-2">
-                  Name: <span className="font-medium">{editingUser?.name}</span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Role:{" "}
-                  <span className="font-medium">
-                    {editingUser?.role || "buyer"}
-                  </span>
-                </p>
-              </div>
-
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Suspension Reason
-                  </label>
-                  <select
-                    value={suspendReason}
-                    onChange={(e) => setSuspendReason(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select a reason</option>
-                    <option value="Violation of terms">
-                      Violation of terms
-                    </option>
-                    <option value="Suspicious activity">
-                      Suspicious activity
-                    </option>
-                    <option value="Payment issues">Payment issues</option>
-                    <option value="Inappropriate content">
-                      Inappropriate content
-                    </option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Additional Feedback
-                  </label>
-                  <textarea
-                    value={suspendFeedback}
-                    onChange={(e) => setSuspendFeedback(e.target.value)}
-                    placeholder="Provide details about the suspension..."
-                    rows="3"
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end space-x-3">
-                <button
-                  onClick={() => {
-                    setSuspendModalOpen(false);
-                    setEditingUser(null);
-                    setSuspendReason("");
-                    setSuspendFeedback("");
-                  }}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+            {editingUser?.status === "active" && (
+              <>
+                <select
+                  value={suspendReason}
+                  onChange={(e) => setSuspendReason(e.target.value)}
+                  className="w-full border rounded px-3 py-2 mb-2"
                 >
-                  Cancel
-                </button>
+                  <option value="">Select suspend reason</option>
+                  <option value="Violation of terms">Violation of terms</option>
+                  <option value="Suspicious activity">
+                    Suspicious activity
+                  </option>
+                </select>
+
+                <textarea
+                  value={suspendFeedback}
+                  onChange={(e) => setSuspendFeedback(e.target.value)}
+                  placeholder="Suspend feedback"
+                  className="w-full border rounded px-3 py-2 mb-2"
+                />
+
                 <button
                   onClick={handleSuspendUser}
-                  disabled={suspending || !suspendReason.trim()}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-red-600 text-white py-2 rounded"
                 >
-                  {suspending ? "Suspending..." : "Confirm Suspension"}
+                  Suspend User?
                 </button>
-              </div>
-            </div>
+              </>
+            )}
+
+            {editingUser?.status === "suspended" && (
+              <button
+                onClick={handleActivateUser}
+                className="w-full bg-blue-600 text-white py-2 rounded"
+              >
+                Activate User
+              </button>
+            )}
+
+            <button
+              onClick={closeUpdateModal}
+              className="w-full mt-3 text-gray-600"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
