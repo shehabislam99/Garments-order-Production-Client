@@ -52,7 +52,7 @@ const ManageUsers = () => {
       setLoading(true);
     
       const res = await axiosSecure.get(
-        `/admin/users?searchText=${searchTerm}&page=${
+        `/users?searchText=${searchTerm}&page=${
           currentPage + 1
         }&limit=${usersPerPage}&role=${filterRole}&status=${filterStatus}`
       );
@@ -86,7 +86,7 @@ const ManageUsers = () => {
 
 const fetchUserStats = async () => {
   try {
-    const res = await axiosSecure.get("/admin/manage-user/stats");
+    const res = await axiosSecure.get("/users/stats");
     console.log("Stats response:", res.data);
 
     if (res.data?.success) {

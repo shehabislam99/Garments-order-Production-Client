@@ -30,6 +30,7 @@ const AllProductAdmin = () => {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [productStats, setProductStats] = useState({
     totalProducts: 0,
@@ -51,18 +52,22 @@ const AllProductAdmin = () => {
 
       if (res.data && res.data?.success) {
         setProducts(res.data?.data || []);
-        (res.data?.total || 0);
+        setTotalProducts(res.data?.total || 0);
         setTotalPages(
           res?.data?.totalPages ||
             Math.ceil((res.data?.total || 0) / productsPerPage)
         );
       } else {
         setProducts([]);
+        setTotalProducts(0);
         setTotalPages(0);
       }
     } catch (error) {
       console.error("Error fetching products:", error);
       toast.error("Failed to fetch products");
+      setProducts([]);
+      setTotalProducts(0);
+      setTotalPages(0);
     } finally {
       setLoading(false);
     }
@@ -238,6 +243,7 @@ const AllProductAdmin = () => {
   const paymentOptionsList = [
     "Cash on Delivery",
     "Credit Card",
+    "Debit Card",
     "Bank Transfer",
   ];
     const categories = [
@@ -536,12 +542,7 @@ const AllProductAdmin = () => {
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <div>
           <h2 className="text-2xl font-bold text-gray-800">All Products</h2>
-          <p className="text-gray-600 text-sm mt-1">
-            Manage all products in the system
-          </p>
-        </div>
         <button
           onClick={() => {
             fetchProducts();
@@ -561,9 +562,6 @@ const AllProductAdmin = () => {
             <p className="text-sm font-medium text-gray-600">Total Products</p>
             <p className="text-2xl font-semibold text-gray-900">
               {productStats?.totalProducts || products.length || 0}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
-              Showing {products.length} products
             </p>
           </div>
         </div>
