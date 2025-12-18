@@ -152,7 +152,7 @@ const ManagerDashboard = () => {
                 <FaTasks />
               </div>
               <div className="text-left">
-                <p className="font-medium text-gray-900">Manage Products</p>
+                <p className="font-medium text-gray-900">Manage all Products</p>
                 <p className="text-sm text-gray-500">
                   Edit, delete or update products
                 </p>

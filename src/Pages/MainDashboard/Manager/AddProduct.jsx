@@ -11,8 +11,6 @@ const AddProduct = () => {
   const { role } = useRole();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState("");
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -266,7 +264,9 @@ const AddProduct = () => {
     "Jeans",
     "Dress",
   ];
-  const paymentOptions = ["Cash on Delivery", "PayFirst"];
+  const paymentOptions = ["Cash on Delivery",
+     "Credit Card", 
+     "Bank Transfer"];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
