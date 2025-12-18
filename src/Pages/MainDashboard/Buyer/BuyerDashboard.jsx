@@ -74,9 +74,9 @@ const BuyerDashboard = () => {
     <div className="p-6">
       <div className="mb-8 text-center item-center">
         <h2 className="text-3xl flex justify-center font-bold  text-gray-800">
-          Welcome back Your Dashboard
+          Welcome back
         </h2>
-        <p className="text-gray-600 mt-2">Here's Your Account Management</p>
+        <p className="text-gray-600 mt-2">Here's Your Dashboard</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -144,7 +144,7 @@ const BuyerDashboard = () => {
         <h3 className="text-lg font-medium text-gray-900 mb-4">
           Quick Actions
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link to="/dashboard/buyer/my-orders">
             <button className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-300 transition duration-150">
               <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-md p-3 mr-4">
@@ -160,7 +160,7 @@ const BuyerDashboard = () => {
           <Link to="/dashboard/buyer/track-order">
             <button className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-green-300 transition duration-150">
               <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-md p-3 mr-4">
-                < FaMapMarkerAlt/>
+                <FaMapMarkerAlt />
               </div>
               <div className="text-left">
                 <p className="font-medium text-gray-900">Track Order</p>
@@ -170,19 +170,6 @@ const BuyerDashboard = () => {
               </div>
             </button>
           </Link>
-
-          <Link to="/dashboard/buyer/booking-order">
-            <button className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-purple-300 transition duration-150">
-              <div className="flex-shrink-0 text-purple-500 bg-purple-100 rounded-md p-3 mr-4">
-                <FaRegCreditCard />
-              </div>
-              <div className="text-left">
-                <p className="font-medium text-gray-900">Booking Order</p>
-                <p className="text-sm text-gray-500">Schedule a new order</p>
-              </div>
-            </button>
-          </Link>
-
           <Link to="/dashboard/buyer/my-profile">
             <button className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-amber-300 transition duration-150">
               <div className="flex-shrink-0 text-amber-500 bg-amber-100 rounded-md p-3 mr-4">

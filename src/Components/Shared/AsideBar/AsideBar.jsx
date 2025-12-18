@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
-  FaRegCreditCard,
   FaTasks,
   FaUsers,
   FaHome,
@@ -103,11 +102,6 @@ const roleConfig = {
         path: "/dashboard/buyer/my-profile",
         title: "My Profile",
         icon: FaUser,
-      },
-      {
-        path: "/dashboard/buyer/booking-order",
-        title: "Booking Order",
-        icon: FaRegCreditCard,
       },
     ],
   },
