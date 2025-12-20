@@ -3,12 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import MyOrders from "./MyOrder";
 import TrackOrder from "./TrackOrder";
 import MyProfile from "./MyProfile";
-import BookingForm from "./BookingForm";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { BsClipboard2X } from "react-icons/bs";
 import { IoNotificationsOffOutline } from "react-icons/io5";
 import {
-  FaRegCreditCard,
   FaTasks,
   FaMapMarkerAlt,
   FaUser,
@@ -63,8 +61,6 @@ const BuyerDashboard = () => {
         return <TrackOrder />;
       case "my-profile":
         return <MyProfile />;
-      case "booking-form":
-        return <BookingForm />;
       default:
         return <DashboardOverview />;
     }

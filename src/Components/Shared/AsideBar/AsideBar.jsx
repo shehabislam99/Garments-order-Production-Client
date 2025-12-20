@@ -13,7 +13,7 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { SiGoogletasks } from "react-icons/si";
 import useAuth from "../../../Hooks/useAuth";
 import useRole from "../../../Hooks/useRole";
-import Loader from "../../Common/Loader/Loader";
+import Loading from "../../Common/Loding/Loding";
 
 
 
@@ -130,7 +130,7 @@ const Asidebar = () => {
   if (loading) {
     return (
       <aside className="fixed left-0 -top-2 h-full w-64 bg-base-200 p-6">
-        <Loader></Loader>
+        <Loading></Loading>
       </aside>
     );
   }

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { useProduct } from "../../Hooks/useProduct"; // Adjust the import path as needed
-import Loader from "../../Components/Common/Loader/Loader";
+import { useProduct } from "../../Hooks/useProduct"; 
 import { FaSearch } from "react-icons/fa";
-import { LuRefreshCcw } from "react-icons/lu";
+import Loading from "../../Components/Common/Loding/Loding";
 
 const AllProducts = () => {
   const {
@@ -12,27 +11,24 @@ const AllProducts = () => {
     fetchProducts,
   } = useProduct();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
+ const [filteredProducts, setFilteredProducts] = useState(products);
 
-  useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setFilteredProducts(products);
-    } else {
-      const filtered = products.filter(
-        (product) =>
-          product.productName
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          product.trackingId
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          product.senderEmail?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredProducts(filtered);
-    }
-  }, [products, searchTerm]);
+ useEffect(() => {
+   if (!searchTerm.trim()) {
+     setFilteredProducts(products);
+     return;
+   }
 
+   const term = searchTerm.toLowerCase();
 
+const filtered = products.filter(
+  (product) =>
+    product.name?.toLowerCase().includes(term) || 
+    product.category?.toLowerCase().includes(term)
+);
+
+   setFilteredProducts(filtered);
+ }, [products, searchTerm]);
 
   const handleRefresh = () => {
     fetchProducts();
@@ -42,7 +38,7 @@ const AllProducts = () => {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="text-center">
-          <Loader></Loader>
+          <Loading></Loading>
           <p className="mt-2 text-gray-600">Loading products...</p>
         </div>
       </div>
@@ -70,7 +66,7 @@ const AllProducts = () => {
           <div className="relative">
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Search products by name or category..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -83,7 +79,6 @@ const AllProducts = () => {
             onClick={handleRefresh}
             className="mt-1 lg:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-red-800 transition-colors flex items-center"
           >
-            <LuRefreshCcw className="mr-1" />
             Refresh
           </button>
         </div>

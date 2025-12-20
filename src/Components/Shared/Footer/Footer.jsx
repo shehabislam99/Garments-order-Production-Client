@@ -3,18 +3,13 @@ import { Link } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
 import Logo from "../../Common/Logo/Logo";
 
-
 const Footer = () => {
   return (
     <>
       <footer className="text-black bg-gray-200 text-center py-4">
         <div className="mx-auto ">
-          <h1
-            className="text-center flex justify-center hover:underline"
-          >
-            <Link to="/">
+          <h1 className="text-center flex justify-center">
               <Logo></Logo>
-            </Link>
           </h1>
           <div
             className="grid grid-cols-1 md:grid-cols-2
@@ -31,24 +26,24 @@ const Footer = () => {
               <ul className="space-y-2 font-medium ">
                 <li>
                   <button
-                    className="hover:text-red-800 hover:underline  transition-all
-                  duration-500 transform hover:scale-105"
+                    className="hover:text-red-800 hover:underline  
+                    "
                   >
                     <Link to="/">Home</Link>
                   </button>
                 </li>
                 <li>
                   <button
-                    className="hover:text-red-800 hover:underline  transition-all
-                  duration-500 transform hover:scale-105"
+                    className="hover:text-red-800 hover:underline  
+                    "
                   >
                     <Link to="/all-products">Products</Link>
                   </button>
                 </li>
                 <li>
                   <button
-                    className="hover:text-red-800 hover:underline  transition-all
-                  duration-500 transform hover:scale-105"
+                    className="hover:text-red-800 hover:underline  
+                    "
                   >
                     <Link to="/about">About</Link>
                   </button>
@@ -65,15 +60,15 @@ const Footer = () => {
                 <li>
                   <button
                     className="hover:text-red-800 hover:underline
-                    transition-all duration-500 hover:scale-105"
+                      "
                   >
                     <Link to="/contact">Contact</Link>
                   </button>
                 </li>
                 <li>
                   <button
-                    className="hover:text-red-800 hover:underline  transition-all
-                  duration-500 transform hover:scale-105"
+                    className="hover:text-red-800 hover:underline  
+                    "
                   >
                     <Link to="/privacy-policy">Privacy Policy</Link>
                   </button>
@@ -81,7 +76,7 @@ const Footer = () => {
                 <li>
                   <button
                     className="hover:text-red-800 hover:underline
-                    transition-all duration-500 hover:scale-105"
+                      "
                   >
                     <Link to="/terms-service">Terms of Service</Link>
                   </button>
@@ -101,8 +96,8 @@ const Footer = () => {
                   href="https://www.facebook.com/"
                   className="text-sm gap-2
                  font-bold flex 
-                   flex-col hover:text-red-800  transition-all
-                  duration-300 transform hover:scale-105"
+                   flex-col hover:text-red-800  
+                  duration-300  "
                 >
                   <SocialIcon
                     url="https://www.youtube.com/"
@@ -117,8 +112,8 @@ const Footer = () => {
                   href="https://x.com"
                   className=" text-sm gap-2
                  font-bold flex
-                   flex-col hover:text-red-800  transition-all
-                  duration-300 transform hover:scale-105"
+                   flex-col hover:text-red-800  
+                  duration-300  "
                 >
                   <SocialIcon
                     url="https://x.com"
@@ -133,8 +128,8 @@ const Footer = () => {
                   href="https://github.com/shehabislam99"
                   className="text-sm gap-2
                  font-bold flex
-                   flex-col hover:text-red-800  transition-all
-                  duration-300 transform hover:scale-105"
+                   flex-col hover:text-red-800  
+                  duration-300  "
                 >
                   <SocialIcon
                     url="https://github.com/shehabislam99"
@@ -149,8 +144,8 @@ const Footer = () => {
                   href="https://www.linkedin.com/"
                   className="text-sm gap-2
                  font-bold flex
-                   flex-col hover:text-red-800 transition-all
-                  duration-300 transform hover:scale-105"
+                   flex-col hover:text-red-800 
+                  duration-300  "
                 >
                   <SocialIcon
                     url="https://www.linkedin.com/"

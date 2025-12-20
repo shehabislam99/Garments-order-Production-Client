@@ -38,8 +38,7 @@ const Navbar = () => {
           <NavLink
             to={link.to}
             className={({ isActive }) =>
-              `text-[16px] font-medium hover:text-red-800 transition-all
-              duration-500 transform hover:scale-105 ${
+              `text-[16px] font-medium hover:text-red-800  ${
                 isActive ? "text-red-800 font-medium underline" : ""
               }`
             }
@@ -59,8 +58,7 @@ const Navbar = () => {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="lg:hidden flex items-center  transition-all
-                  duration-300 transform hover:scale-105
+              className="lg:hidden flex items-center 
               focus:outline-none"
             >
               <HiOutlineMenuAlt1 className="w-7 h-7" />
@@ -84,8 +82,7 @@ const Navbar = () => {
             <div
               className="hidden md:flex items-centerw-full
              text-gray-800 bg-gray-800 border border-gray-400 rounded-full       
-             transition-all
-            duration-500 transform hover:scale-105 px-4 py-2 w-48"
+             px-4 py-2 w-48"
             >
               <input
                 type="text"
@@ -105,8 +102,7 @@ const Navbar = () => {
               placeholder="Search Product..."
               className=" 
             hover:text-red-800
-             transition-all
-            duration-500 transform font-semibold hover:scale-105 hidden md:flex  "
+              font-semibold  hidden md:flex  "
               title="Search"
             >
               Search
@@ -115,8 +111,7 @@ const Navbar = () => {
             {/* Theme toggle */}
             <button
               onClick={handleToggleTheme}
-              className="hover:text-amber-300 transition-all
-                  duration-300 transform hover:scale-105  md:p-2 rounded-full hover:bg-red-900"
+              className="hover:text-indigo-300  md:p-2 rounded-full hover:bg-red-800"
               title={
                 isDarkTheme ? "Switch to light theme" : "Switch to dark theme"
               }
@@ -149,7 +144,7 @@ const Navbar = () => {
                     <Link
                       onClick={() => setIsProfileOpen(false)}
                       to="/dashboard"
-                      className="block px-4 py-2 hover:text-red-800 hover:underline"
+                      className="block text-green-600 px-4 py-2 hover:text-red-800 hover:underline"
                     >
                       Dashboard
                     </Link>
@@ -172,9 +167,8 @@ const Navbar = () => {
                 <Link
                   className="bg-indigo-600 border-none
                rounded-full text-white  hover:bg-purple-600 
-               btn p py-4 duration-300 
-               font-medium  transition-all
-                 transform hover:scale-105"
+               btn p py-4 
+               font-medium "
                   to="/login"
                 >
                   <button>Log In</button>
@@ -183,9 +177,8 @@ const Navbar = () => {
                 <Link
                   className="bg-green-600 border-none
                rounded-full text-white hover:bg-purple-600 
-               btn px-3 duration-300 
-               font-medium  transition-all
-                 transform hover:scale-105"
+               btn px-3  
+               font-medium  "
                   to="/register"
                 >
                   <button>Sign Up </button>

@@ -20,7 +20,8 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
 import { useParams, Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import Loader from "../../../Components/Common/Loader/Loader";
+import Loading from "../../../Components/Common/Loding/Loding";
+
 
 // Icon mapping object
 const iconComponents = {
@@ -260,7 +261,7 @@ const TrackOrder = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Loader className="h-16 w-16" />
+        <Loading className="h-16 w-16" />
       </div>
     );
   }

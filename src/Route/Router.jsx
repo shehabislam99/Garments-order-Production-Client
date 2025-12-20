@@ -16,7 +16,6 @@ import PendingOrders from "../Pages/MainDashboard/Manager/PendingOrders";
 import ManagerProfile from "../Pages/MainDashboard/Manager/ManagerProfile";
 import BuyerDashboard from "../Pages/MainDashboard/Buyer/BuyerDashboard";
 import TrackOrder from "../Pages/MainDashboard/Buyer/TrackOrder";
-import BookingForm from "../Pages/MainDashboard/Buyer/BookingForm";
 import BuyerProfile from "../Pages/MainDashboard/Buyer/MyProfile";
 import ManageProducts from "../Pages/MainDashboard/Manager/ManageProducts";
 import ApproveOrders from "../Pages/MainDashboard/Manager/ApproveOrders";
@@ -26,10 +25,10 @@ import ErrorPage from "../Components/Common/ErrorBoundary/ErrorPage";
 import AuthLayout from "../Layout/AuthLayout/AuthLayout";
 import MainLayout from "../Layout/MainLayout/MainLayout";
 import DashBoardLayout from "../Layout/DashBoardLayout/DashBoardLayout";
-import Forbidden from "../Components/Common/ErrorBoundary/Forbidden";
 import AdminRout from "./AdminRout";
 import AllOrders from "../Pages/MainDashboard/Admin/Allorders";
 import ManagerRout from "./ManagerRout";
+import Booking from "../Pages/Booking/Booking";
 
 const router = createBrowserRouter([
   {
@@ -50,16 +49,16 @@ const router = createBrowserRouter([
         element: <ProductDetailsPage />,
       },
       {
+        path: "/booking/:id",
+        element: <Booking/>
+      },
+      {
         path: "/about",
         element: <About />,
       },
       {
         path: "/contact",
         element: <Contact />,
-      },
-      {
-        path: "*",
-        element: <Forbidden></Forbidden>,
       },
     ],
   },
@@ -196,10 +195,6 @@ const router = createBrowserRouter([
       {
         path: "buyer/track-order",
         element: <TrackOrder />,
-      },
-      {
-        path: "buyer/booking-order",
-        element: <BookingForm />,
       },
       {
         path: "buyer/my-profile",

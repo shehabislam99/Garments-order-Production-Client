@@ -2,13 +2,13 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { FaUpload,  FaSpinner, FaCheck, FaTimes } from "react-icons/fa";
-import { axiosInstance } from "../../../Hooks/useAxios";
-import useRole from "../../../Hooks/useRole";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { FaUpload, FaTimes, FaSpinner, FaCheck } from "react-icons/fa";
 
 const AddProduct = () => {
   const navigate = useNavigate();
-  const { role } = useRole();
+  const AxiosSecure = useAxiosSecure();
+
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
@@ -17,75 +17,72 @@ const AddProduct = () => {
   const [product, setProduct] = useState({
     product_name: "",
     description: "",
-    category: "Shirt",
+    category: "",
     price: "",
     available_quantity: "",
-    moq: "1",
-    video_link: "",
-    payment_options: "Cash on Delivery",
+    moq: "100",
+    demo_video_link: "",
+    payment_Options: "",
     show_on_homepage: false,
   });
 
-  // Check if user is manager
-  if (role !== "manager") {
-    navigate("/unauthorized", { replace: true });
-    return null;
-  }
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setProduct({
-      ...product,
+
+    setProduct((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
 
-    if (files.length === 0) return;
+   const handleImageChange = (e) => {
+     const files = Array.from(e.target.files);
 
-    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-    const invalidFiles = files.filter(
-      (file) => !validTypes.includes(file.type)
-    );
+     if (files.length === 0) return;
 
-    if (invalidFiles.length > 0) {
-      toast.error("Please select valid image files (JPEG, PNG, WebP only)");
-      e.target.value = "";
-      return;
-    }
+     const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+     const invalidFiles = files.filter(
+       (file) => !validTypes.includes(file.type)
+     );
 
-    // Limit to 5 images
-    const newImages = [...images, ...files].slice(0, 5);
-    setImages(newImages);
+     if (invalidFiles.length > 0) {
+       toast.error("Please select valid image files (JPEG, PNG, WebP only)");
+       e.target.value = "";
+       return;
+     }
 
-    // Create previews
-    newImages.forEach((file, index) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreviews((prev) => {
-          const newPreviews = [...prev];
-          newPreviews[index] = reader.result;
-          return newPreviews;
-        });
-      };
-      reader.readAsDataURL(file);
-    });
+     // Limit to 5 images
+     const newImages = [...images, ...files].slice(0, 5);
+     setImages(newImages);
 
-    e.target.value = "";
-  };
+     // Create previews
+     newImages.forEach((file, index) => {
+       const reader = new FileReader();
+       reader.onloadend = () => {
+         setImagePreviews((prev) => {
+           const newPreviews = [...prev];
+           newPreviews[index] = reader.result;
+           return newPreviews;
+         });
+       };
+       reader.readAsDataURL(file);
+     });
 
-  const removeImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index);
-    const newPreviews = imagePreviews.filter((_, i) => i !== index);
-    setImages(newImages);
-    setImagePreviews(newPreviews);
-  };
+     e.target.value = "";
+   };
 
-  const uploadImagesToImgBB = async (files) => {
-    try {
-      setUploading(true);
+   const removeImage = (index) => {
+     const newImages = images.filter((_, i) => i !== index);
+     const newPreviews = imagePreviews.filter((_, i) => i !== index);
+     setImages(newImages);
+     setImagePreviews(newPreviews);
+   };
+
+ const uploadImagesToImgBB = async (files) => {
+   
+   try {
+    setUploading(true);
       const uploadPromises = files.map(async (file) => {
         const formData = new FormData();
         formData.append("image", file);
@@ -103,152 +100,44 @@ const AddProduct = () => {
           }
         );
 
-        if (response.data?.data?.url) {
-          return response.data.data.url;
-        } else {
-          throw new Error("Failed to upload image");
-        }
+        return response.data.data.url;
       });
 
-      const imageUrls = await Promise.all(uploadPromises);
-      toast.success(`${imageUrls.length} image(s) uploaded successfully!`);
-      return imageUrls;
-    } catch (error) {
-      console.error("Image upload error:", error);
-      toast.error("Failed to upload images. Please try again.");
-      return null;
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const validateForm = () => {
-    const errors = [];
-
-    if (!product.product_name.trim()) {
-      errors.push("Product Name is required");
-    }
-
-    if (!product.description.trim()) {
-      errors.push("Product Description is required");
-    }
-
-    if (!product.price || Number(product.price) <= 0) {
-      errors.push("Valid Price is required");
-    }
-
-    if (!product.available_quantity || Number(product.available_quantity) < 0) {
-      errors.push("Valid Available Quantity is required");
-    }
-
-    if (!product.moq || Number(product.moq) < 1) {
-      errors.push("Minimum Order Quantity must be at least 1");
-    }
-
-    if (images.length === 0) {
-      errors.push("At least one product image is required");
-    }
-
-    if (product.video_link && !isValidUrl(product.video_link)) {
-      errors.push("Please enter a valid video URL");
-    }
-
-    return errors;
-  };
-
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
+     return await Promise.all(uploadPromises);
+   } catch {
+     toast.error("Image upload failed");
+     return [];
+   } finally {
+     setUploading(false);
+   }
+ };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Validate form
-    const errors = validateForm();
-    if (errors.length > 0) {
-      errors.forEach((error) => toast.error(error));
+    const imageFiles = await uploadImagesToImgBB(images);
+    if (!imageFiles.length) {
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
+    const productData = {
+      ...product,
+      price: Number(product.price),
+      available_quantity: Number(product.available_quantity),
+      moq: Number(product.moq),
+      images: imageFiles,
+      status: "pending",
+      show_on_homepage: Boolean(product.show_on_homepage),
+    };
 
     try {
-      // Upload images
-      const imageUrls = await uploadImagesToImgBB(images);
-      if (!imageUrls || imageUrls.length === 0) {
-        setLoading(false);
-        return;
-      }
-
-      // Generate tracking ID
-      const generateTrackingId = () => {
-        const prefix = "PRD";
-        const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-        const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-        return `${prefix}-${date}-${random}`;
-      };
-
-      // Prepare product data
-      const productData = {
-        product_name: product.product_name,
-        description: product.description,
-        category: product.category,
-        price: Number(product.price),
-        available_quantity: Number(product.available_quantity),
-        moq: Number(product.moq),
-        video_link: product.video_link || "",
-        payment_options: product.payment_options,
-        show_on_homepage: product.show_on_homepage,
-        images: imageUrls,
-        main_image: imageUrls[0],
-        tracking_id: generateTrackingId(),
-        created_at: new Date().toISOString(),
-        status: "pending",
-        payment_status: "pending",
-        delivery_status: "pending",
-      };
-
-      // Send to backend
-      const response = await axiosInstance.post("/products", productData);
-
-      if (response.data) {
-        toast.success(
-          "Product added successfully! It will appear in the All Products page."
-        );
-
-        // Reset form
-        setProduct({
-          product_name: "",
-          description: "",
-          category: "Shirt",
-          price: "",
-          available_quantity: "",
-          moq: "1",
-          video_link: "",
-          payment_options: "Cash on Delivery",
-          show_on_homepage: false,
-        });
-        setImages([]);
-        setImagePreviews([]);
-
-        // Navigate to all products page after success
-        setTimeout(() => {
-          navigate("/dashboard/manager/all-products");
-        }, 1500);
-      } else {
-        throw new Error("Failed to add product");
-      }
-    } catch (error) {
-      console.error("Product submission error:", error);
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to add product. Please try again."
-      );
+      await AxiosSecure.post("/products", productData);
+      toast.success("Product added successfully");
+      navigate("/all-products");
+    } catch {
+      toast.error("Failed to add product");
     } finally {
       setLoading(false);
     }
@@ -264,9 +153,8 @@ const AddProduct = () => {
     "Jeans",
     "Dress",
   ];
-  const paymentOptions = ["Cash on Delivery",
-     "Credit Card", 
-     "Bank Transfer"];
+
+  const paymentOptionsList = ["Cash on Delivery", "PayFirst"];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -275,29 +163,23 @@ const AddProduct = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Add New Product</h1>
           <p className="text-gray-600 mt-2">
-            Fill in the form below to add a new product. Only Managers can
-            access this page.
+            Fill in the form below to add your a new product
           </p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Basic Information */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
-                Basic Information
-              </h2>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Product Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Product Name <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                    Product Name
                   </label>
                   <input
                     type="text"
                     name="product_name"
-                    value={product.product_name}
+                    value={product?.product_name}
                     onChange={handleChange}
                     placeholder="Enter product name"
                     required
@@ -307,8 +189,8 @@ const AddProduct = () => {
 
                 {/* Category */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                    Category
                   </label>
                   <select
                     name="category"
@@ -317,6 +199,9 @@ const AddProduct = () => {
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
+                    <option value="" disabled>
+                      Select Category
+                    </option>
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>
                         {cat}
@@ -327,8 +212,8 @@ const AddProduct = () => {
 
                 {/* Price */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price ($) <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                    Price ($)
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
@@ -337,7 +222,7 @@ const AddProduct = () => {
                     <input
                       type="number"
                       name="price"
-                      value={product.price}
+                      value={product?.price}
                       onChange={handleChange}
                       placeholder="0.00"
                       min="0"
@@ -350,13 +235,13 @@ const AddProduct = () => {
 
                 {/* Available Quantity */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Available Quantity <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                    Available Quantity
                   </label>
                   <input
                     type="number"
                     name="available_quantity"
-                    value={product.available_quantity}
+                    value={product?.available_quantity}
                     onChange={handleChange}
                     placeholder="Enter available quantity"
                     min="0"
@@ -367,17 +252,16 @@ const AddProduct = () => {
 
                 {/* Minimum Order Quantity */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-800 mb-2">
                     Minimum Order Quantity (MOQ){" "}
-                    <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
                     name="moq"
                     value={product.moq}
                     onChange={handleChange}
-                    placeholder="Minimum 1"
-                    min="1"
+                    placeholder="Minimum 100"
+                    min="100"
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
@@ -385,17 +269,20 @@ const AddProduct = () => {
 
                 {/* Payment Options */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Payment Options <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                    Payment Options
                   </label>
                   <select
-                    name="payment_options"
-                    value={product.payment_options}
+                    name="payment_Options"
+                    value={product?.payment_Options}
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    {paymentOptions.map((option) => (
+                    <option value="" disabled>
+                      Select Payment Method
+                    </option>
+                    {paymentOptionsList.map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
@@ -406,31 +293,83 @@ const AddProduct = () => {
 
               {/* Video Link */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Demo Video Link (Optional)
+                <label className="block text-sm font-medium text-gray-800 mb-2">
+                  Product Demo Video Link (Optional)
                 </label>
                 <input
                   type="url"
-                  name="video_link"
-                  value={product.video_link}
+                  name="demo_video_link"
+                  value={product?.demo_video_link}
                   onChange={handleChange}
                   placeholder="https://example.com/video.mp4"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  Add a video demo of the product (YouTube, Vimeo, or direct
-                  video link)
-                </p>
+              </div>
+
+              {/* Images Upload */}
+              <div className="space-y-2">
+                <h2 className="text-sm font-semibold text-gray-800">
+                  Product Images
+                </h2>
+
+                <div>
+                  <div className="border border-gray-300 rounded-xl text-center hover:border-blue-400 transition-colors mb-6">
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      multiple
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="imageUpload"
+                      className="cursor-pointer text-gray-600 flex px-4 gap-1 py-3"
+                    >
+                      <FaUpload className="w-4 h-4 mt-1" />
+                      <p>Click to upload product images from your device</p>
+                    </label>
+                  </div>
+
+                  {/* Image Previews */}
+                  {imagePreviews.length > 0 && (
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-gray-800">
+                        Image Previews
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        {imagePreviews.map((preview, index) => (
+                          <div key={index} className="relative group">
+                            <div className="aspect-square rounded-lg overflow-hidden border border-gray-200">
+                              <img
+                                src={preview}
+                                alt={`Product preview ${index + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => removeImage(index)}
+                              className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <FaTimes className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Description <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-gray-800 mb-2">
+                  Product Description
                 </label>
                 <textarea
                   name="description"
-                  value={product.description}
+                  value={product?.description}
                   onChange={handleChange}
                   placeholder="Describe your product in detail..."
                   rows="6"
@@ -439,108 +378,22 @@ const AddProduct = () => {
                 />
               </div>
             </div>
-
-            {/* Images Upload */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
-                Product Images
-              </h2>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-4">
-                  Upload Images <span className="text-red-500">*</span>
-                  <span className="text-sm text-gray-500 ml-2">
-                    (Maximum 5 images, first image will be main image)
-                  </span>
-                </label>
-
-                {/* Image Upload Area */}
-                <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors mb-6">
-                  <input
-                    type="file"
-                    id="imageUpload"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    multiple
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="imageUpload"
-                    className="cursor-pointer flex flex-col items-center justify-center"
-                  >
-                    <FaUpload className="w-12 h-12 text-gray-400 mb-4" />
-                    <p className="text-gray-600 font-medium">
-                      Click to upload product images
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      JPEG, PNG, WebP supported (Max 5 images)
-                    </p>
-                  </label>
-                </div>
-
-                {/* Image Previews */}
-                {imagePreviews.length > 0 && (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-medium text-gray-700">
-                      Image Previews ({imagePreviews.length}/5)
-                    </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                      {imagePreviews.map((preview, index) => (
-                        <div key={index} className="relative group">
-                          <div className="aspect-square rounded-lg overflow-hidden border border-gray-200">
-                            <img
-                              src={preview}
-                              alt={`Product preview ${index + 1}`}
-                              className="w-full h-full object-cover"
-                            />
-                            {index === 0 && (
-                              <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                                Main
-                              </div>
-                            )}
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => removeImage(index)}
-                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <FaTimes className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Settings */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
-                Settings
-              </h2>
-
-              {/* Show on Home Page */}
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="show_on_homepage"
-                  name="show_on_homepage"
-                  checked={product.show_on_homepage}
-                  onChange={handleChange}
-                  className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
-                />
-                <label htmlFor="showOnHomePage" className="ml-3 text-gray-700">
-                  Show on Home Page
-                </label>
-                <span className="ml-2 text-sm text-gray-500">
-                  (Product will appear on Home Page if checked)
-                </span>
-              </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="show_on_homepage"
+                name="show_on_homepage"
+                checked={product?.show_on_homepage}
+                onChange={handleChange}
+                className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
+              />
+              <label htmlFor="showOnHomePage" className="ml-3 text-gray-800">
+                Show on Home Page
+              </label>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row gap-4">
               <button
                 type="submit"
                 disabled={loading || uploading}
@@ -561,17 +414,12 @@ const AddProduct = () => {
 
               <button
                 type="button"
-                onClick={() => navigate("/dashboard/manager/all-products")}
+                onClick={() => navigate("/dashboard/manager")}
                 className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
               >
                 <FaTimes className="w-5 h-5 mr-2" />
                 Cancel
               </button>
-            </div>
-
-            {/* Required Fields Note */}
-            <div className="text-sm text-gray-500">
-              <span className="text-red-500">*</span> Required fields
             </div>
           </form>
         </div>

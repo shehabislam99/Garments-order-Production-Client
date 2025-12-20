@@ -1,4 +1,4 @@
-const Loader = ({ size = "medium", className = "" }) => {
+const Loading = ({ size = "medium", className = "" }) => {
   const sizeClasses = {
     small: "w-6 h-6",
     medium: "w-8 h-8",
@@ -14,4 +14,4 @@ const Loader = ({ size = "medium", className = "" }) => {
   );
 };
 
-export default Loader;
+export default Loading;

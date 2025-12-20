@@ -1,38 +1,27 @@
 import { useState, useEffect } from "react";
 import { axiosInstance } from "./useAxios";
+import toast from "react-hot-toast";
 
 export const useProduct = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
  const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/products");
-      setProducts(response.data);
-      setError(null);
-    } catch (err) {
-      console.error("Error fetching products:", err);
-      setError(err);
+      const res = await axiosInstance.get("/products");
+      const productArray = Array.isArray(res.data)
+        ? res.data
+        : res.data?.data || [];
+      setProducts(productArray);
+    } catch {
+      toast.error("Error fetching products");
+       setProducts([]); 
     } finally {
       setLoading(false);
     }
   };
-
-  const addProduct = async (productData) => {
-    try {
-      const response = await axiosInstance.post(
-        "/products",
-        productData
-      );
-      setProducts((prev) => [...prev, response.data.product]);
-      return { success: true, data: response.data };
-    } catch (err) {
-      console.error("Error adding product:", err);
-      return { success: false, error: err };
-    }
-  };
+  
 
   const updateProduct = async (id, productData) => {
     try {
@@ -70,9 +59,7 @@ export const useProduct = () => {
   return {
     products,
     loading,
-    error,
     fetchProducts,
-    addProduct,
     updateProduct,
     deleteProduct,
   };

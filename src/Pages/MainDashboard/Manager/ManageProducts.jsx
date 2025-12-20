@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../../Hooks/useAxios";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import toast from "react-hot-toast";
+import Loading from "../../../Components/Common/Loding/Loding";
+
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -13,9 +16,7 @@ const ManageProducts = () => {
     description: "",
     imageUrl: "",
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
+  const axiosSecure = useAxiosSecure();
   // Fetch products from backend
   useEffect(() => {
     fetchProducts();
@@ -24,11 +25,10 @@ const ManageProducts = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/products");
+      const response = await axiosSecure.get("/products");
       setProducts(response.data.data || []);
-    } catch (error) {
-      setError("Failed to fetch products");
-      console.error("Error fetching products:", error);
+    } catch  {
+      toast.error("Error fetching products");
     } finally {
       setLoading(false);
     }
@@ -37,13 +37,11 @@ const ManageProducts = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axiosInstance.delete(`/products/${id}`);
+        await axiosSecure.delete(`/products/${id}`);
         setProducts(products.filter((product) => product._id !== id));
-        setSuccess("Product deleted successfully");
-        setTimeout(() => setSuccess(""), 3000);
-      } catch (error) {
-        setError("Failed to delete product");
-        console.error("Error deleting product:", error);
+        toast.success("Product deleted successfully");
+      } catch {
+        toast.error("Error deleting product");
       }
     }
   };
@@ -63,7 +61,7 @@ const ManageProducts = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.put(
+      const response = await axiosSecure.put(
         `/products/${editingProduct}`,
         formData
       );
@@ -73,11 +71,9 @@ const ManageProducts = () => {
         )
       );
       setEditingProduct(null);
-      setSuccess("Product updated successfully");
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (error) {
-      setError("Failed to update product");
-      console.error("Error updating product:", error);
+      toast.success("Product updated successfully");
+    } catch  {
+      toast.error("Error updating product:");
     }
   };
 
@@ -103,6 +99,7 @@ const ManageProducts = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
+        <Loading />
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
       </div>
     );
@@ -116,18 +113,6 @@ const ManageProducts = () => {
           {products.length} product{products.length !== 1 ? "s" : ""} found
         </div>
       </div>
-
-      {error && (
-        <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
-          {success}
-        </div>
-      )}
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
@@ -292,13 +277,13 @@ const ManageProducts = () => {
                         <div className="flex space-x-2">
                           <button
                             onClick={() => handleEdit(product)}
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-blue-600 hover:text-red-800"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => handleDelete(product._id)}
-                            className="text-red-600 hover:text-red-900"
+                            className="text-red-600 hover:text-red-800"
                           >
                             Delete
                           </button>

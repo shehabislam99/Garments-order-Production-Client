@@ -2,8 +2,6 @@ const Card = ({
   children,
   className = "",
   padding = "medium",
-  hover = false,
-  onClick,
 }) => {
   const paddingClasses = {
     none: "p-0",
@@ -15,16 +13,11 @@ const Card = ({
   return (
     <div
       className={`
-        bg-white rounded-lg shadow-sm border border-gray-200
+        bg-amber-100 rounded-4xl shadow-md border border-gray-200
         ${paddingClasses[padding]}
-        ${
-          hover
-            ? "hover:shadow-md transition-shadow duration-200 cursor-pointer"
-            : ""
-        }
         ${className}
       `}
-      onClick={onClick}
+      
     >
       {children}
     </div>

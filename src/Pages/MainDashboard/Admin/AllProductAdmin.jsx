@@ -16,7 +16,9 @@ import { BsCurrencyDollar } from "react-icons/bs";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
-import Loader from "../../../Components/Common/Loader/Loader";
+import Loading from "../../../Components/Common/Loding/Loding";
+import { axiosInstance } from "../../../Hooks/useAxios";
+
 
 const AllProductAdmin = () => {
   const [products, setProducts] = useState([]);
@@ -44,7 +46,7 @@ const AllProductAdmin = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axiosSecure.get(
+      const res = await axiosInstance.get(
         `/products?searchText=${searchTerm}&page=${
           currentPage + 1
         }&limit=${productsPerPage}&category=${filterCategory}&status=${filterStatus}`
@@ -266,7 +268,7 @@ const AllProductAdmin = () => {
       category: editingProduct?.category || "",
       image: editingProduct?.image || "",
       demoVideo: editingProduct?.demoVideo || "",
-      paymentOptions: editingProduct?.paymentOptions || [],
+      payment_Options: editingProduct?.payment_Options || [],
     });
 
     const [imagePreview, setImagePreview] = useState(formData.image);
@@ -297,10 +299,10 @@ const AllProductAdmin = () => {
     };
 
     const handlePaymentOptionChange = (option) => {
-      const updatedOptions = formData.paymentOptions.includes(option)
-        ? formData.paymentOptions.filter((opt) => opt !== option)
-        : [...formData.paymentOptions, option];
-      setFormData({ ...formData, paymentOptions: updatedOptions });
+      const updatedOptions = formData.payment_Options.includes(option)
+        ? formData.payment_Options.filter((opt) => opt !== option)
+        : [...formData.payment_Options, option];
+      setFormData({ ...formData, payment_Options: updatedOptions });
     };
 
     const handleSubmit = (e) => {
@@ -496,7 +498,7 @@ const AllProductAdmin = () => {
                 <input
                   type="checkbox"
                   id={`payment-${option}`}
-                  checked={formData.paymentOptions.includes(option)}
+                  checked={formData.payment_Options.includes(option)}
                   onChange={() => handlePaymentOptionChange(option)}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
@@ -527,7 +529,7 @@ const AllProductAdmin = () => {
           >
             {updating ? (
               <span className="flex items-center">
-                <Loader className="h-4 w-4 mr-2" />
+                <Loading className="h-4 w-4 mr-2" />
                 Updating...
               </span>
             ) : (
@@ -682,7 +684,7 @@ const AllProductAdmin = () => {
       {/* Loading State */}
       {loading && (
         <div className="flex justify-center items-center py-12">
-          <Loader className="h-8 w-8" />
+          <Loading className="h-8 w-8" />
           <span className="text-gray-600 ml-3">Loading products...</span>
         </div>
       )}

@@ -243,7 +243,7 @@ const Register = () => {
             <div className="text-center  mb-8">
               <p className="flex justify-center">
                 <Link
-                  className="hover:underline  transition-all duration-300 hover:scale-105"
+                  className="hover:underline"
                   to="/"
                 >
                   <Logo></Logo>
@@ -266,7 +266,7 @@ const Register = () => {
                   >
                     First Name
                   </label>
-                  <div className="relative transition-all duration-300 hover:scale-105">
+                  <div className="relative">
                     <div className="absolute inset-y-0 left-3 flex items-center">
                       <BsFillPersonFill className="h-5 w-5 text-gray-600" />
                     </div>
@@ -290,7 +290,7 @@ const Register = () => {
                   >
                     Last Name
                   </label>
-                  <div className="relative transition-all duration-300 hover:scale-105">
+                  <div className="relative ">
                     <div className="absolute inset-y-0 left-3 flex items-center">
                       <BsFillPersonPlusFill className="h-5 w-5 text-gray-600" />
                     </div>
@@ -314,7 +314,7 @@ const Register = () => {
                 >
                   Email Address
                 </label>
-                <div className="relative transition-all duration-300 hover:scale-105">
+                <div className="relative ">
                   <div className="absolute inset-y-0 left-3 flex items-center">
                     <FaEnvelope className="h-4 w-4 text-gray-600" />
                   </div>
@@ -337,7 +337,7 @@ const Register = () => {
                 >
                   Password
                 </label>
-                <div className="relative transition-all duration-300 hover:scale-105">
+                <div className="relative">
                   <div className="absolute inset-y-0 left-3 flex items-center">
                     <RiLockPasswordFill className="h-4 w-4 text-gray-600" />
                   </div>
@@ -421,7 +421,7 @@ const Register = () => {
                     />
                     <label
                       htmlFor="photoFile"
-                      className="flex items-center justify-center w-full pl-10 pr-4 py-3 text-gray-800 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 cursor-pointer transition-all duration-300 hover:scale-105"
+                      className="flex items-center justify-center w-full pl-10 pr-4 py-3 text-gray-800 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 cursor-pointer"
                     >
                       <div className="absolute inset-y-0 left-3 flex items-center">
                         <MdAddAPhoto className="h-4 w-4 text-gray-600" />
@@ -465,7 +465,7 @@ const Register = () => {
               onChange={handleChange}
               className="w-full pl-10 pr-12 py-3
                text-gray-800 bg-gray-100 border border-gray-300
-                rounded-full focus:outline-none transition-all duration-300 hover:scale-105
+                rounded-full focus:outline-none 
                  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Select your Role</option>
@@ -478,8 +478,7 @@ const Register = () => {
               disabled={loading || uploading}
               className="w-full bg-indigo-600
                 hover:bg-purple-600   text-white font-semibold
-                 py-3 px-4 rounded-full transition-all duration-300
-                  transform hover:scale-105 disabled:opacity-50 
+                 py-3 px-4 rounded-full disabled:opacity-50 
                   disabled:cursor-not-allowed shadow-lg"
             >
               {loading ? "Creating Account..." : "Create Account"}

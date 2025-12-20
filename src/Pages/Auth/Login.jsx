@@ -58,7 +58,7 @@ const Login = () => {
         <div className="w-1/2 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
           <div className=" text-center  mb-8">
             <Link
-              className="flex justify-center hover:underline  transition-all duration-300 hover:scale-105"
+              className="flex justify-center hover:underline "
               to="/"
             >
               <Logo></Logo>
@@ -150,8 +150,7 @@ const Login = () => {
               <Link
                 to="/forgot-password"
                 className="text-sm text-red-500
-                 hover:text-red-800  transition-all
-                  duration-500 transform hover:scale-105"
+                 hover:text-red-800 "
               >
                 Forgot password?
               </Link>
@@ -160,8 +159,7 @@ const Login = () => {
             <button
               type="submit"
               className="w-full  bg-indigo-600 text-white py-3 
-              rounded-full font-semibold hover:bg-purple-600  transition-all
-                  duration-300 transform hover:scale-105"
+              rounded-full font-semibold hover:bg-purple-600"
             >
               Login
             </button>
@@ -176,8 +174,7 @@ const Login = () => {
               Don’t have an account?{" "}
               <button
                 className="text-blue-600 
-                hover:text-red-800 font-semibold  transition-all
-                  duration-500 transform hover:scale-105"
+                hover:text-red-800 font-semibold "
               >
                 <Link to="/register">Create account</Link>
               </button>

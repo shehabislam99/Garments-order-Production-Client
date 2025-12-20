@@ -6,8 +6,8 @@ import { HiOutlineClipboardList } from "react-icons/hi";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
-import Loader from "../../../Components/Common/Loader/Loader";
 import { Link } from "react-router-dom";
+import Loading from "../../../Components/Common/Loding/Loding";
 
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -288,7 +288,7 @@ const AllOrders = () => {
       {/* Loading State */}
       {loading && (
         <div className="flex justify-center items-center py-12">
-          <Loader className="h-8 w-8" />
+          <Loading className="h-8 w-8" />
           <span className="text-gray-600 ml-3">Loading orders...</span>
         </div>
       )}

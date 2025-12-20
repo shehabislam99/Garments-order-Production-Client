@@ -5,10 +5,13 @@ import { Link } from "react-router";
 
 const Logo = () => {
   return (
-    <Link to="/">
+    <Link to="/" className="hover:underline">
       <div className="flex items-end">
-        <img src={logo} alt="" className="w-12 h-10"/>
-        <h3 className="text-black text-3xl font-bold">TexFlow</h3>
+        <img src={logo} alt="" className="w-12 h-10" />
+        <h3 className="text-black text-3xl font-bold">
+          <span className="text-indigo-600">Tex</span>
+          <span className="text-purple-600">Flow</span>
+        </h3>
       </div>
     </Link>
   );

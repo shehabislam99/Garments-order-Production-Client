@@ -12,7 +12,7 @@ import { MdEmail, MdPerson,MdInfo } from "react-icons/md";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
-import Loader from "../../../Components/Common/Loader/Loader";
+import Loading from "../../../Components/Common/Loding/Loding";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -421,7 +421,7 @@ const fetchUserStats = async () => {
       {/* Loading State */}
       {loading && (
         <div className="flex justify-center items-center py-12">
-          <Loader></Loader>
+          <Loading></Loading>
           <span className="text-gray-600">Loading users...</span>
         </div>
       )}
@@ -543,7 +543,7 @@ const fetchUserStats = async () => {
                             className={`flex items-center ${
                               user?.role === "admin"
                                 ? "text-gray-400 cursor-not-allowed"
-                                : "text-indigo-600 hover:text-red-800 hover:underline transition-all duration-500 transform hover:scale-105"
+                                : "text-indigo-600 hover:text-red-800 hover:underline "
                             }`}
                             title="Update Role"
                           >
@@ -557,7 +557,7 @@ const fetchUserStats = async () => {
                             className={`flex items-center ${
                               user?.role === "admin"
                                 ? "text-gray-400 cursor-not-allowed"
-                                : "text-green-600 hover:text-red-800 hover:underline transition-all duration-500 transform hover:scale-105"
+                                : "text-green-600 hover:text-red-800 hover:underline"
                             }`}
                           >
                             <GrDocumentUpdate className="mr-1" />

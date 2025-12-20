@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Loader from "../../../Components/Common/Loader/Loader";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { Link } from "react-router";
@@ -18,6 +17,7 @@ import {
 } from "react-icons/fa";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { IoNotificationsOffOutline } from "react-icons/io5";
+import Loading from "../../../Components/Common/Loding/Loding";
 
 const AdminDashBoard = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -349,7 +349,7 @@ const AdminDashBoard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Loader className="h-16 w-16" />
+        <Loading className="h-16 w-16" />
       </div>
     );
   }

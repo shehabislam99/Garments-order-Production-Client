@@ -17,8 +17,8 @@ import {
   Area,
 } from "recharts";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import Loader from "../../../Components/Common/Loader/Loader";
 import toast from "react-hot-toast";
+import Loading from "../../../Components/Common/Loding/Loding";
 
 const Analytics = () => {
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -170,7 +170,7 @@ const Analytics = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Loader className="h-16 w-16" />
+        <Loading className="h-16 w-16" />
       </div>
     );
   }
