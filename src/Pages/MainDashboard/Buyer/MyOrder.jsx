@@ -19,8 +19,8 @@ import useAuth from "../../../Hooks/useAuth";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Loading from "../../../Components/Common/Loding/Loding";
+import { axiosInstance } from "../../../Hooks/useAxios";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -42,13 +42,13 @@ const MyOrders = () => {
     delivered: 0,
     cancelled: 0,
   });
-const axiosSecure = useAxiosSecure()
+
   const { user } = useAuth();
 
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await axiosSecure.get(
+      const res = await axiosInstance.get(
         `/my-orders?searchText=${searchTerm}&page=${
           currentPage + 1
         }&limit=${ordersPerPage}&status=${filterStatus}`
@@ -79,7 +79,7 @@ const axiosSecure = useAxiosSecure()
 
   const fetchOrderStats = async () => {
     try {
-      const res = await axiosSecure.get("/my-orders/stats");
+      const res = await axiosInstance.get("/my-orders/stats");
 
       if (res.data?.success) {
         setOrderStats(res.data.data);
@@ -127,7 +127,7 @@ const axiosSecure = useAxiosSecure()
 
     try {
       setCancelling(true);
-      const response = await axiosSecure.patch(
+      const response = await axiosInstance.patch(
         `/my-orders/${selectedOrder._id}/cancel`
       );
 

@@ -70,44 +70,13 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center">
               <Logo />
             </div>
-
-            {/* Desktop navigation links */}
-            <div className="hidden lg:flex navbar-center">
-              <ul className="flex justify-between gap-8">{links}</ul>
-            </div>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Search bar */}
-            <div
-              className="hidden md:flex items-centerw-full
-             text-gray-800 bg-gray-800 border border-gray-400 rounded-full       
-             px-4 py-2 w-48"
-            >
-              <input
-                type="text"
-                placeholder="Search Product..."
-                className="bg-transparent border-none outline-none text-white placeholder-gray-400 w-full"
-              />
+            {/* Desktop navigation links */}
+            <div className="hidden lg:flex">
+              <ul className="flex justify-between gap-8">{links}</ul>
             </div>
-
-            {/* Mobile search button */}
-            <div className="lg:hidden md:hidden">
-              <button className="mt-2 hover:text-red-800">
-                <FaSearch />
-              </button>
-            </div>
-            {/* Desktop search button */}
-            <button
-              placeholder="Search Product..."
-              className=" 
-            hover:text-red-800
-              font-semibold  hidden md:flex  "
-              title="Search"
-            >
-              Search
-            </button>
-
             {/* Theme toggle */}
             <button
               onClick={handleToggleTheme}
@@ -124,7 +93,7 @@ const Navbar = () => {
             </button>
 
             {user ? (
-              <div className="relative">
+              <div className="flex relative">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center"
@@ -132,23 +101,24 @@ const Navbar = () => {
                   <img
                     src={user?.photoURL || "https://via.placeholder.com/40"}
                     alt="user"
-                    className="w-10 h-10 rounded-full border-2 border-amber-500"
+                    className="w-10 h-10 rounded-full border-2 border-indigo-500"
                   />
+                </button>
+                <button className="font-medium hover:text-red-800 hover:underline">
+                  <Link
+                    onClick={() => setIsProfileOpen(false)}
+                    to="/dashboard"
+                    className=" px-4 py-2"
+                  >
+                    Dashboard
+                  </Link>
                 </button>
 
                 {isProfileOpen && (
                   <div
-                    className="absolute right-0 mt-3 font-semibold w-48 backdrop-blur-xl 
-                  py-3"
+                    className="absolute right-0 mt-12 font-semibold w-30 backdrop-blur-xl 
+                  py-2 px-2 rounded-4xl shadow-lg "
                   >
-                    <Link
-                      onClick={() => setIsProfileOpen(false)}
-                      to="/dashboard"
-                      className="block text-green-600 px-4 py-2 hover:text-red-800 hover:underline"
-                    >
-                      Dashboard
-                    </Link>
-
                     <button
                       onClick={() => {
                         setIsProfileOpen(false);

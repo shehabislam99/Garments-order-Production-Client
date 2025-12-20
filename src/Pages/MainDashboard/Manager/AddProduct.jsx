@@ -154,7 +154,7 @@ const AddProduct = () => {
     "Dress",
   ];
 
-  const paymentOptionsList = ["Cash on Delivery", "PayFirst"];
+  const paymentOptionsList = ["Cash on Delivery", "Stripe"];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -173,7 +173,7 @@ const AddProduct = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Product Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Product Name
                   </label>
                   <input
@@ -189,7 +189,7 @@ const AddProduct = () => {
 
                 {/* Category */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Category
                   </label>
                   <select
@@ -212,7 +212,7 @@ const AddProduct = () => {
 
                 {/* Price */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Price ($)
                   </label>
                   <div className="relative">
@@ -235,7 +235,7 @@ const AddProduct = () => {
 
                 {/* Available Quantity */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Available Quantity
                   </label>
                   <input
@@ -252,7 +252,7 @@ const AddProduct = () => {
 
                 {/* Minimum Order Quantity */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Minimum Order Quantity (MOQ){" "}
                   </label>
                   <input
@@ -269,7 +269,7 @@ const AddProduct = () => {
 
                 {/* Payment Options */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Payment Options
                   </label>
                   <select
@@ -293,7 +293,7 @@ const AddProduct = () => {
 
               {/* Video Link */}
               <div>
-                <label className="block text-sm font-medium text-gray-800 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Product Demo Video Link (Optional)
                 </label>
                 <input
@@ -308,7 +308,7 @@ const AddProduct = () => {
 
               {/* Images Upload */}
               <div className="space-y-2">
-                <h2 className="text-sm font-semibold text-gray-800">
+                <h2 className="text-sm font-semibold text-gray-700">
                   Product Images
                 </h2>
 
@@ -334,7 +334,7 @@ const AddProduct = () => {
                   {/* Image Previews */}
                   {imagePreviews.length > 0 && (
                     <div className="space-y-2">
-                      <h3 className="text-sm font-medium text-gray-800">
+                      <h3 className="text-sm font-medium text-gray-700">
                         Image Previews
                       </h3>
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -364,7 +364,7 @@ const AddProduct = () => {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-800 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Product Description
                 </label>
                 <textarea
@@ -387,7 +387,7 @@ const AddProduct = () => {
                 onChange={handleChange}
                 className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
               />
-              <label htmlFor="showOnHomePage" className="ml-3 text-gray-800">
+              <label htmlFor="showOnHomePage" className="ml-3 text-gray-700">
                 Show on Home Page
               </label>
             </div>
@@ -415,7 +415,7 @@ const AddProduct = () => {
               <button
                 type="button"
                 onClick={() => navigate("/dashboard/manager")}
-                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
               >
                 <FaTimes className="w-5 h-5 mr-2" />
                 Cancel

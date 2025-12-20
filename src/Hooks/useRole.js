@@ -21,12 +21,12 @@ const useRole = () => {
   });
 
   // Debug log
-  if (error) {
-    console.error("Role fetch error:", error);
-  }
-  if (roleData) {
-    console.log("Role data received:", roleData);
-  }
+  // if (error) {
+  //console.error("Role fetch error:", error);
+  // }
+  // if (roleData) {
+  //   console.log("Role data received:", roleData);
+  // }
 
   return {
     role: roleData?.role || "buyer",

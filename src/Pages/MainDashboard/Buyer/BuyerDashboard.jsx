@@ -55,11 +55,11 @@ const BuyerDashboard = () => {
 
   const renderComponent = () => {
     switch (activeComponent) {
-      case "my-orders":
+      case "/dashboard/my-orders":
         return <MyOrders />;
-      case "track-order":
+      case "/dashboard/track-order":
         return <TrackOrder />;
-      case "my-profile":
+      case "/dashboard/my-profile":
         return <MyProfile />;
       default:
         return <DashboardOverview />;

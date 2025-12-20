@@ -49,8 +49,16 @@ const router = createBrowserRouter([
         element: <ProductDetailsPage />,
       },
       {
-        path: "/booking/:id",
-        element: <Booking/>
+        path: "/order/:id",
+        element: <Booking />,
+      },
+      {
+        path: "payment-success",
+        element: <Contact />,
+      },
+      {
+        path: "payment-cancel",
+        element: <Contact />,
       },
       {
         path: "/about",
@@ -185,28 +193,20 @@ const router = createBrowserRouter([
 
       // Buyer routes
       {
-        path: "buyer",
+        path: "my-dashboard",
         element: <BuyerDashboard />,
       },
       {
-        path: "buyer/my-orders",
+        path: "dashboard/my-orders",
         element: <MyOrder />,
       },
       {
-        path: "buyer/track-order",
+        path: "dashboard/track-order",
         element: <TrackOrder />,
       },
       {
-        path: "buyer/my-profile",
+        path: "dashboard/my-profile",
         element: <BuyerProfile />,
-      },
-      {
-        path: "payment-success",
-        element: <Contact />,
-      },
-      {
-        path: "payment-cancel",
-        element: <Contact />,
       },
     ],
   },

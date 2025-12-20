@@ -183,7 +183,7 @@ const Asidebar = () => {
       </nav>
 
       <div className="p-6 border-t border-base-300">
-        <button onClick={handleLogout} className="btn btn-error btn-block">
+        <button onClick={handleLogout} className="btn btn-error rounded-full btn-block">
           Logout
         </button>
       </div>

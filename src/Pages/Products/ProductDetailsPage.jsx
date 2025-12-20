@@ -55,7 +55,7 @@ const ProductDetailsPage = () => {
     return;
   }
     // Redirect to booking page with product details
-    navigate(`/booking/${id}`, {
+    navigate(`/order/${id}`, {
       state: {
         product,
         selectedPayment,
