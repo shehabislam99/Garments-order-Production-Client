@@ -192,8 +192,6 @@ const router = createBrowserRouter([
           </ManagerRout>
         ),
       },
-
-      // Buyer routes
       {
         path: "/dashboard/buyer",
         element: <BuyerDashboard />,

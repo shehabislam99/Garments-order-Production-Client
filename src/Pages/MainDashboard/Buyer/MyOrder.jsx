@@ -6,21 +6,19 @@ import {
   FaChevronRight,
   FaEye,
   FaBox,
-  FaTruck,
   FaCheckCircle,
   FaTimesCircle,
   FaClock,
   FaShoppingCart,
 } from "react-icons/fa";
-import { MdImage, MdPayment, MdCancel } from "react-icons/md";
-import { BsCurrencyDollar } from "react-icons/bs";
-import { HiOutlineClipboardList } from "react-icons/hi";
+import {  MdPayment, MdCancel } from "react-icons/md";
 import useAuth from "../../../Hooks/useAuth";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import Loading from "../../../Components/Common/Loding/Loding";
-import { axiosInstance } from "../../../Hooks/useAxios";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -34,138 +32,101 @@ const MyOrders = () => {
   const [cancelling, setCancelling] = useState(false);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [orderStats, setOrderStats] = useState({
-    totalOrders: 0,
-    pending: 0,
-    approved: 0,
-    rejected: 0,
-    delivered: 0,
-    cancelled: 0,
-  });
-
+const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      const res = await axiosInstance.get(
-        `/my-orders?searchText=${searchTerm}&page=${
-          currentPage + 1
-        }&limit=${ordersPerPage}&status=${filterStatus}`
+ const fetchOrders = async () => {
+   try {
+     setLoading(true);
+     const res = await axiosSecure.get(
+       `/my-orders?searchText=${searchTerm}&page=${
+         currentPage + 1
+       }&limit=${ordersPerPage}&status=${filterStatus}`
+     );
+
+     if (res.data && res.data?.success) {
+       setOrders(res.data?.data || []);
+       setTotalOrders(res.data?.total || 0);
+       setTotalPages(
+         res?.data?.totalPages ||
+           Math.ceil((res.data?.total || 0) / ordersPerPage)
+       );
+     } else {
+       setOrders([]);
+       setTotalOrders(0);
+       setTotalPages(0);
+     }
+   } catch (error) {
+     console.error("Error fetching orders:", error);
+
+     setOrders([]);
+     setTotalOrders(0);
+     setTotalPages(0);
+   } finally {
+     setLoading(false);
+   }
+ };
+const handleCancelOrder = async () => {
+  if (!selectedOrder) return;
+
+  try {
+    setCancelling(true);
+    const response = await axiosSecure.patch(
+      `/my-orders/cancel/${selectedOrder._id}`
+    );
+
+    if (response.data.success) {
+      setOrders((prev) =>
+        prev.map((order) =>
+          order._id === selectedOrder._id
+            ? { ...order, status: "cancelled" }
+            : order
+        )
       );
 
-      if (res.data && res.data?.success) {
-        setOrders(res.data?.data || []);
-        setTotalOrders(res.data?.total || 0);
-        setTotalPages(
-          res?.data?.totalPages ||
-            Math.ceil((res.data?.total || 0) / ordersPerPage)
-        );
-      } else {
-        setOrders([]);
-        setTotalOrders(0);
-        setTotalPages(0);
-      }
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-      toast.error("Failed to fetch orders");
-      setOrders([]);
-      setTotalOrders(0);
-      setTotalPages(0);
-    } finally {
-      setLoading(false);
+      toast.success("Order cancelled successfully");
+      setCancelModalOpen(false);
+      setSelectedOrder(null);
     }
-  };
+  } catch (error) {
+    console.error("Error cancelling order:", error);
+    toast.error(error?.response?.data?.message || "Failed to cancel order");
+  } finally {
+    setCancelling(false);
+  }
+};
 
-  const fetchOrderStats = async () => {
-    try {
-      const res = await axiosInstance.get("/my-orders/stats");
+ useEffect(() => {
+   if (user) {
+     fetchOrders();
+   } else {
+     setLoading(false);
+     setOrders([]);
+   }
+ }, [user]);
 
-      if (res.data?.success) {
-        setOrderStats(res.data.data);
-      } else {
-        // Calculate stats from current orders
-        const stats = {
-          totalOrders: orders.length,
-          pending: orders.filter((o) => o.status === "pending").length,
-          approved: orders.filter((o) => o.status === "approved").length,
-          rejected: orders.filter((o) => o.status === "rejected").length,
-          delivered: orders.filter((o) => o.status === "delivered").length,
-          cancelled: orders.filter((o) => o.status === "cancelled").length,
-        };
-        setOrderStats(stats);
-      }
-    } catch (error) {
-      console.error("Failed to load order statistics:", error);
-      // Calculate from current orders
-      const stats = {
-        totalOrders: orders.length,
-        pending: orders.filter((o) => o.status === "pending").length,
-        approved: orders.filter((o) => o.status === "approved").length,
-        rejected: orders.filter((o) => o.status === "rejected").length,
-        delivered: orders.filter((o) => o.status === "delivered").length,
-        cancelled: orders.filter((o) => o.status === "cancelled").length,
-      };
-      setOrderStats(stats);
-    }
-  };
+ useEffect(() => {
+   if (user) {
+     const timeoutId = setTimeout(() => {
+       fetchOrders();
+     }, 300); 
 
-  useEffect(() => {
-    if (user) {
-      fetchOrders();
-    }
-  }, [user, currentPage, searchTerm, filterStatus]);
+     return () => clearTimeout(timeoutId);
+   }
+ }, [currentPage, searchTerm, filterStatus, user]);
 
-  useEffect(() => {
-    if (orders.length > 0) {
-      fetchOrderStats();
-    }
-  }, [orders]);
-
-  const handleCancelOrder = async () => {
-    if (!selectedOrder) return;
-
-    try {
-      setCancelling(true);
-      const response = await axiosInstance.patch(
-        `/my-orders/${selectedOrder._id}/cancel`
-      );
-
-      if (response.data.success) {
-        setOrders(
-          orders.map((order) =>
-            order._id === selectedOrder._id
-              ? { ...order, status: "cancelled" }
-              : order
-          )
-        );
-        toast.success("Order cancelled successfully");
-        setCancelModalOpen(false);
-        setSelectedOrder(null);
-        fetchOrderStats(); // Refresh stats
-      }
-    } catch (error) {
-      console.error("Error cancelling order:", error);
-      toast.error("Failed to cancel order");
-    } finally {
-      setCancelling(false);
-    }
-  };
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
   };
-
   const openCancelModal = (order) => {
     setSelectedOrder(order);
     setCancelModalOpen(true);
   };
-
   const closeCancelModal = () => {
     setSelectedOrder(null);
     setCancelModalOpen(false);
   };
-
   const clearFilters = () => {
     setSearchTerm("");
     setFilterStatus("all");
@@ -176,14 +137,10 @@ const MyOrders = () => {
     switch (status?.toLowerCase()) {
       case "pending":
         return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "approved":
+      case "confirmed":
         return "bg-blue-100 text-blue-800 border-blue-200";
-      case "rejected":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "delivered":
-        return "bg-green-100 text-green-800 border-green-200";
       case "cancelled":
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-red-100 text-red-800 border-gray-200";
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
     }
@@ -193,12 +150,8 @@ const MyOrders = () => {
     switch (status?.toLowerCase()) {
       case "pending":
         return <FaClock className="mr-1" />;
-      case "approved":
+      case "confirmed":
         return <FaCheckCircle className="mr-1" />;
-      case "rejected":
-        return <FaTimesCircle className="mr-1" />;
-      case "delivered":
-        return <FaTruck className="mr-1" />;
       case "cancelled":
         return <MdCancel className="mr-1" />;
       default:
@@ -210,12 +163,8 @@ const MyOrders = () => {
     switch (paymentStatus?.toLowerCase()) {
       case "paid":
         return "bg-green-100 text-green-800 border-green-200";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "failed":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "refunded":
-        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "cod":
+        return "bg-violet-100 text-violet-800 border-violet-200";
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
     }
@@ -240,97 +189,30 @@ const MyOrders = () => {
   const statusOptions = [
     { value: "all", label: "All Status" },
     { value: "pending", label: "Pending" },
-    { value: "approved", label: "Approved" },
-    { value: "rejected", label: "Rejected" },
-    { value: "delivered", label: "Delivered" },
+    { value: "confirmed", label: "Comfirmed" },
     { value: "cancelled", label: "Cancelled" },
   ];
 
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">My Orders</h2>
-          <p className="text-gray-600 text-sm mt-1">
-            View and manage your orders
-          </p>
-        </div>
+        <h2 className="text-2xl font-bold text-gray-800">My Orders</h2>
         <button
           onClick={() => {
             fetchOrders();
-            fetchOrderStats();
           }}
           disabled={loading}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center disabled:opacity-50"
+          className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-red-800 transition-colors flex items-center disabled:opacity-50"
         >
           {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
-
-      {/* Stats Summary */}
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-6 gap-4">
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Total Orders</p>
-            <p className="text-2xl font-semibold text-gray-900">
-              {orderStats.totalOrders}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Pending</p>
-            <p className="text-2xl font-semibold text-yellow-600">
-              {orderStats.pending}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Approved</p>
-            <p className="text-2xl font-semibold text-blue-600">
-              {orderStats.approved}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Delivered</p>
-            <p className="text-2xl font-semibold text-green-600">
-              {orderStats.delivered}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Cancelled</p>
-            <p className="text-2xl font-semibold text-gray-600">
-              {orderStats.cancelled}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Total Spent</p>
-            <p className="text-2xl font-semibold text-purple-600">
-              {formatCurrency(
-                orders.reduce(
-                  (total, order) => total + (order.totalAmount || 0),
-                  0
-                )
-              )}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters and Search */}
-      <div className="mt-4 bg-white rounded-lg shadow p-4">
+      <div className="mt-4 bg-white rounded-4xl shadow p-4">
         <div className="flex items-center justify-between mb-4">
           {(searchTerm || filterStatus !== "all") && (
             <button
               onClick={clearFilters}
-              className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
+              className="text-sm text-blue-600 hover:text-red-800 flex items-center"
             >
               <FaTimes className="mr-1" />
               Clear Filters
@@ -339,7 +221,6 @@ const MyOrders = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Search */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Search Orders
@@ -352,16 +233,15 @@ const MyOrders = () => {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => {
-                  setSearchTerm(e.target.value);
+                  setSearchTerm(e.target?.value);
                   setCurrentPage(0);
                 }}
                 placeholder="Search by order ID or product name..."
-                className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
 
-          {/* Status Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Filter by Status
@@ -369,14 +249,14 @@ const MyOrders = () => {
             <select
               value={filterStatus}
               onChange={(e) => {
-                setFilterStatus(e.target.value);
+                setFilterStatus(e.target?.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {statusOptions.map((status) => (
-                <option key={status.value} value={status.value}>
-                  {status.label}
+                <option key={status?.value} value={status?.value}>
+                  {status?.label}
                 </option>
               ))}
             </select>
@@ -384,7 +264,6 @@ const MyOrders = () => {
         </div>
       </div>
 
-      {/* Loading State */}
       {loading && (
         <div className="flex justify-center items-center py-12">
           <Loading className="h-8 w-8" />
@@ -392,10 +271,9 @@ const MyOrders = () => {
         </div>
       )}
 
-      {/* Orders Table */}
       {!loading && (
         <>
-          <div className="mt-4 bg-white rounded-lg shadow overflow-hidden">
+          <div className="mt-4 bg-white rounded-4xl shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -406,30 +284,28 @@ const MyOrders = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Product
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Quantity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Payment
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-15 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-amber-100 divide-y divide-gray-200">
                   {orders.map((order) => (
                     <tr
                       key={order?._id}
                       className="hover:bg-gray-50 transition-colors"
                     >
-                      {/* Order ID */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <HiOutlineClipboardList className="h-4 w-4 text-gray-400 mr-2" />
                           <div>
                             <div className="text-sm font-medium text-gray-900">
                               #
@@ -437,40 +313,26 @@ const MyOrders = () => {
                                 order?._id?.substring(18) ||
                                 "N/A"}
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs  text-gray-500">
                               {formatDate(order?.createdAt)}
                             </div>
                           </div>
                         </div>
                       </td>
 
-                      {/* Product */}
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          {order?.product?.image ? (
-                            <img
-                              className="h-10 w-10 rounded-md object-cover mr-3"
-                              src={order.product.image}
-                              alt={order.product.name}
-                            />
-                          ) : (
-                            <div className="h-10 w-10 rounded-md bg-gray-100 flex items-center justify-center mr-3">
-                              <MdImage className="h-5 w-5 text-gray-400" />
-                            </div>
-                          )}
                           <div>
-                            <div className="text-sm font-medium text-gray-900">
-                              {order?.product?.name || "Unknown Product"}
+                            <div className="font-semibold text-gray-900">
+                              {order?.product_name || "Unknown Product"}
                             </div>
-                            <div className="text-xs text-gray-500 flex items-center">
-                              <BsCurrencyDollar className="mr-1" />
-                              {formatCurrency(order?.product?.price)}
+                            <div className="ml-2 text-sm text-gray-700 flex items-center">
+                              {formatCurrency(order?.price)}
                             </div>
                           </div>
                         </div>
                       </td>
 
-                      {/* Quantity */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-center">
                           <span className="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
@@ -479,7 +341,6 @@ const MyOrders = () => {
                         </div>
                       </td>
 
-                      {/* Status */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getStatusColor(
@@ -490,8 +351,6 @@ const MyOrders = () => {
                           {order?.status || "Pending"}
                         </span>
                       </td>
-
-                      {/* Payment */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex flex-col space-y-1">
                           <span
@@ -509,25 +368,21 @@ const MyOrders = () => {
                           )}
                         </div>
                       </td>
-
-                      {/* Actions */}
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-3">
-                          {/* View Button */}
                           <Link
-                            to={`/dashboard/order-details/${order._id}`}
-                            className="flex items-center text-blue-600 hover:text-blue-800 hover:underline transition-all duration-300"
+                            to={`/products/${order._id}`}
+                            className="px-3 py-1 flex items-center rounded-full bg-indigo-500 text-white hover:bg-red-800"
                             title="View Order Details"
                           >
                             <FaEye className="mr-1" />
                             View
                           </Link>
 
-                          {/* Cancel Button - Only show for pending orders */}
                           {order?.status === "pending" && (
                             <button
                               onClick={() => openCancelModal(order)}
-                              className="flex items-center text-red-600 hover:text-red-800 hover:underline transition-all duration-300"
+                              className="px-2 py-1 flex items-center rounded-full bg-red-500 text-white hover:bg-red-800"
                               title="Cancel Order"
                             >
                               <FaTimesCircle className="mr-1" />
@@ -542,7 +397,6 @@ const MyOrders = () => {
               </table>
             </div>
 
-            {/* Empty State */}
             {orders.length === 0 && !loading && (
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">
@@ -551,6 +405,7 @@ const MyOrders = () => {
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No orders found
                 </h3>
+
                 <p className="text-gray-500">
                   {user
                     ? "You haven't placed any orders yet."
@@ -559,16 +414,21 @@ const MyOrders = () => {
                 {!user && (
                   <Link
                     to="/login"
-                    className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                    className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-red-800"
                   >
                     Login to View Orders
                   </Link>
                 )}
+                <Link
+                  to="/all-products"
+                  className="mt-1 inline-block px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-red-800"
+                >
+                  Order now
+                </Link>
               </div>
             )}
           </div>
 
-          {/* React Paginate Component */}
           {totalPages > 1 && (
             <div className="flex flex-col md:flex-row justify-center items-center mt-6">
               <ReactPaginate
@@ -606,7 +466,6 @@ const MyOrders = () => {
                 disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
               />
 
-              {/* Page info */}
               <div className="ml-0 md:ml-4 text-sm text-gray-700">
                 Page <span className="font-medium">{currentPage + 1}</span> of{" "}
                 <span className="font-medium">{totalPages}</span>
@@ -616,7 +475,6 @@ const MyOrders = () => {
         </>
       )}
 
-      {/* Cancel Confirmation Modal */}
       {cancelModalOpen && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
@@ -626,24 +484,24 @@ const MyOrders = () => {
               </h3>
 
               <div className="mb-6">
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="ml-3  text-gray-600 mb-2">
                   Are you sure you want to cancel this order?
                 </p>
-                <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                <div className="bg-amber-100 rounded-4xl p-5">
                   <p className="font-medium text-red-800">
                     Order: #
                     {selectedOrder?.orderId ||
                       selectedOrder?._id?.substring(18)}
                   </p>
                   <p className="text-sm text-red-600">
-                    Product: {selectedOrder?.product?.name}
+                    Product: {selectedOrder?.product_name}
                   </p>
                   <p className="text-sm text-red-600">
-                    Amount: {formatCurrency(selectedOrder?.totalAmount)}
+                    Amount: {formatCurrency(selectedOrder?.totalPrice)}
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  This action cannot be undone. Any payment will be refunded
+                <p className="text-xs text-gray-500 ml-3 mt-2">
+                  This action cannot be undone. Payment will be refunded
                   according to our policy.
                 </p>
               </div>
@@ -651,14 +509,14 @@ const MyOrders = () => {
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={closeCancelModal}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-red-800 rounded-full"
                 >
                   Keep Order
                 </button>
                 <button
                   onClick={handleCancelOrder}
                   disabled={cancelling}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors disabled:opacity-50"
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-800 rounded-full"
                 >
                   {cancelling ? "Cancelling..." : "Yes, Cancel Order"}
                 </button>

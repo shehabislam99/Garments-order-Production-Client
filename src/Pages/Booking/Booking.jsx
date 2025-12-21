@@ -85,9 +85,9 @@ const axiosSecure = useAxiosSecure()
   const orderData = {
     CustomerEmail: user.email,
     orderId: product._id,
-    productName: product.product_name,
-    paymentMethod: selectedPayment,
-    pricePerUnit: product.price,
+    product_name: product.product_name,
+    payment_method: selectedPayment,
+    price: product.price,
     quantity,
     totalPrice,
     customer: formData,
