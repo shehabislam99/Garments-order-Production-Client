@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaBox, FaCheckCircle, FaClock, FaSearch, FaShoppingCart, FaTimes, FaTimesCircle, FaUser } from "react-icons/fa";
+import { FaBox, FaCheckCircle, FaClock, FaEye, FaSearch, FaShoppingCart, FaTimes, FaTimesCircle, FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { HiOutlineClipboardList } from "react-icons/hi";
@@ -59,7 +59,7 @@ const AllOrders = () => {
 
   const fetchOrderStats = async () => {
     try {
-      const res = await axiosSecure.get("/admin/orders/stats");
+      const res = await axiosSecure.get("admin/order/orders");
 
       if (res.data?.success) {
         setOrderStats(res.data.data);
@@ -94,7 +94,7 @@ const AllOrders = () => {
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     try {
       const response = await axiosSecure.patch(
-        `/admin/orders//status/${orderId}`,
+        `/admin/orders/status/${orderId}`,
         {
           status: newStatus,
         }

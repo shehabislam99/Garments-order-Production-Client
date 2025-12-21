@@ -6,7 +6,6 @@ import {
   FaHome,
   FaBox,
   FaChartBar,
-  FaMapMarkerAlt,
   FaUser,
 } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
@@ -94,11 +93,6 @@ const roleConfig = {
       },
       { path: "/dashboard/my-orders", title: "My Orders", icon: FaTasks },
       {
-        path: "/dashboard/track-order",
-        title: "Track Order",
-        icon: FaMapMarkerAlt,
-      },
-      {
         path: "/dashboard/my-profile",
         title: "My Profile",
         icon: FaUser,
@@ -109,7 +103,7 @@ const roleConfig = {
 
 
 const Asidebar = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { role, loading } = useRole();
   const navigate = useNavigate();
 
@@ -134,16 +128,10 @@ const Asidebar = () => {
       </aside>
     );
   }
-
   const config = roleConfig[role] || roleConfig.buyer;
-  
-  const handleLogout = async () => {
-    await logout();
-    navigate("/", { replace: true });
-  };
 
   return (
-    <aside className="w-64 bg-base-200 min-h-screen flex flex-col">
+    <aside className="w-64 min-h-screen bg-base-300 flex flex-col">
       <div className="p-6 flex justify-center border-b border-gray-300">
         <h1 className="mt-1 font-bold text-3xl">{config.title}</h1>
       </div>
@@ -161,11 +149,14 @@ const Asidebar = () => {
       </div>
 
       <nav className="flex-1 overflow-y-auto p-4">
-        <ul className="menu menu-lg w-full">
+        <ul className="px-4 py-2 text-xl space-y-3 font-medium w-full">
           {config.links.map((link) => {
             const Icon = link.icon;
             return (
-              <li key={link.path}>
+              <li
+                className="hover:bg-blue-500 hover:rounded-2xl hover:px-2 hover:py-2"
+                key={link.path}
+              >
                 <NavLink
                   to={link.path}
                   end={link.path === `/dashboard/${role}`}
@@ -174,7 +165,7 @@ const Asidebar = () => {
                   }
                 >
                   {Icon && <Icon className="w-5 h-5" />}
-                  <span className="ml-3">{link.title}</span>
+                  <span className="ml-3 ">{link.title}</span>
                 </NavLink>
               </li>
             );
@@ -183,8 +174,11 @@ const Asidebar = () => {
       </nav>
 
       <div className="p-6 border-t border-base-300">
-        <button onClick={handleLogout} className="btn btn-error rounded-full btn-block">
-          Logout
+        <button
+          onClick={() => navigate("/")}
+          className="px-4 py-2 text-white bg-indigo-600 hover:bg-red-800 rounded-full btn-block"
+        >
+          Go back home
         </button>
       </div>
     </aside>

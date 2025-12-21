@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { axiosInstance } from "../../../Hooks/useAxios";
 import useAuth from "../../../Hooks/useAuth";
 import { Link } from "react-router-dom";
 import { FaTasks } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
 import { BsClockHistory } from "react-icons/bs";
 import { SiGoogletasks } from "react-icons/si";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
   const DashboardOverview = ({ stats }) => (
     <div className="p-6">
       <div className="mb-8 text-center item-center">
-        <h2 className="text-3xl flex justify-center font-bold text-gray-800">
+        <h2 className="text-3xl flex justify-center font-bold">
           Welcome back to Your Dashboard
         </h2>
-        <p className="text-gray-600 mt-2">Here's Your Account Management</p>
+        <p className="mt-2">Here's Your Account Management</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -65,7 +65,9 @@ import { SiGoogletasks } from "react-icons/si";
                 <FaTasks className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <p className="text-lg font-semibold">Manage Products</p>
+                <p className="text-lg text-gray-700 font-semibold">
+                  Manage Products
+                </p>
                 <p className="text-lg text-gray-500">Edit your products</p>
               </div>
             </button>
@@ -77,7 +79,9 @@ import { SiGoogletasks } from "react-icons/si";
                 <BsClockHistory className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <p className="text-lg font-semibold">Pending Orders</p>
+                <p className="text-lg text-gray-700 font-semibold">
+                  Pending Orders
+                </p>
                 <p className="text-lg text-gray-500">
                   Review and approve orders
                 </p>
@@ -91,7 +95,9 @@ import { SiGoogletasks } from "react-icons/si";
                 <SiGoogletasks className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <p className="text-lg font-semibold">Approved Orders</p>
+                <p className="text-lg text-gray-700 font-semibold">
+                  Approved Orders
+                </p>
                 <p className="text-lg text-gray-500">View completed orders</p>
               </div>
             </button>
@@ -103,7 +109,9 @@ import { SiGoogletasks } from "react-icons/si";
                 <MdAddShoppingCart className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <p className="text-lg font-semibold">Add Product</p>
+                <p className="text-lg text-gray-700 font-semibold">
+                  Add Product
+                </p>
                 <p className="text-lg text-gray-500">
                   Add Your Exciting Product
                 </p>
@@ -123,11 +131,12 @@ const ManagerDashboard = () => {
     approvedOrders: 0,
     totalRevenue: 0,
   });
+  const axiosSecure = useAxiosSecure()
 
   useEffect(() => {
     const fetchDashboardStats = async () => {
       try {
-        const response = await axiosInstance.get("/manager/stats");
+        const response = await axiosSecure.get("/manager/stats");
         setStats(response.data.data);
       } catch (error) {
         console.error("Error fetching dashboard stats:", error);
@@ -139,9 +148,9 @@ const ManagerDashboard = () => {
 
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen ">
       <div className="flex flex-col flex-1 overflow-hidden">
-        <header className="bg-white shadow">
+        <header className="bg-white rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
               <h1 className="text-xl  font-bold text-gray-800">Dashboard</h1>

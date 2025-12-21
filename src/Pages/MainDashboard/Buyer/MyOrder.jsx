@@ -196,7 +196,7 @@ const handleCancelOrder = async () => {
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800">My Orders</h2>
+        <h2 className="text-2xl font-bold ">My Orders</h2>
         <button
           onClick={() => {
             fetchOrders();
@@ -207,7 +207,7 @@ const handleCancelOrder = async () => {
           {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
-      <div className="mt-4 bg-white rounded-4xl shadow p-4">
+      <div className="mt-4 bg-amber-100 rounded-4xl shadow p-4">
         <div className="flex items-center justify-between mb-4">
           {(searchTerm || filterStatus !== "all") && (
             <button
@@ -237,7 +237,7 @@ const handleCancelOrder = async () => {
                   setCurrentPage(0);
                 }}
                 placeholder="Search by order ID or product name..."
-                className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 w-full px-3 py-2 border placeholder-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -252,7 +252,7 @@ const handleCancelOrder = async () => {
                 setFilterStatus(e.target?.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 text-green-500 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {statusOptions.map((status) => (
                 <option key={status?.value} value={status?.value}>
@@ -363,7 +363,7 @@ const handleCancelOrder = async () => {
                           </span>
                           {order?.totalAmount && (
                             <span className="text-xs text-gray-500">
-                              {formatCurrency(order.totalAmount)}
+                              {formatCurrency(order?.totalAmount)}
                             </span>
                           )}
                         </div>
@@ -371,7 +371,7 @@ const handleCancelOrder = async () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-3">
                           <Link
-                            to={`/products/${order._id}`}
+                            to={`/dashboard/track-order/${order?.orderId}`}
                             className="px-3 py-1 flex items-center rounded-full bg-indigo-500 text-white hover:bg-red-800"
                             title="View Order Details"
                           >

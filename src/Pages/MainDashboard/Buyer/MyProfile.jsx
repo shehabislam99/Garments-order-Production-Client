@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { useNavigate } from "react-router-dom";
-import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import {  FaSignOutAlt} from "react-icons/fa";
+import useAuth from "../../../Hooks/useAuth";
+import toast from "react-hot-toast";
 
 const MyProfile = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const{logout} = useAuth();
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,15 +29,19 @@ const MyProfile = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await axiosSecure.post("/auth/logout");
-      localStorage.removeItem("accessToken");
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed", error);
+     const handleLogout = async () => {
+      try{
+        setLoading(true);
+         await logout();
+       navigate("/", { replace: true });
+      toast.success("Oops... logout")
+     } catch (error) {
+      console.error("Failed to load profile", error);
+    } finally {
+      setLoading(false);
     }
-  };
+  }
+  
 
   if (loading) {
     return (
@@ -53,69 +60,92 @@ const MyProfile = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">My Profile</h2>
-
-      <div className="bg-white rounded-lg shadow p-6">
-        {/* PROFILE HEADER */}
-        <div className="flex items-center gap-6 border-b pb-6 mb-6">
-          {user.photo ? (
-            <img
-              src={user.photo}
-              alt="Profile"
-              className="h-20 w-20 rounded-full object-cover"
-            />
-          ) : (
-            <FaUserCircle className="h-20 w-20 text-gray-400" />
-          )}
-
-          <div>
-            <h3 className="text-xl font-semibold text-gray-800">
-              {user.name || "N/A"}
-            </h3>
-            <p className="text-gray-600">{user.email}</p>
-            <span className="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-              {user.role || "User"}
-            </span>
-          </div>
+    <div className="in-h-screen py-8">
+      <div className="mx-auto sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-black">My Profile</h2>
+          <p className="text-lg font-semibold text-gray-700 mt-3">
+           your account information
+          </p>
         </div>
 
-        {/* PROFILE DETAILS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <p className="text-sm text-gray-500">Full Name</p>
-            <p className="font-medium text-gray-800">{user.name || "N/A"}</p>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="col-span-1">
+            <div className="bg-amber-100 rounded-2xl shadow-lg px-5 py-10 sticky top-8">
+              <div className="text-center mb-6">
+                <div className="relative inline-block">
+                  <img
+                    src={user?.photoURL || "/default-avatar.png"}
+                    className="w-32 h-32 rounded-full object-cover border-4 border-green-300"
+                  />
 
-          <div>
-            <p className="text-sm text-gray-500">Email Address</p>
-            <p className="font-medium text-gray-800">{user.email || "N/A"}</p>
-          </div>
+                  <active className="absolute bottom-3 right-2 bg-green-600 p-2 rounded-full hover:bg-gray-500"></active>
+                </div>
+                <h2 className="text-2xl font-bold text-red-400 mt-4">
+                  {user?.email || "User"}
+                </h2>
+                <p className="text-blue-600">{user?.role}</p>
+              </div>
 
-          <div>
-            <p className="text-sm text-gray-500">Role</p>
-            <p className="font-medium text-gray-800">{user.role || "User"}</p>
+            
+                <div className="flex justify-center">
+                  <h3 className="font-semibold text-gray-900">
+                    Last Login Date :
+                  </h3>
+                  <p className="ml-2 text-violet-700">
+                    {user.metadata?.lastSignInTime
+                      ? new Date(
+                          user.metadata.lastSignInTime
+                        ).toLocaleDateString()
+                      : "Recently"}
+                  </p>
+                </div>
+              </div>
           </div>
+          <div className="">
+            <div className="bg-amber-100 p-10 rounded-2xl shadow-lg ">
+              <h2 className="text-xl text-center font-bold text-black mb-6">
+                Personal Information
+              </h2>
 
-          <div>
-            <p className="text-sm text-gray-500">Account Created</p>
-            <p className="font-medium text-gray-800">
-              {user.createdAt
-                ? new Date(user.createdAt).toLocaleDateString()
-                : "N/A"}
-            </p>
+              <div className="flex gap-7">
+                <h2 className="font-medium text-black mb-2 flex items-center">
+                  Full Name :
+                </h2>
+                <p className="text-green-700">{user?.name}</p>
+              </div>
+              <div className="flex gap-3">
+                <h2 className="flex text-sm font-medium text-black items-center">
+                  <span className="inline-block "> Email Address :</span>
+                </h2>
+                <p className="text-green-700 ">{user?.email}</p>
+              </div>
+
+              <div className="flex gap-17">
+                <h2 className="font-medium text-black mb-2 flex items-center">
+                  Role :
+                </h2>
+                <p className="text-green-700 ">{user?.role}</p>
+              </div>
+
+              <div className="flex gap-5">
+                <h2 className="font-medium text-black  items-center mb-2">
+                  Created At :
+                </h2>
+                <p className="text-green-700 ">{user?.createdAt}</p>
+              </div>
+
+              <div className="flex justify-end gap-3 p-6 ">
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition"
+                >
+                  <FaSignOutAlt />
+                  Logout
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* LOGOUT */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-md transition"
-          >
-            <FaSignOutAlt />
-            Logout
-          </button>
         </div>
       </div>
     </div>

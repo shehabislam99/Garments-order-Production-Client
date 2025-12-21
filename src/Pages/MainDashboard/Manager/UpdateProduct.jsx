@@ -1,33 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { FaUpload, FaTimes, FaSpinner, FaCheck } from "react-icons/fa";
 
-const AddProduct = () => {
+const UpdateProduct = () => {
   const navigate = useNavigate();
-  const AxiosSecure = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-
+  const [existingImages, setExistingImages] = useState([]);
   const [product, setProduct] = useState({
     product_name: "",
-    description: "",
     category: "",
     price: "",
     available_quantity: "",
-    moq: "100",
-    demo_video_link: "",
+    moq: "",
     payment_Options: "",
+    demo_video_link: "",
+    description: "",
     show_on_homepage: false,
   });
 
+  useEffect(() => {
+    if (id) {
+      fetchProductById();
+    }
+  }, [id]);
+
+  const fetchProductById = async () => {
+    try {
+      setLoading(true);
+      const res = await axiosSecure.get(`/products/${id}`);
+      const productData = res.data.data;
+      setProduct({
+        product_name: productData.product_name,
+        category: productData.category,
+        price: productData.price,
+        available_quantity: productData.available_quantity,
+        moq: productData.moq,
+        payment_Options: productData.payment_Options,
+        demo_video_link: productData.demo_video_link,
+        description: productData.description,
+        show_on_homepage: productData.show_on_homepage || false,
+      });
+
+      if (productData.images && Array.isArray(productData.images)) {
+        setExistingImages(productData.images);
+        setImagePreviews(productData.images);
+      }
+    } catch (error) {
+      toast.error("Failed to load product");
+      console.error("Error fetching product:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
     setProduct((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -36,9 +71,7 @@ const AddProduct = () => {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-
     if (files.length === 0) return;
-
     const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
     const invalidFiles = files.filter(
       (file) => !validTypes.includes(file.type)
@@ -56,10 +89,10 @@ const AddProduct = () => {
     newImages.forEach((file, index) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreviews((prev) => {
-          const newPreviews = [...prev];
-          newPreviews[index] = reader.result;
-          return newPreviews;
+        setImagePreviews(() => {
+          const newPreviews = [...existingImages];
+          newPreviews[existingImages.length + index] = reader.result;
+          return newPreviews.filter((preview) => preview);
         });
       };
       reader.readAsDataURL(file);
@@ -69,10 +102,16 @@ const AddProduct = () => {
   };
 
   const removeImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index);
-    const newPreviews = imagePreviews.filter((_, i) => i !== index);
-    setImages(newImages);
-    setImagePreviews(newPreviews);
+    if (index < existingImages.length) {
+      const newExistingImages = existingImages.filter((_, i) => i !== index);
+      setExistingImages(newExistingImages);
+      setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      const newIndex = index - existingImages.length;
+      const newImages = images.filter((_, i) => i !== newIndex);
+      setImages(newImages);
+      setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+    }
   };
 
   const uploadImagesToImgBB = async (files) => {
@@ -81,7 +120,6 @@ const AddProduct = () => {
       const uploadPromises = files.map(async (file) => {
         const formData = new FormData();
         formData.append("image", file);
-
         const response = await axios.post(
           `https://api.imgbb.com/1/upload?key=${
             import.meta.env.VITE_IMGBB_API_KEY
@@ -94,7 +132,6 @@ const AddProduct = () => {
             timeout: 30000,
           }
         );
-
         return response.data.data.url;
       });
 
@@ -111,10 +148,14 @@ const AddProduct = () => {
     e.preventDefault();
     setLoading(true);
 
-    const imageFiles = await uploadImagesToImgBB(images);
-    if (!imageFiles.length) {
-      setLoading(false);
-      return;
+    let imageUrls = [...existingImages];
+    if (images.length > 0) {
+      const uploadedImages = await uploadImagesToImgBB(images);
+      if (uploadedImages.length === 0) {
+        setLoading(false);
+        return;
+      }
+      imageUrls = [...existingImages, ...uploadedImages];
     }
 
     const productData = {
@@ -122,17 +163,17 @@ const AddProduct = () => {
       price: Number(product.price),
       available_quantity: Number(product.available_quantity),
       moq: Number(product.moq),
-      images: imageFiles,
-      status: "pending",
+      images: imageUrls,
       show_on_homepage: Boolean(product.show_on_homepage),
     };
 
     try {
-      await AxiosSecure.post("/products", productData);
-      toast.success("Product added successfully");
+      await axiosSecure.put(`/products/${id}`, productData);
+      toast.success("Product updated successfully");
       navigate("/all-products");
-    } catch {
-      toast.error("Failed to add product");
+    } catch (error) {
+      toast.error("Failed to update product");
+      console.error("Update error:", error);
     } finally {
       setLoading(false);
     }
@@ -151,14 +192,20 @@ const AddProduct = () => {
 
   const paymentOptionsList = ["Cash on Delivery", "Stripe"];
 
+  if (loading && !product.product_name) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <FaSpinner className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold ">Add New Product</h1>
-          <p className="mt-2">
-            Fill in the form below to add your a new product
-          </p>
+          <h1 className="text-3xl font-bold">Update Product</h1>
+          <p className="mt-2">Modify the form below to update your product</p>
         </div>
 
         <div className="p-6 rounded-4xl bg-amber-100 md:p-8">
@@ -171,14 +218,13 @@ const AddProduct = () => {
                 <input
                   type="text"
                   name="product_name"
-                  value={product?.product_name}
+                  value={product.product_name}
                   onChange={handleChange}
                   placeholder="Enter product name"
                   required
                   className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>
-
               <div>
                 <label className="ml-3 text-sm text-gray-700 font-medium block">
                   Category
@@ -200,7 +246,6 @@ const AddProduct = () => {
                   ))}
                 </select>
               </div>
-
               <div>
                 <label className="ml-3 text-sm text-gray-700 font-medium block">
                   Price ($)
@@ -208,7 +253,7 @@ const AddProduct = () => {
                 <input
                   type="number"
                   name="price"
-                  value={product?.price}
+                  value={product.price}
                   onChange={handleChange}
                   placeholder="0.00"
                   min="0"
@@ -217,7 +262,6 @@ const AddProduct = () => {
                   className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>
-
               <div>
                 <label className="ml-3 text-sm text-gray-700 font-medium block">
                   Available Quantity
@@ -225,7 +269,7 @@ const AddProduct = () => {
                 <input
                   type="number"
                   name="available_quantity"
-                  value={product?.available_quantity}
+                  value={product.available_quantity}
                   onChange={handleChange}
                   placeholder="Enter available quantity"
                   min="0"
@@ -256,7 +300,7 @@ const AddProduct = () => {
                 </label>
                 <select
                   name="payment_Options"
-                  value={product?.payment_Options}
+                  value={product.payment_Options}
                   onChange={handleChange}
                   required
                   className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
@@ -279,14 +323,13 @@ const AddProduct = () => {
                 <input
                   type="url"
                   name="demo_video_link"
-                  value={product?.demo_video_link}
+                  value={product.demo_video_link}
                   onChange={handleChange}
                   placeholder="https://example.com/video.mp4"
                   className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>
             </div>
-
             <div>
               <label className="ml-3 text-sm text-gray-700 font-medium block">
                 Product Images
@@ -305,7 +348,7 @@ const AddProduct = () => {
                   className="cursor-pointer text-gray-600 flex px-4 gap-1 py-3 justify-center items-center"
                 >
                   <FaUpload className="w-4 h-4" />
-                  <p>Click to upload product images from your device</p>
+                  <p>Click to upload additional product images</p>
                 </label>
               </div>
 
@@ -344,7 +387,7 @@ const AddProduct = () => {
               </label>
               <textarea
                 name="description"
-                value={product?.description}
+                value={product.description}
                 onChange={handleChange}
                 placeholder="Describe your product in detail..."
                 rows="6"
@@ -352,12 +395,13 @@ const AddProduct = () => {
                 className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white resize-none"
               />
             </div>
+
             <div className="flex items-center">
               <input
                 type="checkbox"
                 id="show_on_homepage"
                 name="show_on_homepage"
-                checked={product?.show_on_homepage}
+                checked={product.show_on_homepage}
                 onChange={handleChange}
                 className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
               />
@@ -370,22 +414,22 @@ const AddProduct = () => {
               <button
                 type="submit"
                 disabled={loading || uploading}
-                className="flex-1 py-3 bg-indigo-600 text-white rounded-full font-semibold hover:bg-red-800 disabled:opacity-50"
+                className="flex-1 py-3 bg-indigo-600 text-white rounded-full font-semibold hover:bg-indigo-700 disabled:opacity-50"
               >
                 {loading || uploading ? (
                   <>
                     <FaSpinner className="w-5 h-5 mr-2 animate-spin inline" />
-                    {uploading ? "Uploading Images..." : "Adding Product..."}
+                    {uploading ? "Uploading Images..." : "Updating Product..."}
                   </>
                 ) : (
-                  <>Add Product</>
+                  <>Update Product</>
                 )}
               </button>
 
               <button
                 type="button"
-                onClick={() => navigate("/dashboard/manager")}
-                className="flex-1 py-3 bg-red-600 text-white rounded-full font-semibold hover:bg-gray-200"
+                onClick={() => navigate(-1)}
+                className="flex-1 py-3 bg-red-600 text-white rounded-full font-semibold hover:bg-red-700"
               >
                 Cancel
               </button>
@@ -397,4 +441,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

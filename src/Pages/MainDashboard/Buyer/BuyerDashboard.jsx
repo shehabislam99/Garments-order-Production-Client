@@ -11,10 +11,10 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 const DashboardOverview = ({ stats }) => (
   <div className="p-6">
     <div className="mb-8 text-center item-center">
-      <h2 className="text-3xl flex justify-center font-bold  text-gray-800">
+      <h2 className="text-3xl flex justify-center font-bold">
         Welcome back
       </h2>
-      <p className="text-gray-600 mt-2">Here's Your Dashboard</p>
+      <p className="mt-2">Here's Your Dashboard</p>
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -22,7 +22,7 @@ const DashboardOverview = ({ stats }) => (
         <div className="ml-4 text-center">
           <p className="text-xl font-medium text-gray-600">Total Orders</p>
           <p className="text-2xl mt-1 font-semibold text-blue-500">
-            {stats?.totalOrders|| 0}
+            {stats?.totalOrders || 0}
           </p>
         </div>
       </div>
@@ -31,7 +31,7 @@ const DashboardOverview = ({ stats }) => (
         <div className="ml-4 text-center">
           <p className="text-xl font-medium text-gray-600">Pending Orders</p>
           <p className="text-2xl mt-1 font-semibold text-purple-900">
-            {stats?.pendingOrders|| 0}
+            {stats?.pendingOrders || 0}
           </p>
         </div>
       </div>
@@ -62,7 +62,7 @@ const DashboardOverview = ({ stats }) => (
           </button>
         </Link>
 
-        <Link to="/dashboard/track-order">
+        <Link to="/dashboard/track-order/:orderId">
           <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
             <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
               <FaMapMarkerAlt className="w-6 h-6" />
@@ -118,9 +118,9 @@ const BuyerDashboard = () => {
 
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen">
       <div className="flex flex-col flex-1 overflow-hidden">
-        <header className="bg-white shadow">
+        <header className="bg-white rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
               <h1 className="text-xl  font-bold text-gray-800">
