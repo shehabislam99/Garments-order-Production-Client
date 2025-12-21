@@ -66,12 +66,12 @@ const roleConfig = {
         icon: FaTasks,
       },
       {
-        path: "/dashboard/manager/orders/pending",
+        path: "/dashboard/manager/pending-orders",
         title: "Pending Orders",
         icon: SiGoogletasks,
       },
       {
-        path: "/dashboard/manager/orders/approved",
+        path: "/dashboard/manager/approved-orders",
         title: "Approved Orders",
         icon: SiGoogletasks,
       },
@@ -92,14 +92,14 @@ const roleConfig = {
         title: "My Dashboard",
         icon: FaHome,
       },
-      { path: "/dashboard/buyer/my-orders", title: "My Orders", icon: FaTasks },
+      { path: "/dashboard/my-orders", title: "My Orders", icon: FaTasks },
       {
-        path: "/dashboard/buyer/track-order",
+        path: "/dashboard/track-order",
         title: "Track Order",
         icon: FaMapMarkerAlt,
       },
       {
-        path: "/dashboard/buyer/my-profile",
+        path: "/dashboard/my-profile",
         title: "My Profile",
         icon: FaUser,
       },

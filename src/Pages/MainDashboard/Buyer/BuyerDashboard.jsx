@@ -141,7 +141,7 @@ const BuyerDashboard = () => {
           Quick Actions
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link to="/dashboard/buyer/my-orders">
+          <Link to="/dashboard/my-orders">
             <button className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-300 transition duration-150">
               <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-md p-3 mr-4">
                 <FaTasks />
@@ -153,7 +153,7 @@ const BuyerDashboard = () => {
             </button>
           </Link>
 
-          <Link to="/dashboard/buyer/track-order">
+          <Link to="/dashboard/track-order">
             <button className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-green-300 transition duration-150">
               <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-md p-3 mr-4">
                 <FaMapMarkerAlt />
@@ -166,7 +166,7 @@ const BuyerDashboard = () => {
               </div>
             </button>
           </Link>
-          <Link to="/dashboard/buyer/my-profile">
+          <Link to="/dashboard/my-profile">
             <button className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-amber-300 transition duration-150">
               <div className="flex-shrink-0 text-amber-500 bg-amber-100 rounded-md p-3 mr-4">
                 <FaUser />

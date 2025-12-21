@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import useAuth from "../../Hooks/useAuth";
 import useRole from "../../Hooks/useRole";
-import { axiosInstance } from "../../Hooks/useAxios";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 
 const Booking = () => {
@@ -11,7 +11,7 @@ const Booking = () => {
   const location = useLocation();
   const { user } = useAuth();
   const { role } = useRole();
-
+const axiosSecure = useAxiosSecure()
   const {
     product,
     quantity: initialQty = 0,
@@ -78,53 +78,72 @@ const Booking = () => {
     setQuantity(val);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+   const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitting(true);
 
-    const orderData = {
-      email: user.email,
-      orderId: product._id,
-      productName: product.product_name,
-      paymentMethod: selectedPayment,
-      pricePerUnit: product.price,
-      quantity,
-      totalPrice,
-      customer: formData,
-      status: selectedPayment === "Stripe" ? "payment_pending" : "pending",
-      createdAt: new Date(),
-    };
+  const orderData = {
+    CustomerEmail: user.email,
+    orderId: product._id,
+    productName: product.product_name,
+    paymentMethod: selectedPayment,
+    pricePerUnit: product.price,
+    quantity,
+    totalPrice,
+    customer: formData,
+    createdAt: new Date(),
+  };
 
+  let trackingId = null;
+  try {
+    const res = await axiosSecure.post("/orders", orderData);
+
+    if (!res.data.success) {
+      throw new Error("Order creation failed");
+    }
+
+    trackingId = res.data.order.trackingId;
+    toast.success("Order created successfully");
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.message || "Failed to create order"
+    );
+    setSubmitting(false);
+    return;
+  }
+  if (selectedPayment === "Stripe") {
     try {
-      setSubmitting(true);
-      const res = await axiosInstance.post("/orders", orderData);
+      const paymentRes = await axiosSecure.post(
+        "/payment-checkout-session",
+        {
+          orderamount: totalPrice,
+          product_name: product.product_name,
+          orderId: product._id,
+          CustomerEmail: user.email,
+          trackingId,
+        }
+      );
 
-      if (res.data.success) {
-        toast.success("Order placed successfully");
-
-      if (selectedPayment === "Stripe") {
-        const paymentRes = await axiosInstance.post(
-          "/payment-checkout-session",
-          {
-            orderamount: totalPrice,
-            product_name: product.product_name,
-            orderId: product._id,
-            senderEmail: user.email,
-            trackingId: res.data.order.trackingId,
-          }
-        );
-
-        window.location.href = paymentRes.data.url;
-      } else {
-        navigate("/dashboard/my-orders");
+      if (!paymentRes.data?.url) {
+        throw new Error("Stripe session creation failed");
       }
-       
-      }
-    } catch  {
-      toast.error("Failed to place order");
+
+      toast.success("Redirecting to payment...");
+      window.location.href = paymentRes.data.url;
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Payment initiation failed"
+      );
     } finally {
       setSubmitting(false);
     }
-  };
+  } else {
+    toast.success("Order confirmed (Cash on Delivery)");
+    navigate("/dashboard/my-orders");
+    setSubmitting(false);
+  }
+};
+
 
 
   return (

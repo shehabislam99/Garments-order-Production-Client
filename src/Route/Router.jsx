@@ -29,6 +29,8 @@ import AdminRout from "./AdminRout";
 import AllOrders from "../Pages/MainDashboard/Admin/Allorders";
 import ManagerRout from "./ManagerRout";
 import Booking from "../Pages/Booking/Booking";
+import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
+import PaymentCancelled from "../Pages/Payment/PaymentCanceled";
 
 const router = createBrowserRouter([
   {
@@ -54,11 +56,11 @@ const router = createBrowserRouter([
       },
       {
         path: "payment-success",
-        element: <Contact />,
+        element: <PaymentSuccess />,
       },
       {
-        path: "payment-cancel",
-        element: <Contact />,
+        path: "payment-canceled",
+        element: <PaymentCancelled />,
       },
       {
         path: "/about",
@@ -193,19 +195,19 @@ const router = createBrowserRouter([
 
       // Buyer routes
       {
-        path: "my-dashboard",
+        path: "/dashboard/buyer",
         element: <BuyerDashboard />,
       },
       {
-        path: "dashboard/my-orders",
+        path: "/dashboard/my-orders",
         element: <MyOrder />,
       },
       {
-        path: "dashboard/track-order",
+        path: "/dashboard/track-order",
         element: <TrackOrder />,
       },
       {
-        path: "dashboard/my-profile",
+        path: "/dashboard/my-profile",
         element: <BuyerProfile />,
       },
     ],
