@@ -9,7 +9,6 @@ import Contact from "../Pages/Stat/Contact";
 import AdminDashboard from "../Pages/MainDashboard/Admin/AdminDashboard";
 import ManageUsers from "../Pages/MainDashboard/Admin/ManageUsers";
 import AllProductAdmin from "../Pages/MainDashboard/Admin/AllProductAdmin";
-import Analytic from "../Pages/MainDashboard/Admin/Analytic";
 import ManagerDashboard from "../Pages/MainDashboard/Manager/ManagerDashboard";
 import AddProduct from "../Pages/MainDashboard/Manager/AddProduct";
 import PendingOrders from "../Pages/MainDashboard/Manager/PendingOrders";
@@ -128,22 +127,6 @@ const router = createBrowserRouter([
           </AdminRout>
         ),
       },
-      {
-        path: "admin/analytics",
-        element: (
-          <AdminRout>
-            <Analytic />
-          </AdminRout>
-        ),
-      },
-      // {
-      //   path: "admin/order/:id",
-      //   element: (
-      //     <AdminRout>
-      //       <OrderDetails />
-      //     </AdminRout>
-      //   ),
-      // },
 
       {
         path: "manager",

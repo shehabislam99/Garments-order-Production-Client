@@ -6,8 +6,6 @@ import {
   FaTasks,
   FaUsers,
   FaBox,
-  FaChartBar,
-
 } from "react-icons/fa";
 import Loading from "../../../Components/Common/Loding/Loding";
 
@@ -63,7 +61,7 @@ import Loading from "../../../Components/Common/Loding/Loding";
         <h3 className="text-lg font-medium text-gray-900 mb-4">
           Quick Actions
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link to="/dashboard/admin/manage-users">
             <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
               <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-lg p-3 mr-4">
@@ -102,18 +100,6 @@ import Loading from "../../../Components/Common/Loding/Loding";
                 <p className="text-lg text-gray-500 font-medium">
                   Review, delete and approve orders
                 </p>
-              </div>
-            </button>
-          </Link>
-
-          <Link to="/dashboard/admin/analytics">
-            <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
-              <div className="flex-shrink-0 text-amber-500 bg-violet-100 rounded-lg p-3 mr-4">
-                <FaChartBar />
-              </div>
-              <div className="text-left">
-                <p className="text-xl font-semibold text-gray-900">Analytics</p>
-                <p className="text-lg text-gray-500 font-medium">View detailed analytics</p>
               </div>
             </button>
           </Link>

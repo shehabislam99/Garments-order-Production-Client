@@ -29,9 +29,9 @@ const DashboardOverview = ({ stats }) => (
 
       <div className="bg-amber-100 rounded-4xl shadow p-6">
         <div className="ml-4 text-center">
-          <p className="text-xl font-medium text-gray-600">Pending Orders</p>
+          <p className="text-xl font-medium text-gray-600">Payment Pending</p>
           <p className="text-2xl mt-1 font-semibold text-purple-900">
-            {stats?.pendingOrders || 0}
+            {stats?.pendingPayment || 0}
           </p>
         </div>
       </div>
@@ -99,7 +99,7 @@ const BuyerDashboard = () => {
   const axiosSecure = useAxiosSecure()
   const [stats, setStats] = useState({
     totalOrders: 0,
-    pendingOrders: 0,
+    pendingPayment: 0,
     totalSpent: 0,
   });
   

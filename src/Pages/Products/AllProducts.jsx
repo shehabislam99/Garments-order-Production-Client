@@ -1,108 +1,224 @@
-import React, { useState, useEffect } from "react";
-import ProductCard from "./ProductCard";
-import { useProduct } from "../../Hooks/useProduct"; 
-import { FaSearch } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import {
+  FaSearch,
+  FaShoppingCart,
+  FaEye,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Loading from "../../Components/Common/Loding/Loding";
 
 const AllProducts = () => {
-  const {
-    products,
-    loading,
-    fetchProducts,
-  } = useProduct();
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
- const [filteredProducts, setFilteredProducts] = useState(products);
 
- useEffect(() => {
-   if (!searchTerm.trim()) {
-     setFilteredProducts(products);
-     return;
-   }
+  const axiosSecure = useAxiosSecure();
+  const wasSearching = useRef(false); 
 
-   const term = searchTerm.toLowerCase();
-
-const filtered = products.filter(
-  (product) =>
-    product.name?.toLowerCase().includes(term) || 
-    product.category?.toLowerCase().includes(term)
-);
-
-   setFilteredProducts(filtered);
- }, [products, searchTerm]);
-
-  const handleRefresh = () => {
-    fetchProducts();
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const res = await axiosSecure.get("/products");
+      setProducts(res.data.data || []);
+      setFilteredProducts(res.data.data || []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (loading) {
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredProducts(products);
+      return;
+    }
+
+    wasSearching.current = true; 
+
+    const term = searchTerm.toLowerCase();
+    const filtered = products.filter(
+      (product) =>
+        product?.product_name?.toLowerCase().includes(term) ||
+        product?.name?.toLowerCase().includes(term) ||
+        product?.category?.toLowerCase().includes(term) ||
+        product?.description?.toLowerCase().includes(term)
+    );
+
+    setFilteredProducts(filtered);
+  }, [searchTerm, products]);
+
+  useEffect(() => {
+    if (searchTerm === "" && wasSearching.current) {
+      fetchProducts();
+      wasSearching.current = false;
+    }
+  }, [searchTerm]);
+
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount || 0);
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.5 },
+    },
+  };
+
+  if (loading && products.length === 0) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <Loading></Loading>
-          <p className="mt-2 text-gray-600">Loading products...</p>
+          <Loading />
+          <p className="mt-4 text-lg text-gray-600">Loading all products...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      {/* Header Section */}
-      <div>
-        <h1 className="text-2xl text-center font-bold ">All Products</h1>
-        <p className="text-gray-500 text-center text-lg">Explore our all products</p>
-      </div>
-
-      <div className="flex justify-between items-center py-6">
-        <div>
-          <p className="text-lg font-medium mt-1">
-            Total Products (
-            <span className=" font-bold text-green-500">{products.length}</span>
-            ){searchTerm && `(Filtered: ${filteredProducts.length})`}
-          </p>
-        </div>
-
-        <div className=" lg:flex items-center space-x-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search products by name or category..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <FaSearch className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12 pt-8"
+        >
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
+            All Products
           </div>
-
-          {/* Refresh Button */}
-          <button
-            onClick={handleRefresh}
-            className="mt-1 lg:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-red-800 transition-colors flex items-center"
-          >
-            Refresh
-          </button>
-        </div>
-      </div>
-
-      {/* Products Grid */}
-      {filteredProducts.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-8 text-center">
-          <h3 className="mt-4 text-lg font-medium text-gray-900">
-            No products found
-          </h3>
-          <p className="mt-1 text-gray-500">
-            {searchTerm
-              ? `No products match "${searchTerm}". Try a different search term.`
-              : "No products available. Add your first product!"}
+          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Explore Our Collection
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+            Discover our complete range of premium garments
           </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
-      )}
+
+          <div className="flex justify-end">
+            <form onSubmit={handleSearch} className="relative">
+              <input
+                type="text"
+                placeholder="Search by name, category, or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-12 pr-10 py-3 w-full md:w-96 rounded-full border border-gray-300"
+              />
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            </form>
+          </div>
+        </motion.div>
+
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Loading />
+          </div>
+        ) : (
+          <>
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {filteredProducts.map((product, index) => (
+                <motion.div
+                  key={product?._id}
+                  variants={cardVariants}
+                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                  className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+                >
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={
+                        product?.images?.[0] ||
+                        "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                      }
+                      alt={product?.product_name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+
+                    <div className="absolute top-4 left-4">
+                      {product?.show_on_homepage === "true" && (
+                        <span className="px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
+                          Featured
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <button className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors">
+                        <FaShoppingCart className="w-5 h-5 text-gray-700" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-amber-100">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="px-3 py-1 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full">
+                        {product?.category}
+                      </span>
+                      <div className="flex items-center"></div>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
+                      {product?.product_name}
+                    </h3>
+
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      {product?.description?.substring(0, 50)}...
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-2xl font-bold text-green-500">
+                          {formatCurrency(product?.price)}
+                        </span>
+                      </div>
+
+                      <Link
+                        to={`/products/${product?._id}`}
+                        className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-full hover:bg-red-800 transform hover:scale-105 transition-all duration-300"
+                      >
+                        <FaEye className="mr-2" />
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </>
+        )}
+      </div>
     </div>
   );
 };

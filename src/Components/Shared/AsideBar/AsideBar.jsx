@@ -5,7 +5,6 @@ import {
   FaUsers,
   FaHome,
   FaBox,
-  FaChartBar,
   FaUser,
 } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
@@ -31,11 +30,6 @@ const roleConfig = {
         path: "/dashboard/admin/all-orders",
         title: "All Orders",
         icon: FaTasks,
-      },
-      {
-        path: "/dashboard/admin/analytics",
-        title: "Analytics",
-        icon: FaChartBar,
       },
       {
         path: "/dashboard/admin/manage-users",

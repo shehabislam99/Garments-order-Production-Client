@@ -115,7 +115,6 @@ const HomeProduct = () => {
                       )}
                     </div>
 
-                    {/* Quick Actions */}
                     <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <button className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors">
                         <FaShoppingCart className="w-5 h-5 text-gray-700" />
@@ -123,15 +122,12 @@ const HomeProduct = () => {
                     </div>
                   </div>
 
-                  {/* Product Info */}
                   <div className="p-6 bg-amber-100">
                     <div className="flex items-center justify-between mb-2">
                       <span className="px-3 py-1 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full">
                         {product?.category}
                       </span>
-                      <div className="flex items-center">
-                        
-                      </div>
+                      <div className="flex items-center"></div>
                     </div>
 
                     <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
@@ -150,7 +146,7 @@ const HomeProduct = () => {
                       </div>
 
                       <Link
-                        to={`/product-details/${product?._id}`}
+                        to={`/products/${product?._id}`}
                         className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-full hover:bg-red-800 transform hover:scale-105 transition-all duration-300"
                       >
                         <FaEye className="mr-2" />
@@ -162,7 +158,6 @@ const HomeProduct = () => {
               ))}
             </motion.div>
 
-            {/* View All Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

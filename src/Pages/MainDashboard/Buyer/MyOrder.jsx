@@ -79,7 +79,7 @@ const handleCancelOrder = async () => {
       setOrders((prev) =>
         prev.map((order) =>
           order._id === selectedOrder._id
-            ? { ...order, status: "cancelled" }
+            ? { ...order }
             : order
         )
       );
@@ -137,7 +137,7 @@ const handleCancelOrder = async () => {
     switch (status?.toLowerCase()) {
       case "pending":
         return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "confirmed":
+      case "approved":
         return "bg-blue-100 text-blue-800 border-blue-200";
       case "cancelled":
         return "bg-red-100 text-red-800 border-gray-200";
@@ -150,9 +150,9 @@ const handleCancelOrder = async () => {
     switch (status?.toLowerCase()) {
       case "pending":
         return <FaClock className="mr-1" />;
-      case "confirmed":
+      case "approved":
         return <FaCheckCircle className="mr-1" />;
-      case "cancelled":
+      case "canceled":
         return <MdCancel className="mr-1" />;
       default:
         return <FaBox className="mr-1" />;
@@ -189,8 +189,8 @@ const handleCancelOrder = async () => {
   const statusOptions = [
     { value: "all", label: "All Status" },
     { value: "pending", label: "Pending" },
-    { value: "confirmed", label: "Comfirmed" },
-    { value: "cancelled", label: "Cancelled" },
+    { value: "approved", label: "Approved" },
+    { value: "cancelld", label: "Cancelled" },
   ];
 
   return (
