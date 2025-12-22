@@ -13,7 +13,7 @@ const HowWorks = () => {
     {
       icon: <FaSearch />,
       title: "Browse Products",
-      description: "Explore our extensive collection of premium fashion items",
+      description: "Explore our extensive collection of premium garments items",
       color: "bg-blue-100 text-blue-600",
     },
     {
@@ -64,9 +64,8 @@ const HowWorks = () => {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+    <section className="py-16 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -77,16 +76,14 @@ const HowWorks = () => {
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
             Easy Process
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">
             How It Works
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Simple steps to get your favorite fashion items delivered to your
-            doorstep
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            Simple steps to get your favorite garment items delivered to your
+            doorstep?
           </p>
         </motion.div>
-
-        {/* Steps Timeline */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -94,7 +91,6 @@ const HowWorks = () => {
           viewport={{ once: true }}
           className="relative"
         >
-          {/* Connecting Line */}
           <div className="hidden lg:block absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-green-500 to-red-500 opacity-20"></div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
@@ -105,26 +101,22 @@ const HowWorks = () => {
                 whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
                 className="relative"
               >
-                {/* Step Number */}
+           
                 <div className="absolute -top-4 -left-4 w-8 h-8 bg-white border-4 border-gray-100 rounded-full flex items-center justify-center text-sm font-bold text-gray-700 z-10">
                   {index + 1}
                 </div>
-
-                {/* Step Card */}
-                <div className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                <div className="bg-amber-100 rounded-4xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
                   <div
-                    className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${step.color} mb-6`}
+                    className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${step?.color} mb-6`}
                   >
-                    <div className="text-2xl">{step.icon}</div>
+                    <div className="text-2xl">{step?.icon}</div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
-                    {step.title}
+                  <h3 className="text-xl font-bold text-black mb-3">
+                    {step?.title}
                   </h3>
 
-                  <p className="text-gray-600">{step.description}</p>
-
-                  {/* Arrow for mobile */}
+                  <p className="text-gray-700">{step?.description}</p>
                   {index < steps.length - 1 && (
                     <div className="lg:hidden absolute -right-4 top-1/2 transform -translate-y-1/2">
                       <div className="w-8 h-8 flex items-center justify-center">
@@ -147,28 +139,6 @@ const HowWorks = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
-        </motion.div>
-
-        {/* Additional Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-            <div className="text-3xl font-bold text-blue-600">24-48 Hours</div>
-            <div className="text-gray-700 font-medium">Processing Time</div>
-          </div>
-          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-            <div className="text-3xl font-bold text-green-600">Free</div>
-            <div className="text-gray-700 font-medium">Shipping Over $100</div>
-          </div>
-          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-            <div className="text-3xl font-bold text-red-600">30 Days</div>
-            <div className="text-gray-700 font-medium">Return Policy</div>
           </div>
         </motion.div>
       </div>

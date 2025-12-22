@@ -52,7 +52,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="text-black navbar bg-gray-200 py-4">
+      <nav className="text-black navbar bg-amber-100 py-4">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-20">
             {/* Mobile menu button */}

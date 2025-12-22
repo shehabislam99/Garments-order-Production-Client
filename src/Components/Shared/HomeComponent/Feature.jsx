@@ -32,7 +32,7 @@ const Feature = () => {
     {
       icon: <FaRecycle />,
       title: "Easy Returns",
-      description: "30-day return policy, no questions asked",
+      description: "Easy return policy",
       color: "from-purple-500 to-purple-600",
     },
     {
@@ -50,7 +50,7 @@ const Feature = () => {
   ];
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -62,10 +62,10 @@ const Feature = () => {
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-600 font-medium mb-4">
             Why Choose Us
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">
             Experience the Difference
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             We're committed to providing the best shopping experience
           </p>
         </motion.div>
@@ -84,23 +84,21 @@ const Feature = () => {
               <div
                 className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl blur-xl"
                 style={{
-                  backgroundImage: `linear-gradient(to bottom right, ${feature.color})`,
+                  backgroundImage: `linear-gradient(to bottom right, ${feature?.color})`,
                 }}
               />
 
-              <div className="relative bg-white rounded-3xl p-8 shadow-xl group-hover:shadow-2xl transition-all duration-300 border border-gray-100">
+              <div className="relative bg-amber-100 rounded-4xl p-8 shadow-xl group-hover:shadow-2xl transition-all duration-300 border border-gray-100">
                 <div
-                  className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} text-white mb-6`}
+                  className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${feature?.color} text-white mb-6`}
                 >
-                  <div className="text-2xl">{feature.icon}</div>
+                  <div className="text-2xl">{feature?.icon}</div>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
-                  {feature.title}
+                <h3 className="text-xl font-bold text-black mb-3">
+                  {feature?.title}
                 </h3>
-                <p className="text-gray-600">{feature.description}</p>
-
-                {/* Animated Border */}
+                <p className="text-gray-700">{feature?.description}</p>
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent group-hover:via-gradient-to-r group-hover:from-blue-500 group-hover:to-purple-500 transition-all duration-500" />
               </div>
             </motion.div>

@@ -12,6 +12,17 @@ const CustomerFeedback = () => {
 
   const testimonials = [
     {
+      id: 4,
+      name: "David Park",
+      role: "Photographer",
+      image:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      rating: 5,
+      comment:
+        "As a photographer, I appreciate quality fabrics. These products are perfect for my photoshoots. Great value for money!",
+      date: "2 weeks ago",
+    },
+    {
       id: 1,
       name: "Sarah Johnson",
       role: "Fashion Blogger",
@@ -44,17 +55,6 @@ const CustomerFeedback = () => {
         "Love the attention to detail in every product. The materials feel luxurious and the designs are timeless.",
       date: "3 days ago",
     },
-    {
-      id: 4,
-      name: "David Park",
-      role: "Photographer",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      rating: 5,
-      comment:
-        "As a photographer, I appreciate quality fabrics. These products are perfect for my photoshoots. Great value for money!",
-      date: "2 weeks ago",
-    },
   ];
 
   const nextSlide = () => {
@@ -83,9 +83,8 @@ const CustomerFeedback = () => {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-blue-50">
+    <section className="py-16 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -96,17 +95,14 @@ const CustomerFeedback = () => {
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-100 text-amber-600 font-medium mb-4">
             Testimonials
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
             What Our Customers Say
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Don't just take our word for it. Hear from our satisfied customers
           </p>
         </motion.div>
-
-        {/* Carousel Container */}
         <div className="relative">
-          {/* Main Carousel */}
           <div className="relative h-[400px] lg:h-[350px] overflow-hidden rounded-3xl">
             <AnimatePresence initial={false} custom={1}>
               <motion.div
@@ -122,17 +118,16 @@ const CustomerFeedback = () => {
                 }}
                 className="absolute inset-0"
               >
-                <div className="h-full bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl overflow-hidden">
+                <div className="h-full bg-gradient-to-br from-indigo-600 to-blue-800 rounded-3xl overflow-hidden">
                   <div className="h-full flex flex-col lg:flex-row">
-                    {/* Left Side - Testimonial */}
                     <div className="flex-1 p-8 lg:p-12 text-white">
-                      <FaQuoteLeft className="w-12 h-12 text-white/30 mb-6" />
+                      <FaQuoteLeft className="w-12 h-12 text-white/30 mb-3" />
 
                       <p className="text-xl lg:text-2xl font-light mb-8 leading-relaxed">
                         "{testimonials[currentSlide].comment}"
                       </p>
 
-                      <div className="flex items-center mb-4">
+                      <div className="flex items-center mb-2">
                         {[...Array(5)].map((_, i) => (
                           <FaStar
                             key={i}
@@ -157,10 +152,8 @@ const CustomerFeedback = () => {
                         </p>
                       </div>
                     </div>
-
-                    {/* Right Side - Image */}
                     <div className="flex-1 relative hidden lg:block">
-                      <div className="absolute inset-0 bg-gradient-to-l from-blue-600 to-transparent z-10"></div>
+                      <div className="absolute inset-0 bg-gradient-to-l from-indigo-600 to-transparent z-10"></div>
                       <img
                         src={testimonials[currentSlide].image}
                         alt={testimonials[currentSlide].name}
@@ -177,7 +170,7 @@ const CustomerFeedback = () => {
             </AnimatePresence>
           </div>
 
-          {/* Navigation Buttons */}
+
           <button
             onClick={prevSlide}
             className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transform hover:scale-110 transition-all duration-300 z-20"
@@ -191,7 +184,6 @@ const CustomerFeedback = () => {
             <FaChevronRight className="w-5 h-5 text-gray-700" />
           </button>
 
-          {/* Dots Indicator */}
           <div className="flex justify-center mt-6 space-x-2">
             {testimonials.map((_, index) => (
               <button
@@ -199,7 +191,7 @@ const CustomerFeedback = () => {
                 onClick={() => setCurrentSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentSlide
-                    ? "bg-blue-600 w-8"
+                    ? "bg-indigo-600 w-8"
                     : "bg-gray-300 hover:bg-gray-400"
                 }`}
               />
@@ -207,7 +199,6 @@ const CustomerFeedback = () => {
           </div>
         </div>
 
-        {/* Additional Testimonials Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -223,7 +214,7 @@ const CustomerFeedback = () => {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
-              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300"
+              className="bg-amber-100 rounded-4xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300"
             >
               <div className="flex items-center mb-4">
                 <img

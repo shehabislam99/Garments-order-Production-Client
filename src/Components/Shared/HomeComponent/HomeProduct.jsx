@@ -57,9 +57,8 @@ const HomeProduct = () => {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-blue-50">
+    <section className="py-16 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -70,11 +69,11 @@ const HomeProduct = () => {
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
             Our Collection
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
             Featured Products
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover our handpicked selection of premium fashion items
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            Discover our premium garments items
           </p>
         </motion.div>
 
@@ -84,7 +83,6 @@ const HomeProduct = () => {
           </div>
         ) : (
           <>
-            {/* Products Grid */}
             <motion.div
               variants={containerVariants}
               initial="hidden"
@@ -94,32 +92,25 @@ const HomeProduct = () => {
             >
               {products.map((product, index) => (
                 <motion.div
-                  key={product._id}
+                  key={product?._id}
                   variants={cardVariants}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
                   className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                 >
-                  {/* Product Image */}
                   <div className="relative h-64 overflow-hidden">
                     <img
                       src={
-                        product.images?.[0] ||
+                        product?.images?.[0] ||
                         "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
                       }
-                      alt={product.product_name}
+                      alt={product?.product_name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
 
-                    {/* Badges */}
                     <div className="absolute top-4 left-4">
-                      {product.status === "featured" && (
+                      {product?.show_on_homepage === "true" && (
                         <span className="px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
                           Featured
-                        </span>
-                      )}
-                      {product.available_quantity < 10 && (
-                        <span className="ml-2 px-3 py-1 bg-yellow-500 text-white text-xs font-bold rounded-full">
-                          Low Stock
                         </span>
                       )}
                     </div>
@@ -133,51 +124,38 @@ const HomeProduct = () => {
                   </div>
 
                   {/* Product Info */}
-                  <div className="p-6">
+                  <div className="p-6 bg-amber-100">
                     <div className="flex items-center justify-between mb-2">
                       <span className="px-3 py-1 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full">
-                        {product.category}
+                        {product?.category}
                       </span>
                       <div className="flex items-center">
-                        <FaStar className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="ml-1 text-sm text-gray-600">4.8</span>
+                        
                       </div>
                     </div>
 
                     <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
-                      {product.product_name}
+                      {product?.product_name}
                     </h3>
 
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {product.description?.substring(0, 100)}...
+                      {product?.description?.substring(0, 50)}...
                     </p>
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-2xl font-bold text-gray-900">
-                          {formatCurrency(product.price)}
+                        <span className="text-2xl font-bold text-green-500">
+                          {formatCurrency(product?.price)}
                         </span>
-                        {product.originalPrice && (
-                          <span className="ml-2 text-sm text-gray-500 line-through">
-                            {formatCurrency(product.originalPrice)}
-                          </span>
-                        )}
                       </div>
 
                       <Link
-                        to={`/product-details/${product._id}`}
-                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-red-800 transform hover:scale-105 transition-all duration-300"
+                        to={`/product-details/${product?._id}`}
+                        className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-full hover:bg-red-800 transform hover:scale-105 transition-all duration-300"
                       >
                         <FaEye className="mr-2" />
                         View Details
                       </Link>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <span>Stock: {product.available_quantity || 0}</span>
-                        <span>MOQ: {product.moq || 100}+</span>
-                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -194,7 +172,7 @@ const HomeProduct = () => {
             >
               <Link
                 to="/all-products"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-full hover:from-red-700 hover:to-red-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-full hover:from-red-700 hover:to-red-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 View All Products
                 <FaArrowRight className="ml-3" />
