@@ -20,13 +20,7 @@ const useRole = () => {
     retry: 1, // Retry once if fails
   });
 
-  // Debug log
-  // if (error) {
-  //console.error("Role fetch error:", error);
-  // }
-  // if (roleData) {
-  //   console.log("Role data received:", roleData);
-  // }
+  
 
   return {
     role: roleData?.role || "buyer",

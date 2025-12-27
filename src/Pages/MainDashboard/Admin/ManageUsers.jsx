@@ -31,19 +31,6 @@ const ManageUsers = () => {
   const [loading, setLoading] = useState(true);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [userStats, setUserStats] = useState({
-    totalUsers: 0,
-    roles: {
-      admin: 0,
-      manager: 0,
-      buyer: 0,
-    },
-    statuses: {
-      active: 0,
-      suspended: 0,
-      pending: 0,
-    },
-  });
   const axiosSecure = useAxiosSecure();
 
 
@@ -84,31 +71,10 @@ const ManageUsers = () => {
     }
   };
 
-const fetchUserStats = async () => {
-  try {
-    const res = await axiosSecure.get("/users/stats");
-    console.log("Stats response:", res.data);
 
-    if (res.data?.success) {
-      setUserStats(res.data);
-    } else {
-      throw new Error("Stats API success:false");
-    }
-  } catch (error) {
-    console.error("Failed to load statistics", error);
-
-    setUserStats({
-      totalUsers: 0,
-      roles: { admin: 0, manager: 0, buyer: 0 },
-      statuses: { active: 0, suspended: 0, pending: 0 },
-    });
-    toast.error("Failed to load statistics");
-  }
-};
 
  useEffect(() => {
    fetchUsers();
-   fetchUserStats();
  }, [currentPage, searchTerm, filterRole, filterStatus]);
   
   const handleRoleUpdate = async () => {
@@ -135,8 +101,8 @@ const fetchUserStats = async () => {
         setSelectedRole("");
       }
     } catch (error) {
-      console.error("Error updating user? role:", error);
-      toast.error("Failed to update user? role");
+      console.error("Error updating user role:", error);
+      toast.error("Failed to update user role");
     } finally {
       setUpdating(false);
     }
@@ -252,7 +218,7 @@ const fetchUserStats = async () => {
       case "suspended":
         return "bg-red-100 text-red-800";
       case "pending":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-gray-100 text-yellow-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -280,67 +246,16 @@ const fetchUserStats = async () => {
         <button
           onClick={() => {
             fetchUsers();
-            fetchUserStats();
           }}
           disabled={loading}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-red-800 transition-colors flex items-center disabled:opacity-50"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-red-800 transition-colors flex items-center disabled:opacity-50"
         >
           {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
-      {/* Stats Summary */}
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-6 gap-4">
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Total Users</p>
-            <p className="text-2xl font-semibold text-gray-900">
-              {userStats.totalUsers}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Active</p>
-            <p className="text-2xl font-semibold text-green-600">
-              {userStats.statuses?.active}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Suspended</p>
-            <p className="text-2xl font-semibold text-red-600">
-              {userStats.statuses?.suspended}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Admins</p>
-            <p className="text-2xl font-semibold text-red-600">
-              {userStats.roles?.admin}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Managers</p>
-            <p className="text-2xl font-semibold text-blue-600">
-              {userStats.roles?.manager}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-600">Buyer</p>
-            <p className="text-2xl font-semibold text-blue-600">
-              {userStats.roles?.buyer}
-            </p>
-          </div>
-        </div>
-      </div>
+
       {/* Filters and Search */}
-      <div className="mt-4 bg-white rounded-lg shadow p-4">
+      <div className="mt-4 bg-amber-100 rounded-4xl shadow p-4">
         <div className="flex items-center justify-between mb-4">
           {(searchTerm || filterRole !== "all" || filterStatus !== "all") && (
             <button
@@ -371,7 +286,7 @@ const fetchUserStats = async () => {
                   setCurrentPage(0);
                 }}
                 placeholder="Search by name or email..."
-                className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                className="pl-10 w-full px-3 py-2 placeholder-green-500 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>
@@ -387,7 +302,7 @@ const fetchUserStats = async () => {
                 setFilterRole(e.target.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">All Roles</option>
               <option value="admin">Admin</option>
@@ -407,9 +322,9 @@ const fetchUserStats = async () => {
                 setFilterStatus(e.target.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="all">All Status</option>
+              <option value="all">User all Status</option>
               <option value="active">Active</option>
               <option value="suspended">Suspended</option>
               <option value="pending">Pending</option>
@@ -429,7 +344,7 @@ const fetchUserStats = async () => {
       {/* Users Table */}
       {!loading && (
         <>
-          <div className="mt-4 bg-white rounded-lg shadow overflow-hidden ">
+          <div className="mt-4 bg-white rounded-4xl shadow overflow-hidden ">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -443,18 +358,15 @@ const fetchUserStats = async () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Role
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
+                    <th className="px-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    User  Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Created
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Manage Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-amber-100 divide-y divide-gray-200">
                   {users.map((user) => (
                     <tr
                       key={user?._id}
@@ -463,23 +375,16 @@ const fetchUserStats = async () => {
                       {/* User Info */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          {user?.photoURL ? (
+                         
                             <img
                               className="h-10 w-10 rounded-full"
-                              src={user?.photoURL}
+                              src={user?.photoURL || "https://via.placeholder.com/48"}
                               alt={user?.name}
                             />
-                          ) : (
-                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                              <MdPerson className="h-6 w-6 text-blue-600" />
-                            </div>
-                          )}
+                         
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {user?.name || user?.displayName || "No Name"}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              ID: {user?._id?.substring(0, 8)}...
+                              {user?.name || "No Name"}
                             </div>
                           </div>
                         </div>
@@ -526,13 +431,6 @@ const fetchUserStats = async () => {
                         </div>
                       </td>
 
-                      {/* Created Date */}
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {user?.createdAt
-                          ? new Date(user?.createdAt).toLocaleDateString()
-                          : "N/A"}
-                      </td>
-
                       {/* Actions */}
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-3">
@@ -543,7 +441,7 @@ const fetchUserStats = async () => {
                             className={`flex items-center ${
                               user?.role === "admin"
                                 ? "text-gray-400 cursor-not-allowed"
-                                : "text-indigo-600 hover:text-red-800 hover:underline "
+                                : "hover:bg-red-800 px-3 py-1 rounded-full text-white bg-indigo-600 "
                             }`}
                             title="Update Role"
                           >
@@ -557,7 +455,7 @@ const fetchUserStats = async () => {
                             className={`flex items-center ${
                               user?.role === "admin"
                                 ? "text-gray-400 cursor-not-allowed"
-                                : "text-green-600 hover:text-red-800 hover:underline"
+                                : "hover:bg-red-800 px-3 py-1 rounded-full text-white bg-green-600"
                             }`}
                           >
                             <GrDocumentUpdate className="mr-1" />
@@ -602,7 +500,7 @@ const fetchUserStats = async () => {
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
                 pageCount={totalPages}
-                forcePage={currentPage} // This keeps the pagination in sync
+                forcePage={currentPage}
                 previousLabel={
                   <div className="flex items-center">
                     <FaChevronLeft className="mr-1 h-3 w-3" />
@@ -638,20 +536,23 @@ const fetchUserStats = async () => {
       {/* Role Update Modal */}
       {roleModalOpen && editingUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+          <div className="bg-amber-100 rounded-4xl  shadow-xl max-w-md w-full">
             <div className="p-6">
               <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
-                Update User? Role
+                Update User Role
               </h3>
 
               <div className="mb-6">
                 <p className="text-sm text-gray-600 mb-2">
-                  Name: <span className="font-medium">{editingUser?.name}</span>
+                  Name:{" "}
+                  <span className="font-medium text-black">
+                    {editingUser?.name}
+                  </span>
                 </p>
                 <p className="text-sm text-gray-600">
                   Role:{" "}
-                  <span className="font-medium">
-                    {editingUser?.role || "buyer"}
+                  <span className="font-medium text-black">
+                    {editingUser?.role || "Unknown"}
                   </span>
                 </p>
               </div>
@@ -677,14 +578,14 @@ const fetchUserStats = async () => {
                     setEditingUser(null);
                     setSelectedRole("");
                   }}
-                  className="px-4 py-2 text-sm font-medium text-black-700 bg-gray-200 hover:bg-gray-200 rounded-md transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-800 rounded-full transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleRoleUpdate}
                   disabled={updating || !selectedRole}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-red-800 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {updating ? "Updating..." : "Update Role"}
                 </button>
@@ -694,18 +595,20 @@ const fetchUserStats = async () => {
         </div>
       )}
 
-      {/* Suspend User? Modal */}
+      {/* Suspend User Modal */}
       {updateModalOpen && editingUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <h3 className="text-lg font-semibold mb-4">Update Status</h3>
+          <div className="bg-amber-100 rounded-4xl shadow-xl max-w-md w-full p-6">
+            <h3 className="text-lg text-center font-bold mb-4">
+              Update Status
+            </h3>
             {/* STATUS ACTIONS */}
             {editingUser?.status === "pending" && (
               <button
                 onClick={handleApproveUser}
-                className="w-full bg-green-600 text-white py-2 rounded mb-2"
+                className="w-full bg-green-600 text-white py-2 rounded-full mb-2"
               >
-                Approve User?
+                Approve User
               </button>
             )}
 
@@ -714,12 +617,15 @@ const fetchUserStats = async () => {
                 <select
                   value={suspendReason}
                   onChange={(e) => setSuspendReason(e.target.value)}
-                  className="w-full border rounded px-3 py-2 mb-2"
+                  className="w-full border border-gray-400 rounded-xl px-3 py-2 mb-2"
                 >
                   <option value="">Select suspend reason</option>
                   <option value="Violation of terms">Violation of terms</option>
                   <option value="Suspicious activity">
                     Suspicious activity
+                  </option>
+                  <option value="Payment Related Issue">
+                    Payment Related Issue
                   </option>
                 </select>
 
@@ -727,14 +633,14 @@ const fetchUserStats = async () => {
                   value={suspendFeedback}
                   onChange={(e) => setSuspendFeedback(e.target.value)}
                   placeholder="Suspend feedback"
-                  className="w-full border rounded px-3 py-2 mb-2"
+                  className="w-full border border-gray-400 rounded-xl px-3 py-2 mb-2"
                 />
 
                 <button
                   onClick={handleSuspendUser}
-                  className="w-full bg-red-600 text-white py-2 rounded"
+                  className="w-full bg-red-600 rounded-full text-white py-2 rounded"
                 >
-                  Suspend User?
+                  Suspend User
                 </button>
               </>
             )}
@@ -742,7 +648,7 @@ const fetchUserStats = async () => {
             {editingUser?.status === "suspended" && (
               <button
                 onClick={handleActivateUser}
-                className="w-full bg-blue-600 text-white py-2 rounded"
+                className="w-full bg-blue-600 text-white py-2 rounded-full"
               >
                 Activate User
               </button>
@@ -750,7 +656,7 @@ const fetchUserStats = async () => {
 
             <button
               onClick={closeUpdateModal}
-              className="w-full mt-3 text-gray-600"
+              className="w-full mt-3 bg-gray-400  rounded-full  py-2"
             >
               Cancel
             </button>

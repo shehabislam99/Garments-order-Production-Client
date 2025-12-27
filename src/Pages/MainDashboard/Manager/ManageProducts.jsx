@@ -25,7 +25,6 @@ const ManageProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [totalProducts, setTotalProducts] = useState(0);
 
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
@@ -40,7 +39,7 @@ const ManageProducts = () => {
       const res = await axiosSecure.get("/products");
       const productsData = res?.data?.data || [];
       setProducts(productsData);
-      setTotalProducts(productsData?.length);
+    
     } catch {
       toast.error("Failed to load products");
     } finally {
@@ -106,16 +105,7 @@ const filteredProducts = products.filter((product) => {
     setCurrentPage(0);
   };
 
-  const getPaymentIcon = (paymentMethod) => {
-    switch (paymentMethod?.toLowerCase()) {
-      case "stripe":
-        return <MdPayment className="mr-1" />;
-      case "cash on delivery":
-        return <FaBox className="mr-1" />;
-      default:
-        return <MdPayment className="mr-1" />;
-    }
-  };
+
 
   const getPaymentColor = (paymentMethod) => {
     switch (paymentMethod?.toLowerCase()) {
@@ -136,7 +126,7 @@ const filteredProducts = products.filter((product) => {
   };
 
   const paymentStatus = [
-    { value: "all", label: "All" },
+    { value: "all", label: "All Payment Methods" },
     { value: "stripe", label: "Stripe" },
     { value: "cash on delivery", label: "Cash on Delivery" },
   ];
@@ -271,33 +261,32 @@ const filteredProducts = products.filter((product) => {
 
                       {/* Details */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm">
+                        <div className="text-sm font-medium ">
                           <h2 className="text-gray-900">
                             {product?.product_name}
                           </h2>
                         </div>
                       </td>
-
-                      <td className="px-8 py-4 whitespace-nowrap">
-                        <div className="text-sm font-semibold text-gray-900">
+                      {/* Price */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                           {formatCurrency(product?.price)}
                         </div>
                       </td>
 
                       {/* Payment Mode */}
-                      <td className="px-9 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getPaymentColor(
                             product?.payment_Options
                           )}`}
                         >
-                          {getPaymentIcon(product?.payment_Options)}
                           {product?.payment_Options || "N/A"}
                         </span>
                       </td>
 
                       {/* Actions */}
-                      <td className="px-15 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-3">
                           <button
                             onClick={() =>
@@ -305,7 +294,7 @@ const filteredProducts = products.filter((product) => {
                                 `/dashboard/update-product/${product?._id}`
                               )
                             }
-                            className="px-3 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700"
+                            className="px-3 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-red-800"
                             title="Edit Product"
                           >
                             <FaEdit className="mr-1" />

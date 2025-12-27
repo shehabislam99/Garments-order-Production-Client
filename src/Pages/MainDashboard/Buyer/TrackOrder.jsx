@@ -49,7 +49,7 @@ const TrackOrder = () => {
   const fetchOrder = async () => {
     try {
       setLoading(true);
-      const res = await axiosSecure.get(`/track-order/${orderId}`);
+      const res = await axiosSecure.get(`/track-order/${orderId}/timeline`);
 
       if (res.data.success) {
         const { order, trackingHistory } = res.data.data;

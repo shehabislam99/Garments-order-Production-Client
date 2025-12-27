@@ -26,7 +26,7 @@ useEffect(() => {
         `/payment-success?session_id=${sessionId}`
       );
 
-      console.log(res.data);
+     
 
       setPaymentInfo({
         transactionId: res.data.transactionId,

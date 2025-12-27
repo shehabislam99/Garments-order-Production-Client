@@ -4,11 +4,8 @@ import {
   FaChevronRight,
   FaEye,
   FaTruck,
-  FaCalendarAlt,
   FaBox,
-  FaCheckCircle,
   FaSync,
-  FaUser,
   FaMapMarkerAlt,
   FaClipboardCheck,
   FaShippingFast,
@@ -34,7 +31,7 @@ const ApprovedOrders = () => {
   const [trackingForm, setTrackingForm] = useState({
     location: "",
     note: "",
-    status: "Cutting Completed",
+    status: "",
     dateTime: new Date().toISOString().slice(0, 16),
   });
   const [addingTracking, setAddingTracking] = useState(false);
@@ -49,7 +46,7 @@ const ApprovedOrders = () => {
       setOrders(data);
       setCurrentPage(0);
     } catch (err) {
-      toast.error("Failed to load approved orders");
+      toast.error("Failed to load approved orders", err);
       setOrders([]);
     } finally {
       setLoading(false);
@@ -60,45 +57,49 @@ const ApprovedOrders = () => {
     fetchApprovedOrders();
   }, []);
 
-  const paginatedOrders = orders.slice(
-    currentPage * ordersPerPage,
-    (currentPage + 1) * ordersPerPage
-  );
-
-  const handlePageClick = (e) => setCurrentPage(e.selected);
-
+  // --- MODAL HANDLERS ---
   const openAddTrackingModal = (order) => {
     setSelectedOrder(order);
-    setTrackingForm({
-      location: "",
-      note: "",
-      status: "Cutting Completed",
-      dateTime: new Date().toISOString().slice(0, 16),
-    });
     setTrackingModalOpen(true);
   };
 
   const openViewTrackingModal = async (order) => {
     setSelectedOrder(order);
     setViewTrackingModalOpen(true);
+
     try {
-      const res = await axiosSecure.get(
-        `/track-order/${order.orderId || order.trackingId}/timeline`
-      );
-      setTrackingTimeline(res.data.data || []);
-    } catch {
-      toast.error("Failed to load tracking timeline");
+      const res = await axiosSecure.get(`/track-order/${order._id}/timeline`);
+      
+
+      // Check if data exists in the expected format
+      if (res.data.success && res.data.data) {
+        setTrackingTimeline(res.data.data);
+      } else {
+        toast.error("No tracking history found");
+        setTrackingTimeline([]);
+      }
+    } catch (err) {
+      console.error("Error fetching timeline:", err);
+      toast.error("Failed to load tracking history");
       setTrackingTimeline([]);
     }
   };
 
   const closeModals = () => {
-    setSelectedOrder(null);
     setTrackingModalOpen(false);
     setViewTrackingModalOpen(false);
+    setSelectedOrder(null);
     setTrackingTimeline([]);
+    // Reset form
+    setTrackingForm({
+      location: "",
+      note: "",
+      status: "Cutting Completed",
+      dateTime: new Date().toISOString().slice(0, 16),
+    });
   };
 
+  // --- API ACTIONS ---
   const handleAddTracking = async () => {
     if (!trackingForm.location) {
       toast.error("Location required");
@@ -110,42 +111,24 @@ const ApprovedOrders = () => {
         `/orders/${selectedOrder._id}/tracking`,
         trackingForm
       );
-      toast.success("Tracking added");
+      toast.success("Tracking added successfully");
       closeModals();
       fetchApprovedOrders();
     } catch (err) {
-      toast.error("Failed to add tracking");
+      toast.error("Failed to add tracking", err);
     } finally {
       setAddingTracking(false);
     }
   };
 
-  /* ---------------- HELPER FUNCTIONS ---------------- */
-  const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "approved":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "rejected":
-        return "bg-red-100 text-red-800 border-gray-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
+  // --- HELPERS ---
+  const paginatedOrders = orders.slice(
+    currentPage * ordersPerPage,
+    (currentPage + 1) * ordersPerPage
+  );
 
-  const getStatusIcon = (status) => {
-    switch (status?.toLowerCase()) {
-      case "pending":
-        return <FaCalendarAlt className="mr-1" />;
-      case "approved":
-        return <FaCheckCircle className="mr-1" />;
-      default:
-        return <FaBox className="mr-1" />;
-    }
-  };
+  const handlePageClick = (e) => setCurrentPage(e.selected);
 
-  /* ---------------- OTHER HELPERS ---------------- */
   const formatDate = (d) =>
     d
       ? new Date(d).toLocaleDateString("en-US", {
@@ -162,24 +145,12 @@ const ApprovedOrders = () => {
     }).format(amt || 0);
 
   const getTrackingStatusIcon = (status) => {
-    switch (status) {
-      case "CUTTING COMPLETED":
-        return <FaBox className="mr-1" />;
-      case "SEWING STARTED":
-        return <FaClipboardCheck className="mr-1" />;
-      case "FINISHING":
-        return <FaCheckCircle className="mr-1" />;
-      case "QC CHECKED":
-        return <FaClipboardCheck className="mr-1" />;
-      case "PACKED":
-        return <FaBox className="mr-1" />;
-      case "SHIPPED":
-        return <FaShippingFast className="mr-1" />;
-      case "OUT FOR DELIVERY":
-        return <FaTruck className="mr-1" />;
-      default:
-        return <FaMapMarkerAlt className="mr-1" />;
-    }
+    const s = status?.toUpperCase();
+    if (s?.includes("CUTTING")) return <FaBox className="mr-1" />;
+    if (s?.includes("SEWING")) return <FaClipboardCheck className="mr-1" />;
+    if (s?.includes("SHIPPED")) return <FaShippingFast className="mr-1" />;
+    if (s?.includes("DELIVERY")) return <FaTruck className="mr-1" />;
+    return <FaMapMarkerAlt className="mr-1" />;
   };
 
   if (loading)
@@ -191,15 +162,14 @@ const ApprovedOrders = () => {
 
   return (
     <div className="p-3">
-      {/* HEADER - SIMPLIFIED */}
+      {/* Title & Refresh */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Approved Orders</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Approved Orders</h2>
         <button
           onClick={fetchApprovedOrders}
-          disabled={loading}
-          className="px-4 py-2 bg-blue-600 text-white rounded-full flex items-center hover:bg-blue-700 disabled:opacity-50"
+          className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
         >
-          <FaSync className={`mr-2 ${loading ? "animate-spin" : ""}`} /> Refresh
+          <FaSync />
         </button>
       </div>
 
@@ -209,22 +179,22 @@ const ApprovedOrders = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Order ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  User
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  Customer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Product
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Quantity
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                  Qty
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Approved Date
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Actions
                 </th>
               </tr>
@@ -235,108 +205,45 @@ const ApprovedOrders = () => {
                   key={order._id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  {/* Order ID */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          #{order.orderId || order._id?.substring(18) || "N/A"}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          <span
-                            className={`px-2 py-1 inline-flex items-center text-xs rounded-full ${getStatusColor(
-                              order.status
-                            )}`}
-                          >
-                            {getStatusIcon(order.status)}
-                            Approved
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    #{order.orderId?.substring(0, 10) || "N/A"}
                   </td>
-
-                  {/* User */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <FaUser className="h-8 w-8 text-gray-400 bg-gray-100 rounded-full p-2 mr-3" />
-                      <div>
-                        <div className="font-semibold text-gray-900">
-                          {order.user?.name || "Unknown User"}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {order.user?.email || "N/A"}
-                        </div>
-                      </div>
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {order.user?.name ||
+                      order.customer?.firstName ||
+                      "Customer"}
                   </td>
-
-                  {/* Product */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      {order.items?.[0]?.image && (
-                        <img
-                          src={order.items[0].image}
-                          alt={order.items[0].name}
-                          className="h-10 w-10 rounded-full object-cover border border-gray-300 mr-3"
-                        />
-                      )}
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {order.items?.[0]?.name || "Unknown Product"}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {formatCurrency(
-                            order.items?.[0]?.price || order.totalAmount
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* Quantity */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-center">
-                      <span className="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {order.items?.reduce(
-                          (sum, item) => sum + (item.quantity || 1),
-                          0
-                        ) || 1}
-                      </span>
-                    </div>
-                  </td>
-
-                  {/* Approved Date */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {formatDate(
-                        order.approvedAt || order.updatedAt || order.createdAt
-                      )}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <div>
+                      {order.items?.[0]?.name ||
+                        order.product_name ||
+                        "Product"}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {order.approvedBy && `By ${order.approvedBy}`}
+                      {formatCurrency(order.totalAmount || order.price)}
                     </div>
                   </td>
-
-                  {/* Actions */}
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <span className="px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">
+                      {order.items?.[0]?.quantity || order.quantity || 1}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {formatDate(order.approvedAt || order.createdAt)}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-3">
                       <button
                         onClick={() => openViewTrackingModal(order)}
-                        className="px-3 py-1 flex items-center rounded-full bg-indigo-500 text-white hover:bg-indigo-600 transition-colors"
-                        title="View Tracking"
+                        className="px-3 py-1 flex items-center rounded-full bg-indigo-500 text-white hover:bg-indigo-600"
                       >
-                        <FaEye className="mr-1" />
-                        View Tracking
+                        <FaEye className="mr-1" /> View
                       </button>
-
                       <button
                         onClick={() => openAddTrackingModal(order)}
-                        className="px-3 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors"
-                        title="Add Tracking"
+                        className="px-3 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700"
                       >
-                        <FaTruck className="mr-1" />
-                        Add Tracking
+                        <FaTruck className="mr-1" /> Track
                       </button>
                     </div>
                   </td>
@@ -345,18 +252,6 @@ const ApprovedOrders = () => {
             </tbody>
           </table>
         </div>
-
-        {orders.length === 0 && !loading && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <FaCheckCircle className="mx-auto h-12 w-12" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No approved orders found
-            </h3>
-            <p className="text-gray-500">No orders have been approved yet</p>
-          </div>
-        )}
       </div>
 
       {/* PAGINATION */}
@@ -538,8 +433,7 @@ const ApprovedOrders = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-gray-900">
-                  Tracking History - #
-                  {selectedOrder.orderId || selectedOrder._id?.substring(18)}
+                  Tracking History - #{selectedOrder.orderId?.substring(0, 10)}
                 </h3>
                 <button
                   onClick={closeModals}
@@ -555,23 +449,25 @@ const ApprovedOrders = () => {
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-700">Product</p>
-                    <p className="text-gray-900">
-                      {selectedOrder.items?.[0]?.name || "Unknown"}
+                    <p className="text-sm font-medium text-gray-700">
+                      Latest Status
+                    </p>
+                    <p className="text-gray-900 font-bold">
+                      {/* Show the most recent status from the timeline */}
+                      {trackingTimeline[0]?.step || "Approved"}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-700">
-                      Customer
+                      Current Location
                     </p>
-                    <p className="text-gray-900">
-                      {selectedOrder.user?.name || "Unknown"}
+                    <p className="text-gray-900 font-bold">
+                      {trackingTimeline[0]?.location || "Factory"}
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Tracking Timeline */}
               <div className="mb-6">
                 <h4 className="text-lg font-semibold text-gray-800 mb-4">
                   Tracking Timeline
@@ -579,11 +475,13 @@ const ApprovedOrders = () => {
                 {trackingTimeline.length > 0 ? (
                   <div className="space-y-4">
                     {trackingTimeline.map((track, index) => (
-                      <div key={index} className="flex">
+                      <div key={track.id || index} className="flex">
                         <div className="flex flex-col items-center mr-4">
                           <div
                             className={`w-3 h-3 rounded-full ${
-                              index === 0 ? "bg-green-500" : "bg-blue-500"
+                              track.status === "current"
+                                ? "bg-green-500"
+                                : "bg-blue-500"
                             }`}
                           ></div>
                           {index < trackingTimeline.length - 1 && (
@@ -593,23 +491,24 @@ const ApprovedOrders = () => {
                         <div className="flex-1 pb-4">
                           <div className="bg-gray-50 rounded-lg p-4">
                             <div className="flex items-center mb-2">
-                              {getTrackingStatusIcon(track.status)}
+                              {getTrackingStatusIcon(track.step)}
                               <span className="font-medium text-gray-900">
-                                {track.status}
+                                {track.step}
                               </span>
                               <span className="ml-auto text-sm text-gray-500">
-                                {formatDate(track.dateTime)}
+                                {formatDate(track.date)}
                               </span>
                             </div>
                             <p className="text-sm text-gray-700 mb-1">
                               <FaMapMarkerAlt className="inline mr-1" />
-                              {track.location || "Factory"}
+                              {track.location}
                             </p>
-                            {track.note && (
-                              <p className="text-sm text-gray-600">
-                                {track.note}
-                              </p>
-                            )}
+                            {track.description &&
+                              track.description !== "No additional details" && (
+                                <p className="text-sm text-gray-600 italic">
+                                  "{track.description}"
+                                </p>
+                              )}
                           </div>
                         </div>
                       </div>
@@ -618,26 +517,14 @@ const ApprovedOrders = () => {
                 ) : (
                   <div className="text-center py-8">
                     <FaTruck className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                    <p className="text-gray-500">
-                      No tracking updates available
-                    </p>
-                    <button
-                      onClick={() => {
-                        closeModals();
-                        openAddTrackingModal(selectedOrder);
-                      }}
-                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Add First Tracking Update
-                    </button>
+                    <p className="text-gray-500">No tracking updates yet</p>
                   </div>
                 )}
               </div>
-
               <div className="flex justify-end">
                 <button
                   onClick={closeModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
                 >
                   Close
                 </button>

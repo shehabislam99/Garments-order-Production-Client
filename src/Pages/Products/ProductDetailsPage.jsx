@@ -30,7 +30,7 @@ const ProductDetailsPage = () => {
        setLoading(true);
        const res = await axiosInstance.get(`/products/${id}`);
        setProduct(res.data.data);
-         console.log("Formatted Payment Options:", res.data.data);
+         
      } catch {
        toast.error("Failed to load product details");
      } finally {

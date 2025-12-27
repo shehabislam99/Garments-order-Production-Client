@@ -8,7 +8,6 @@ import {
   FaTimesCircle,
   FaUser,
   FaBox,
-  FaSync,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
@@ -41,31 +40,35 @@ const PendingOrders = () => {
         setOrders([]);
       }
     } catch (error) {
-      toast.error("Failed to load pending orders");
+      toast.error("Failed to load pending orders",error);
       setOrders([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleApprove = async (orderId) => {
-    try {
-      setApproving(true);
-      const res = await axiosSecure.put(`/orders/status/${orderId}`, {
-        status: "approved",
-        approvedAt: new Date().toISOString(),
-      });
-      if (res.data?.success) {
-        setOrders((prev) => prev.filter((o) => o._id !== orderId));
-        toast.success("Order approved successfully");
-        if (viewModalOpen) closeViewModal();
-      }
-    } catch (error) {
-      toast.error("Failed to approve order");
-    } finally {
-      setApproving(false);
-    }
-  };
+ const handleApprove = async (orderId) => {
+   try {
+     setApproving(true);
+     const res = await axiosSecure.put(`/orders/status/${orderId}`, {
+       status: "approved",
+       approvedAt: new Date().toISOString(),
+     });
+
+     if (res.data?.success) {
+       setOrders((prev) => prev.filter((o) => o._id !== orderId));
+       toast.success("Order approved successfully");
+       if (viewModalOpen) closeViewModal();
+     } else {
+       toast.error(res.data?.message || "Failed to approve order");
+     }
+   } catch (error) {
+     console.error("Approve error:", error.response?.data || error.message);
+     toast.error(error.response?.data?.message || "Failed to approve order");
+   } finally {
+     setApproving(false);
+   }
+ };
 
   const handleReject = async (orderId) => {
     const reason = window.prompt("Please provide a reason for rejection:");
@@ -77,18 +80,32 @@ const PendingOrders = () => {
 
     try {
       setRejecting(true);
-      const res = await axiosSecure.put(`/orders/status/${orderId}`, {
+
+      const res = await axiosSecure.put(`/order/status/${orderId}`, {
         status: "rejected",
         rejectionReason: reason,
         rejectedAt: new Date().toISOString(),
       });
+
+      
+
       if (res.data?.success) {
         setOrders((prev) => prev.filter((o) => o._id !== orderId));
         toast.success("Order rejected successfully");
         if (viewModalOpen) closeViewModal();
+      } else {
+        toast.error(res.data?.message || "Failed to reject order");
       }
     } catch (error) {
-      toast.error("Failed to reject order");
+      console.error("Reject error:", error);
+
+      if (error.response) {
+        toast.error(error.response.data?.message || "Server error occurred");
+      } else if (error.request) {
+        toast.error("No response from server");
+      } else {
+        toast.error("Error: " + error.message);
+      }
     } finally {
       setRejecting(false);
     }
@@ -126,9 +143,7 @@ const PendingOrders = () => {
       currency: "USD",
     }).format(amount || 0);
 
-  const getTotalQuantity = (items) => {
-    return items?.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
-  };
+  
 
   if (loading) {
     return (
@@ -140,7 +155,6 @@ const PendingOrders = () => {
 
   return (
     <div className="p-3">
-      {/* Header Section matches ManageProducts */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Pending Orders</h2>
         <button
@@ -148,12 +162,10 @@ const PendingOrders = () => {
           disabled={loading}
           className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-red-800 transition-colors flex items-center disabled:opacity-50"
         >
-          <FaSync className={`mr-2 ${loading ? "animate-spin" : ""}`} />
           {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
 
-      {/* Main Table Container */}
       <div className="mt-4 bg-white rounded-4xl shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -166,10 +178,10 @@ const PendingOrders = () => {
                   User
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Product(s)
+                  Product
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Qty
+                  Quanttity
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Order Date
@@ -179,7 +191,6 @@ const PendingOrders = () => {
                 </th>
               </tr>
             </thead>
-            {/* Body theme matches amber-100 */}
             <tbody className="bg-amber-100 divide-y divide-gray-200">
               {paginatedOrders.map((order) => (
                 <tr
@@ -187,26 +198,25 @@ const PendingOrders = () => {
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                    #{order.orderId}
+                    #{order.orderId.substring(0,10)}
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm font-semibold text-gray-900">
-                      {order.user?.name}
+                    <div className="inline-flex text-sm font-semibold text-gray-900">
+                      {order.customer?.firstName}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {order.user?.email}
+                      {order.CustomerEmail}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 truncate max-w-[150px]">
-                      {order.items?.[0]?.name}
-                      {order.items?.length > 1 &&
-                        ` (+${order.items.length - 1})`}
+                    <div className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
+                      {order.product_name}
+  
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">
-                      {getTotalQuantity(order.items)}
+                      {order.quantity}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -252,7 +262,6 @@ const PendingOrders = () => {
         )}
       </div>
 
-      {/* Pagination - Matching ManageProducts logic */}
       {Math.ceil(orders.length / ordersPerPage) > 1 && (
         <div className="flex justify-center mt-6">
           <ReactPaginate
@@ -282,7 +291,6 @@ const PendingOrders = () => {
         </div>
       )}
 
-      {/* View Modal */}
       {viewModalOpen && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -323,15 +331,17 @@ const PendingOrders = () => {
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={() => handleApprove(selectedOrder._id)}
-                  className="px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700"
+                  disabled={approving}
+                  className="px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 disabled:opacity-50"
                 >
-                  Confirm Approval
+                  {approving ? "Approving..." : "Confirm Approval"}
                 </button>
                 <button
                   onClick={() => handleReject(selectedOrder._id)}
-                  className="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                  disabled={rejecting}
+                  className="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 disabled:opacity-50"
                 >
-                  Reject Order
+                  {rejecting ? "Rejecting..." : "Reject Order"}
                 </button>
               </div>
             </div>

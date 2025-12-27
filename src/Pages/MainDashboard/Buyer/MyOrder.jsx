@@ -11,14 +11,13 @@ import {
   FaClock,
   FaShoppingCart,
 } from "react-icons/fa";
-import {  MdPayment, MdCancel } from "react-icons/md";
+import { MdPayment, MdCancel } from "react-icons/md";
 import useAuth from "../../../Hooks/useAuth";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import Loading from "../../../Components/Common/Loding/Loding";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -32,89 +31,86 @@ const MyOrders = () => {
   const [cancelling, setCancelling] = useState(false);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
- const fetchOrders = async () => {
-   try {
-     setLoading(true);
-     const res = await axiosSecure.get(
-       `/my-orders?searchText=${searchTerm}&page=${
-         currentPage + 1
-       }&limit=${ordersPerPage}&status=${filterStatus}`
-     );
-
-     if (res.data && res.data?.success) {
-       setOrders(res.data?.data || []);
-       setTotalOrders(res.data?.total || 0);
-       setTotalPages(
-         res?.data?.totalPages ||
-           Math.ceil((res.data?.total || 0) / ordersPerPage)
-       );
-     } else {
-       setOrders([]);
-       setTotalOrders(0);
-       setTotalPages(0);
-     }
-   } catch (error) {
-     console.error("Error fetching orders:", error);
-
-     setOrders([]);
-     setTotalOrders(0);
-     setTotalPages(0);
-   } finally {
-     setLoading(false);
-   }
- };
-const handleCancelOrder = async () => {
-  if (!selectedOrder) return;
-
-  try {
-    setCancelling(true);
-    const response = await axiosSecure.patch(
-      `/my-orders/cancel/${selectedOrder._id}`
-    );
-
-    if (response.data.success) {
-      setOrders((prev) =>
-        prev.map((order) =>
-          order._id === selectedOrder._id
-            ? { ...order }
-            : order
-        )
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const res = await axiosSecure.get(
+        `/my-orders?searchText=${searchTerm}&page=${
+          currentPage + 1
+        }&limit=${ordersPerPage}&status=${filterStatus}`
       );
 
-      toast.success("Order cancelled successfully");
-      setCancelModalOpen(false);
-      setSelectedOrder(null);
+      if (res.data && res.data?.success) {
+        setOrders(res.data?.data || []);
+        setTotalOrders(res.data?.total || 0);
+        setTotalPages(
+          res?.data?.totalPages ||
+            Math.ceil((res.data?.total || 0) / ordersPerPage)
+        );
+      } else {
+        setOrders([]);
+        setTotalOrders(0);
+        setTotalPages(0);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+
+      setOrders([]);
+      setTotalOrders(0);
+      setTotalPages(0);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Error cancelling order:", error);
-    toast.error(error?.response?.data?.message || "Failed to cancel order");
-  } finally {
-    setCancelling(false);
-  }
-};
+  };
+  const handleCancelOrder = async () => {
+    if (!selectedOrder) return;
 
- useEffect(() => {
-   if (user) {
-     fetchOrders();
-   } else {
-     setLoading(false);
-     setOrders([]);
-   }
- }, [user]);
+    try {
+      setCancelling(true);
+      const response = await axiosSecure.patch(
+        `/my-orders/cancel/${selectedOrder._id}`
+      );
 
- useEffect(() => {
-   if (user) {
-     const timeoutId = setTimeout(() => {
-       fetchOrders();
-     }, 300); 
+      if (response.data.success) {
+        setOrders((prev) =>
+          prev.map((order) =>
+            order._id === selectedOrder._id ? { ...order } : order
+          )
+        );
 
-     return () => clearTimeout(timeoutId);
-   }
- }, [currentPage, searchTerm, filterStatus, user]);
+        toast.success("Order cancelled successfully");
+        setCancelModalOpen(false);
+        setSelectedOrder(null);
+      }
+    } catch (error) {
+      console.error("Error cancelling order:", error);
+      toast.error(error?.response?.data?.message || "Failed to cancel order");
+    } finally {
+      setCancelling(false);
+    }
+  };
 
+  useEffect(() => {
+    if (user) {
+      fetchOrders();
+    } else {
+      setLoading(false);
+      setOrders([]);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      const timeoutId = setTimeout(() => {
+        fetchOrders();
+      }, 300);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [currentPage, searchTerm, filterStatus, user]);
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);

@@ -179,9 +179,7 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/update-product/:id",
         element: (
-          <ManagerRout>
             <UpdateProduct />
-          </ManagerRout>
         ),
       },
       {

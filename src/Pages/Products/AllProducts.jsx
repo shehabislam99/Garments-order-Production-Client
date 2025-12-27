@@ -6,8 +6,8 @@ import {
   FaEye,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Loading from "../../Components/Common/Loding/Loding";
+import { axiosInstance } from "../../Hooks/useAxios";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -15,13 +15,12 @@ const AllProducts = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const axiosSecure = useAxiosSecure();
   const wasSearching = useRef(false); 
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axiosSecure.get("/products");
+      const res = await axiosInstance.get("/products");
       setProducts(res.data.data || []);
       setFilteredProducts(res.data.data || []);
     } catch (error) {

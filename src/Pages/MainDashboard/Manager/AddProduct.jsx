@@ -3,7 +3,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import { FaUpload, FaTimes, FaSpinner, FaCheck } from "react-icons/fa";
+import { FaUpload, FaTimes, FaSpinner} from "react-icons/fa";
+import useAuth from "../../../Hooks/useAuth";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const AddProduct = () => {
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const{user} = useAuth();
 
   const [product, setProduct] = useState({
     product_name: "",
@@ -119,6 +121,7 @@ const AddProduct = () => {
 
     const productData = {
       ...product,
+      createdByEmail: user?.email,
       price: Number(product.price),
       available_quantity: Number(product.available_quantity),
       moq: Number(product.moq),
