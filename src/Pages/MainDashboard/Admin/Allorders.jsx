@@ -62,6 +62,8 @@ const AllOrders = () => {
     setCurrentPage(0);
   };
 
+  
+
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case "pending":

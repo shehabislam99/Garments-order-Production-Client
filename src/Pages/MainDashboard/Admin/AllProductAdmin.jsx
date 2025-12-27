@@ -160,6 +160,13 @@ const AllProductAdmin = () => {
   };
 
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount || 0);
+  };
+
   const getProductImage = (product) => {
     if (product.images && product.images.length > 0) {
       return Array.isArray(product.images) ? product.images[0] : product.images;
@@ -327,7 +334,7 @@ const AllProductAdmin = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <span className="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                              ${product?.price || 0}
+                              {formatCurrency(product?.price || 0)}
                             </span>
                           </div>
                         </td>

@@ -15,7 +15,6 @@ import PendingOrders from "../Pages/MainDashboard/Manager/PendingOrders";
 import ManagerProfile from "../Pages/MainDashboard/Manager/ManagerProfile";
 import BuyerDashboard from "../Pages/MainDashboard/Buyer/BuyerDashboard";
 import TrackOrder from "../Pages/MainDashboard/Buyer/TrackOrder";
-import BuyerProfile from "../Pages/MainDashboard/Buyer/MyProfile";
 import ManageProducts from "../Pages/MainDashboard/Manager/ManageProducts";
 import ApproveOrders from "../Pages/MainDashboard/Manager/ApproveOrders";
 import MyOrder from "../Pages/MainDashboard/Buyer/MyOrder";
@@ -31,6 +30,7 @@ import Booking from "../Pages/Booking/Booking";
 import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payment/PaymentCanceled";
 import UpdateProduct from "../Pages/MainDashboard/Manager/UpdateProduct";
+import BuyerProfile from "../Pages/MainDashboard/Buyer/BuyerProfile";
 
 const router = createBrowserRouter([
   {
@@ -96,7 +96,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
-        path: "admin",
+        path: "/dashboard/admin",
         element: (
           <AdminRout>
             <AdminDashboard />
@@ -104,7 +104,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin/manage-users",
+        path: "/dashboard/manage-users",
         element: (
           <AdminRout>
             <ManageUsers />
@@ -112,7 +112,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin/all-products",
+        path: "/dashboard/all-product",
         element: (
           <AdminRout>
             <AllProductAdmin />
@@ -120,7 +120,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin/all-orders",
+        path: "/dashboard/all-orders",
         element: (
           <AdminRout>
             <AllOrders />
@@ -129,7 +129,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "manager",
+        path: "/dashboard/manager",
         element: (
           <ManagerRout>
             <ManagerDashboard />
@@ -137,7 +137,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "manager/add-product",
+        path: "/dashboard/add-product",
         element: (
           <ManagerRout>
             <AddProduct />
@@ -145,7 +145,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "manager/manage-products",
+        path: "/dashboard/manage-products",
         element: (
           <ManagerRout>
             <ManageProducts />
@@ -153,7 +153,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "manager/pending-orders",
+        path: "/dashboard/pending-orders",
         element: (
           <ManagerRout>
             <PendingOrders />
@@ -161,7 +161,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "manager/approved-orders",
+        path: "/dashboard/approved-orders",
         element: (
           <ManagerRout>
             <ApproveOrders />
@@ -169,17 +169,15 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "manager/profile",
-        element: (
-          <ManagerRout>
-            <ManagerProfile />
-          </ManagerRout>
-        ),
+        path: "/dashboard/profile",
+        element: <ManagerProfile />,
       },
       {
         path: "/dashboard/update-product/:id",
         element: (
+          <ManagerRout>
             <UpdateProduct />
+          </ManagerRout>
         ),
       },
       {
@@ -195,8 +193,8 @@ const router = createBrowserRouter([
         element: <TrackOrder />,
       },
       {
-        path: "/dashboard/my-profile",
-        element: <BuyerProfile />,
+        path: "/dashboard/profile",
+        element: <BuyerProfile/>
       },
     ],
   },

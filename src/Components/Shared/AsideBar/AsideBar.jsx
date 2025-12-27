@@ -22,17 +22,17 @@ const roleConfig = {
     links: [
       { path: "/dashboard/admin", title: "My Dashboard", icon: FaHome },
       {
-        path: "/dashboard/admin/all-products",
+        path: "/dashboard/all-product",
         title: "All Products",
         icon: FaBox,
       },
       {
-        path: "/dashboard/admin/all-orders",
+        path: "/dashboard/all-orders",
         title: "All Orders",
         icon: FaTasks,
       },
       {
-        path: "/dashboard/admin/manage-users",
+        path: "/dashboard/manage-users",
         title: "Manage Users",
         icon: FaUsers,
       },
@@ -49,27 +49,27 @@ const roleConfig = {
         icon: FaHome,
       },
       {
-        path: "/dashboard/manager/add-product",
+        path: "/dashboard/add-product",
         title: "Add Product",
         icon: MdAddShoppingCart,
       },
       {
-        path: "/dashboard/manager/manage-products",
+        path: "/dashboard/manage-products",
         title: "Manage Products",
         icon: FaTasks,
       },
       {
-        path: "/dashboard/manager/pending-orders",
+        path: "/dashboard/pending-orders",
         title: "Pending Orders",
         icon: SiGoogletasks,
       },
       {
-        path: "/dashboard/manager/approved-orders",
+        path: "/dashboard/approved-orders",
         title: "Approved Orders",
         icon: SiGoogletasks,
       },
       {
-        path: "/dashboard/manager/profile",
+        path: "/dashboard/profile",
         title: "Manager Profile",
         icon: FaUser,
       },
@@ -87,7 +87,7 @@ const roleConfig = {
       },
       { path: "/dashboard/my-orders", title: "My Orders", icon: FaTasks },
       {
-        path: "/dashboard/my-profile",
+        path: "/dashboard/profile",
         title: "My Profile",
         icon: FaUser,
       },

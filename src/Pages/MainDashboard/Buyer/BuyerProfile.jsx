@@ -1,8 +1,9 @@
+
 import React from "react";
 import Profile from "../../../Components/Shared/Profile";
 import useAuth from "../../../Hooks/useAuth";
 
-const ManagerProfile = () => {
+const BuyerProfile = () => {
   const { user } = useAuth();
   return (
     <div>
@@ -11,4 +12,7 @@ const ManagerProfile = () => {
   );
 };
 
-export default ManagerProfile;
+
+
+
+export default BuyerProfile;

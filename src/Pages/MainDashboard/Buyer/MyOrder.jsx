@@ -29,7 +29,6 @@ const MyOrders = () => {
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
-  const [totalOrders, setTotalOrders] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
@@ -45,21 +44,21 @@ const MyOrders = () => {
 
       if (res.data && res.data?.success) {
         setOrders(res.data?.data || []);
-        setTotalOrders(res.data?.total || 0);
+       
         setTotalPages(
           res?.data?.totalPages ||
             Math.ceil((res.data?.total || 0) / ordersPerPage)
         );
       } else {
         setOrders([]);
-        setTotalOrders(0);
+      
         setTotalPages(0);
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
 
       setOrders([]);
-      setTotalOrders(0);
+      
       setTotalPages(0);
     } finally {
       setLoading(false);
@@ -132,7 +131,7 @@ const MyOrders = () => {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case "pending":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+        return "bg-gray-100 text-yellow-800 border-yellow-200";
       case "approved":
         return "bg-blue-100 text-blue-800 border-blue-200";
       case "cancelled":
@@ -142,18 +141,7 @@ const MyOrders = () => {
     }
   };
 
-  const getStatusIcon = (status) => {
-    switch (status?.toLowerCase()) {
-      case "pending":
-        return <FaClock className="mr-1" />;
-      case "approved":
-        return <FaCheckCircle className="mr-1" />;
-      case "canceled":
-        return <MdCancel className="mr-1" />;
-      default:
-        return <FaBox className="mr-1" />;
-    }
-  };
+
 
   const getPaymentColor = (paymentStatus) => {
     switch (paymentStatus?.toLowerCase()) {
@@ -183,7 +171,7 @@ const MyOrders = () => {
   };
 
   const statusOptions = [
-    { value: "all", label: "All Status" },
+    { value: "all", label: "All Order Status" },
     { value: "pending", label: "Pending" },
     { value: "approved", label: "Approved" },
     { value: "cancelld", label: "Cancelled" },
@@ -278,16 +266,16 @@ const MyOrders = () => {
                       Order ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Product
+                      Product & Price
                     </th>
-                    <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-7 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Quantity
                     </th>
-                    <th className="px-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Order Status
                     </th>
                     <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Payment
+                      Payment Status
                     </th>
                     <th className="px-15 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
@@ -303,13 +291,10 @@ const MyOrders = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div>
-                            <div className="text-sm font-medium text-gray-900">
-                              #
-                              {order?.orderId ||
-                                order?._id?.substring(18) ||
-                                "N/A"}
+                            <div className="text-sm font-semibold text-gray-900">
+                              #{order?.orderId?.substring(0, 12) || "N/A"}
                             </div>
-                            <div className="text-xs  text-gray-500">
+                            <div className="text-sm font-medium  text-gray-500">
                               {formatDate(order?.createdAt)}
                             </div>
                           </div>
@@ -322,7 +307,7 @@ const MyOrders = () => {
                             <div className="font-semibold text-gray-900">
                               {order?.product_name || "Unknown Product"}
                             </div>
-                            <div className="ml-2 text-sm text-gray-700 flex items-center">
+                            <div className="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-blue-100 text-green-800">
                               {formatCurrency(order?.price)}
                             </div>
                           </div>
@@ -343,25 +328,18 @@ const MyOrders = () => {
                             order?.status
                           )}`}
                         >
-                          {getStatusIcon(order?.status)}
                           {order?.status || "Pending"}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex flex-col space-y-1">
                           <span
-                            className={`px-2 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getPaymentColor(
+                            className={`px-3 py-1 inline-flex text-center text-xs  leading-5 font-semibold rounded-full border ${getPaymentColor(
                               order?.paymentStatus
                             )}`}
                           >
-                            <MdPayment className="mr-1" />
                             {order?.paymentStatus || "Pending"}
                           </span>
-                          {order?.totalAmount && (
-                            <span className="text-xs text-gray-500">
-                              {formatCurrency(order?.totalAmount)}
-                            </span>
-                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
