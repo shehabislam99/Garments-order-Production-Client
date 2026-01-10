@@ -8,7 +8,6 @@ import {
   FaChevronRight,
   FaBox,
 } from "react-icons/fa";
-import { MdPayment } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
@@ -234,7 +233,7 @@ const filteredProducts = products.filter((product) => {
                     <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Price
                     </th>
-                    <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Payment Mode
                     </th>
                     <th className="px-19 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

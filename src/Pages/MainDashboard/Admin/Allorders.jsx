@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import Loading from "../../../Components/Common/Loding/Loding";
+import { MdEmail } from "react-icons/md";
 
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -182,7 +183,7 @@ const AllOrders = () => {
                       Order ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User name
+                      User 
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Product name
@@ -190,7 +191,7 @@ const AllOrders = () => {
                     <th className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Quantity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-13 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -217,8 +218,12 @@ const AllOrders = () => {
                       {/* User */}
                       <td className="px-6 py-4">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0">
-                            {order?.customer?.firstName}
+                          <span className="mt-1 mr-1 rounded-full">
+                            <MdEmail className="text-gray-600"></MdEmail>
+                          </span>
+
+                          <div className="flex-shrink-0 text-gray-700 font-medium">
+                            {order?.CustomerEmail}
                           </div>
                         </div>
                       </td>

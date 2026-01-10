@@ -333,7 +333,8 @@ const AllProductAdmin = () => {
                         {/* Price */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <span className="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            <span className="px-3 py-1 inline-flex text-sm leading-5 
+                            font-semibold rounded-full bg-blue-100 text-blue-800">
                               {formatCurrency(product?.price || 0)}
                             </span>
                           </div>
@@ -343,7 +344,7 @@ const AllProductAdmin = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className="px-3 py-1 inline-flex text-xs leading-5 
-                            font-semibold rounded-full bg-green-100 text-greeen-600
+                            font-semibold rounded-full bg-green-100 text-green-800
                               
                             "
                           >
@@ -351,7 +352,7 @@ const AllProductAdmin = () => {
                           </span>
                         </td>
 
-                        {/* Created By - This might not exist in your backend */}
+                        {/* Created By */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <MdEmail className="h-4 w-4 text-gray-400 mr-2" />
