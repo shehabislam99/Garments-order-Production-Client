@@ -41,9 +41,10 @@ const Login = () => {
 
     signIn(loginData.email, loginData.password)
       .then(() => {
-        toast.success("Login successful! Welcome back!", {
-          autoClose: 3000,
-        });
+        toast.success("Login successful.. Welcome back!", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       })
       .then(() => {
         setLoading(false);
@@ -159,7 +160,7 @@ const Login = () => {
             <button
               type="submit"
               className="w-full  bg-indigo-600 text-white py-3 
-              rounded-full font-semibold hover:bg-purple-600"
+              rounded-full font-semibold hover:bg-red-800"
             >
               Login
             </button>

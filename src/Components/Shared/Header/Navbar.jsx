@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { Link, useNavigate, NavLink } from "react-router-dom";
-import { HiOutlineMenuAlt1, HiMoon, HiSun, HiX } from "react-icons/hi";
-import { FaSearch } from "react-icons/fa";
+import { HiOutlineMenuAlt1, HiMoon, HiSun } from "react-icons/hi";
 import MenuSideBar from "./MenuSideBar";
 import Logo from "../../Common/Logo/Logo";
 import useAuth from "../../../Hooks/useAuth";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
 
   const handleLogout = () => {
     logout();
+      toast.success("Logged out successfully!", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     navigate("/");
   };
 
@@ -25,12 +28,17 @@ const Navbar = () => {
       .setAttribute("data-theme", isDarkTheme ? "dark" : "light");
   };
 
-  const navLinks = [
-    { to: "/", label: "Home" },
-    { to: "/all-products", label: "Products" },
-    { to: "/about", label: "About" },
-  ];
-
+ const navLinks = user
+   ? [
+       { to: "/", label: "Home" },
+       { to: "/all-products", label: "All Products" },
+     ]
+   : [
+       { to: "/", label: "Home" },
+       { to: "/all-products", label: "All Products" },
+       { to: "/about", label: "About Us" },
+       { to: "/contact", label: "Contact Us" },
+     ];
   const links = (
     <>
       {navLinks.map((link, index) => (
@@ -52,7 +60,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="text-black navbar bg-amber-100 py-4">
+      <nav className="text-indigo-500 navbar bg-amber-100 py-4">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-20">
             {/* Mobile menu button */}
@@ -80,7 +88,7 @@ const Navbar = () => {
             {/* Theme toggle */}
             <button
               onClick={handleToggleTheme}
-              className="hover:text-indigo-300  md:p-2 rounded-full hover:bg-red-800"
+              className=" hover:text-red-800"
               title={
                 isDarkTheme ? "Switch to light theme" : "Switch to dark theme"
               }
@@ -93,50 +101,32 @@ const Navbar = () => {
             </button>
 
             {user ? (
-              <div className="flex relative">
-                <button
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center"
-                >
-                  <img
-                    src={user?.photoURL || "https://via.placeholder.com/40"}
-                    alt="user"
-                    className="w-10 h-10 rounded-full border-2 border-indigo-500"
-                  />
-                </button>
+              <div className="flex relative gap-4">
                 <button className="font-medium hover:text-red-800 hover:underline">
-                  <Link
-                    onClick={() => setIsProfileOpen(false)}
-                    to="/dashboard"
-                    className=" px-4 py-2"
-                  >
+                  <Link to="/dashboard" className="">
                     Dashboard
                   </Link>
                 </button>
+                <img
+                  src={user?.photoURL || "https://via.placeholder.com/40"}
+                  alt="user"
+                  className="w-10 h-10 rounded-full border-2 border-indigo-500"
+                />
 
-                {isProfileOpen && (
-                  <div
-                    className="absolute right-0 mt-12 font-semibold w-30 backdrop-blur-xl 
-                  py-2 px-2 rounded-4xl shadow-lg "
-                  >
-                    <button
-                      onClick={() => {
-                        setIsProfileOpen(false);
-
-                        handleLogout();
-                      }}
-                      className="w-full text-left px-4 py-2 hover:text-red-800 text-red-600"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
+              
+                  <button
+                 
+                    onClick={handleLogout}
+                    className="w-full font-medium hover:underline  hover:text-red-800 text-red-600">
+                    Logout
+                  </button>
+               
               </div>
             ) : (
               <div className="flex gap-2">
                 <Link
                   className="bg-indigo-600 border-none
-               rounded-full text-white  hover:bg-purple-600 
+               rounded-full text-white  hover:bg-red-800 
                btn p py-4 
                font-medium "
                   to="/login"
@@ -146,7 +136,7 @@ const Navbar = () => {
 
                 <Link
                   className="bg-green-600 border-none
-               rounded-full text-white hover:bg-purple-600 
+               rounded-full text-white hover:bg-red-800 
                btn px-3  
                font-medium  "
                   to="/register"

@@ -6,7 +6,7 @@ import Logo from "../../Common/Logo/Logo";
 const Footer = () => {
   return (
     <>
-      <footer className="text-black bg-amber-100 text-center py-4">
+      <footer className="text-indigo-500 bg-amber-100 text-center py-4">
         <div className="mx-auto ">
           <h1 className="text-center flex justify-center">
               <Logo></Logo>
@@ -19,7 +19,7 @@ const Footer = () => {
             <div className="lg:mt-7 ">
               <h3
                 className="text-lg 
-              text-blue-500 font-semibold mb-2 "
+              text-black font-semibold mb-2 "
               >
                 Quick Links
               </h3>
@@ -53,7 +53,7 @@ const Footer = () => {
 
             {/* Legal  */}
             <div className="lg:mt-7 my-3 md:mt-0">
-              <h3 className="text-lg text-blue-500 font-semibold mb-4 ">
+              <h3 className="text-lg text-black font-semibold mb-4 ">
                 Legal & Services
               </h3>
               <ul className="space-y-2 font-medium">
@@ -88,7 +88,7 @@ const Footer = () => {
              lg:col-span-1 lg:mt-7"
             >
               {/* Social Media Links*/}
-              <h3 className="text-lg text-blue-500 font-semibold mb-4">
+              <h3 className="text-lg text-black font-semibold mb-4">
                 Follow Us
               </h3>
               <div className="flex flex-wrap justify-center gap-4 md:gap-6">

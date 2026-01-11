@@ -32,18 +32,27 @@ const axiosSecure = useAxiosSecure()
 
   useEffect(() => {
     if (!user) {
-      toast.error("Please login to place an order");
+      toast.error("Please login to place an order", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       navigate("/login");
       return;
     }
 
     if (role === "admin" || role === "manager") {
-      toast.error("Admins / Managers cannot place orders");
+      toast.error("Admins / Managers cannot place orders", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       navigate(-1);
     }
 
     if (!product) {
-      toast.error("Invalid product selection");
+      toast.error("Invalid product selection", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       navigate("/all-products");
     }
   }, [user, role, product, navigate]);
@@ -68,11 +77,17 @@ const axiosSecure = useAxiosSecure()
     const val = Number(e.target.value);
 
     if (val < product.moq) {
-      toast.error(`Minimum order quantity is ${product.moq}`);
+      toast.error(`Minimum order quantity is ${product.moq}`, {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
     if (val > product.available_quantity) {
-      toast.error("Quantity exceeds available stock");
+      toast.error("Quantity exceeds available stock", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
     setQuantity(val);
@@ -103,11 +118,15 @@ const axiosSecure = useAxiosSecure()
     }
 
     trackingId = res.data.order.trackingId;
-    toast.success("Order created successfully");
+    toast.success("Order created successfully", {
+      position: "top-center",
+      autoClose: 2000,
+    });
   } catch (error) {
-    toast.error(
-      error?.response?.data?.message || "Failed to create order"
-    );
+    toast.error(error?.response?.data?.message || "Failed to create order", {
+      position: "top-center",
+      autoClose: 2000,
+    });
     setSubmitting(false);
     return;
   }
@@ -128,17 +147,27 @@ const axiosSecure = useAxiosSecure()
         throw new Error("Stripe session creation failed");
       }
 
-      toast.success("Redirecting to payment...");
+      toast.success("Redirecting to payment...", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       window.location.href = paymentRes.data.url;
     } catch (error) {
       toast.error(
-        error?.response?.data?.message || "Payment initiation failed"
+        error?.response?.data?.message || "Payment initiation failed",
+        {
+          position: "top-center",
+          autoClose: 2000,
+        }
       );
     } finally {
       setSubmitting(false);
     }
   } else {
-    toast.success("Order confirmed (Cash on Delivery)");
+    toast.success("Order confirmed (Cash on Delivery)", {
+      position: "top-center",
+      autoClose: 2000,
+    });
     navigate("/dashboard/my-orders");
     setSubmitting(false);
   }

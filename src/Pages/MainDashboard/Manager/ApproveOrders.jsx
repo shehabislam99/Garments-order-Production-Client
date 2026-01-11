@@ -46,7 +46,10 @@ const ApprovedOrders = () => {
       setOrders(data);
       setCurrentPage(0);
     } catch (err) {
-      toast.error("Failed to load approved orders", err);
+      toast.error("Failed to load approved orders", err, {
+        position: "top-center",
+        autoClose: 2000,
+      });
       setOrders([]);
     } finally {
       setLoading(false);
@@ -75,12 +78,18 @@ const ApprovedOrders = () => {
       if (res.data.success && res.data.data) {
         setTrackingTimeline(res.data.data);
       } else {
-        toast.error("No tracking history found");
+        toast.error("No tracking history found", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         setTrackingTimeline([]);
       }
     } catch (err) {
       console.error("Error fetching timeline:", err);
-      toast.error("Failed to load tracking history");
+      toast.error("Failed to load tracking history", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       setTrackingTimeline([]);
     }
   };
@@ -102,7 +111,10 @@ const ApprovedOrders = () => {
   // --- API ACTIONS ---
   const handleAddTracking = async () => {
     if (!trackingForm.location) {
-      toast.error("Location required");
+      toast.error("Location required", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
     try {
@@ -111,11 +123,17 @@ const ApprovedOrders = () => {
         `/orders/${selectedOrder._id}/tracking`,
         trackingForm
       );
-      toast.success("Tracking added successfully");
+      toast.success("Tracking added successfully", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       closeModals();
       fetchApprovedOrders();
     } catch (err) {
-      toast.error("Failed to add tracking", err);
+      toast.error("Failed to add tracking", err, {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
       setAddingTracking(false);
     }

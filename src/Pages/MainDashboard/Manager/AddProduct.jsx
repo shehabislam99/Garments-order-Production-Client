@@ -47,7 +47,10 @@ const AddProduct = () => {
     );
 
     if (invalidFiles.length > 0) {
-      toast.error("Please select valid image files (JPEG, PNG, WebP only)");
+      toast.error("Please select valid image files (JPEG, PNG, WebP only)", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       e.target.value = "";
       return;
     }
@@ -102,7 +105,10 @@ const AddProduct = () => {
 
       return await Promise.all(uploadPromises);
     } catch {
-      toast.error("Image upload failed");
+      toast.error("Image upload failed", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return [];
     } finally {
       setUploading(false);
@@ -132,10 +138,16 @@ const AddProduct = () => {
 
     try {
       await AxiosSecure.post("/products", productData);
-      toast.success("Product added successfully");
+      toast.success("Product added successfully", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       navigate("/all-products");
     } catch {
-      toast.error("Failed to add product");
+      toast.error("Failed to add product", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
       setLoading(false);
     }

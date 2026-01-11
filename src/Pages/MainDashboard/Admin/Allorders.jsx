@@ -38,8 +38,10 @@ const AllOrders = () => {
         setTotalPages(0);
       }
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      toast.error("Failed to fetch orders");
+      toast.error("Failed to fetch orders",error, {
+        position: "top-center",
+        autoClose: 2000,
+      });
       setOrders([]);
       setTotalPages(0);
     } finally {

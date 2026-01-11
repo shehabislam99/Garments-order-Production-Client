@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaStar,
@@ -8,62 +8,27 @@ import {
 } from "react-icons/fa";
 
 const CustomerFeedback = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+ const [currentSlide, setCurrentSlide] = useState(0);
+ const [rating, setRating] = useState([]);
 
-  const testimonials = [
-    {
-      id: 4,
-      name: "David Park",
-      role: "Photographer",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      rating: 5,
-      comment:
-        "As a photographer, I appreciate quality fabrics. These products are perfect for my photoshoots. Great value for money!",
-      date: "2 weeks ago",
-    },
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      role: "Fashion Blogger",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      rating: 5,
-      comment:
-        "The quality of products is exceptional! I ordered a custom dress and it exceeded my expectations. Perfect fit and beautiful fabric.",
-      date: "2 days ago",
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      role: "Business Owner",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      rating: 5,
-      comment:
-        "Outstanding customer service and premium quality products. The shipping was faster than expected. Highly recommended!",
-      date: "1 week ago",
-    },
-    {
-      id: 3,
-      name: "Emily Rodriguez",
-      role: "Interior Designer",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      rating: 4,
-      comment:
-        "Love the attention to detail in every product. The materials feel luxurious and the designs are timeless.",
-      date: "3 days ago",
-    },
-  ];
+ useEffect(() => {
+   fetch("/rating.json")
+     .then((res) => res.json())
+     .then((data) => setRating(data));
+ }, []);
+
+ if (!rating.length) {
+   return <div className="text-center py-20">Loading testimonials...</div>;
+ }
+
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+    setCurrentSlide((prev) => (prev + 1) % rating.length);
   };
 
   const prevSlide = () => {
     setCurrentSlide(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+      (prev) => (prev - 1 + rating.length) % rating.length
     );
   };
 
@@ -92,8 +57,8 @@ const CustomerFeedback = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-100 text-amber-600 font-medium mb-4">
-            Testimonials
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/20 text-blue-600 font-medium mb-6">
+            Testimonial and Ratings
           </div>
           <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
             What Our Customers Say
@@ -124,7 +89,7 @@ const CustomerFeedback = () => {
                       <FaQuoteLeft className="w-12 h-12 text-white/30 mb-3" />
 
                       <p className="text-xl lg:text-2xl font-light mb-8 leading-relaxed">
-                        "{testimonials[currentSlide].comment}"
+                        "{rating[currentSlide].comment}"
                       </p>
 
                       <div className="flex items-center mb-2">
@@ -132,7 +97,7 @@ const CustomerFeedback = () => {
                           <FaStar
                             key={i}
                             className={`w-5 h-5 ${
-                              i < testimonials[currentSlide].rating
+                              i < rating[currentSlide].rating
                                 ? "text-yellow-400 fill-current"
                                 : "text-white/30"
                             }`}
@@ -142,21 +107,21 @@ const CustomerFeedback = () => {
 
                       <div>
                         <h4 className="text-2xl font-bold mb-1">
-                          {testimonials[currentSlide].name}
+                          {rating[currentSlide].name}
                         </h4>
                         <p className="text-white/80">
-                          {testimonials[currentSlide].role}
+                          {rating[currentSlide].role}
                         </p>
                         <p className="text-white/60 text-sm mt-2">
-                          {testimonials[currentSlide].date}
+                          {rating[currentSlide].date}
                         </p>
                       </div>
                     </div>
                     <div className="flex-1 relative hidden lg:block">
                       <div className="absolute inset-0 bg-gradient-to-l from-indigo-600 to-transparent z-10"></div>
                       <img
-                        src={testimonials[currentSlide].image}
-                        alt={testimonials[currentSlide].name}
+                        src={rating[currentSlide].image}
+                        alt={rating[currentSlide].name}
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute bottom-8 right-8 bg-white/10 backdrop-blur-sm rounded-2xl p-4">
@@ -169,7 +134,6 @@ const CustomerFeedback = () => {
               </motion.div>
             </AnimatePresence>
           </div>
-
 
           <button
             onClick={prevSlide}
@@ -185,7 +149,7 @@ const CustomerFeedback = () => {
           </button>
 
           <div className="flex justify-center mt-6 space-x-2">
-            {testimonials.map((_, index) => (
+            {rating.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
@@ -206,7 +170,7 @@ const CustomerFeedback = () => {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
         >
-          {testimonials.slice(0, 3).map((testimonial, index) => (
+          {rating.slice(0, 3).map((testimonial, index) => (
             <motion.div
               key={testimonial.id}
               initial={{ opacity: 0, y: 20 }}

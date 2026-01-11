@@ -40,7 +40,10 @@ const PendingOrders = () => {
         setOrders([]);
       }
     } catch (error) {
-      toast.error("Failed to load pending orders",error);
+      toast.error("Failed to load pending orders", error, {
+        position: "top-center",
+        autoClose: 2000,
+      });
       setOrders([]);
     } finally {
       setLoading(false);
@@ -57,14 +60,23 @@ const PendingOrders = () => {
 
      if (res.data?.success) {
        setOrders((prev) => prev.filter((o) => o._id !== orderId));
-       toast.success("Order approved successfully");
+       toast.success("Order approved successfully", {
+         position: "top-center",
+         autoClose: 2000,
+       });
        if (viewModalOpen) closeViewModal();
      } else {
-       toast.error(res.data?.message || "Failed to approve order");
+       toast.error(res.data?.message || "Failed to approve order", {
+         position: "top-center",
+         autoClose: 2000,
+       });
      }
    } catch (error) {
      console.error("Approve error:", error.response?.data || error.message);
-     toast.error(error.response?.data?.message || "Failed to approve order");
+     toast.error(error.response?.data?.message || "Failed to approve order", {
+       position: "top-center",
+       autoClose: 2000,
+     });
    } finally {
      setApproving(false);
    }
@@ -74,7 +86,10 @@ const PendingOrders = () => {
     const reason = window.prompt("Please provide a reason for rejection:");
     if (reason === null) return;
     if (!reason.trim()) {
-      toast.error("Please provide a rejection reason");
+      toast.error("Please provide a rejection reason", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
 
@@ -94,17 +109,29 @@ const PendingOrders = () => {
         toast.success("Order rejected successfully");
         if (viewModalOpen) closeViewModal();
       } else {
-        toast.error(res.data?.message || "Failed to reject order");
+        toast.error(res.data?.message || "Failed to reject order", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       }
     } catch (error) {
       console.error("Reject error:", error);
 
       if (error.response) {
-        toast.error(error.response.data?.message || "Server error occurred");
+        toast.error(error.response.data?.message || "Server error occurred", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       } else if (error.request) {
-        toast.error("No response from server");
+        toast.error("No response from server", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       } else {
-        toast.error("Error: " + error.message);
+        toast.error("Error: " + error.message, {
+          position: "top-center",
+          autoClose: 2000,
+        });
       }
     } finally {
       setRejecting(false);

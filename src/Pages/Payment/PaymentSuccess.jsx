@@ -34,10 +34,9 @@ useEffect(() => {
         amount: res.data.amount,
       });
 
-      toast.success("Payment Successful", {
-        position: "top-right",
-        autoClose: 5000,
-        theme: "colored",
+      toast.success("Payment Successful" , {
+        position: "top-center",
+        autoClose: 2000,
       });
 
       setTimeout(() => {
@@ -60,7 +59,10 @@ useEffect(() => {
       toast.error(
         error?.response?.data?.message ||
           "Payment verification failed. Please contact support.",
-        { autoClose: 5000 }
+        {
+          position: "top-center",
+          autoClose: 2000,
+        }
       );
     }
   };

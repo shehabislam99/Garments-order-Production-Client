@@ -24,10 +24,16 @@ const ManagerProfile = () => {
     try {
       await logout();
       navigate("/", { replace: true });
-      toast.success("Logged out successfully");
+      toast.success("Logged out successfully", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } catch (error) {
       console.error("Logout error:", error);
-      toast.error("Failed to logout");
+      toast.error("Failed to logout", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     }
   };
 

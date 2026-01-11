@@ -62,10 +62,16 @@ const TrackOrder = () => {
             )
         );
       } else {
-        toast.error("Failed to load order");
+        toast.error("Failed to load order", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       }
     } catch (err) {
-      toast.error("Unable to load tracking information");
+      toast.error("Unable to load tracking information",err, {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
       setLoading(false);
     }

@@ -100,13 +100,20 @@ const AllProductAdmin = () => {
         toast.success(
           !currentValue
             ? "Product will now show on home page"
-            : "Product removed from home page"
+            : "Product removed from home page",
+          {
+            position: "top-center",
+            autoClose: 2000,
+          }
         );
         
       }
     } catch (error) {
       console.error("Error toggling show on home:", error);
-      toast.error("Failed to update product visibility");
+      toast.error("Failed to update product visibility", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     }
   };
 
@@ -123,13 +130,19 @@ const AllProductAdmin = () => {
         setProducts(
           products.filter((product) => product._id !== editingProduct._id)
         );
-        toast.success("Product deleted successfully");
+        toast.success("Product deleted successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         setDeleteModalOpen(false);
         setEditingProduct(null);
       }
     } catch (error) {
       console.error("Error deleting product:", error);
-      toast.error("Failed to delete product");
+      toast.error("Failed to delete product", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
       setUpdating(false);
     }

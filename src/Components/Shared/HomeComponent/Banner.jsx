@@ -1,10 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
+import imgBanner from "../../../assets/photo-cloth.avif";
 import {
   FaArrowRight,
   FaShoppingBag,
-  FaTruck,
-  FaHeadset,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -68,7 +67,7 @@ const Banner = () => {
           >
             <div className="relative h-[500px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                src={imgBanner}
                 alt="Fashion Collection"
                 className="w-full h-full object-cover"
               />
@@ -84,7 +83,7 @@ const Banner = () => {
                   <span className="text-sm text-indigo-600 font-semibold">Trending Now</span>
                 </div>
                 <h3 className="font-bold text-black">
-                  Summer Collection 2025
+                  Winter Collection 2026
                 </h3>
                 <p className="text-sm text-gray-700">Limited edition designs</p>
               </motion.div>

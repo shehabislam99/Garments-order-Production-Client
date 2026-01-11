@@ -54,7 +54,10 @@ const UpdateProduct = () => {
         setImagePreviews(productData.images);
       }
     } catch (error) {
-      toast.error("Failed to load product");
+      toast.error("Failed to load product", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       console.error("Error fetching product:", error);
     } finally {
       setLoading(false);
@@ -78,7 +81,10 @@ const UpdateProduct = () => {
     );
 
     if (invalidFiles.length > 0) {
-      toast.error("Please select valid image files (JPEG, PNG, WebP only)");
+      toast.error("Please select valid image files (JPEG, PNG, WebP only)", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       e.target.value = "";
       return;
     }
@@ -137,7 +143,10 @@ const UpdateProduct = () => {
 
       return await Promise.all(uploadPromises);
     } catch {
-      toast.error("Image upload failed");
+      toast.error("Image upload failed", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return [];
     } finally {
       setUploading(false);
@@ -169,11 +178,21 @@ const UpdateProduct = () => {
 
     try {
       await axiosSecure.put(`/products/${id}`, productData);
-      toast.success("Product updated successfully");
+      toast.success("Product updated successfully", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       navigate("/all-products");
     } catch (error) {
       toast.error("Failed to update product");
-      console.error("Update error:", error);
+      console.error(
+        "Update error:",
+        {
+          position: "top-center",
+          autoClose: 2000,
+        },
+        error
+      );
     } finally {
       setLoading(false);
     }

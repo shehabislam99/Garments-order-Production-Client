@@ -70,7 +70,7 @@ const CTAsection = () => {
                   href="mailto:support@fashionstore.com"
                   className="text-indigo-600 hover:text-red-800 font-medium"
                 >
-                  support@fashionstore.com
+                  support@textileflow.com
                 </a>
               </motion.div>
 
@@ -92,7 +92,7 @@ const CTAsection = () => {
                   href="tel:+18005551234"
                   className="text-violet-600 hover:text-red-800 font-medium"
                 >
-                  +1 (800) 555-1234
+                  +(880) 555-1234
                 </a>
               </motion.div>
 

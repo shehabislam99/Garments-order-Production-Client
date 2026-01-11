@@ -62,7 +62,10 @@ const ManageUsers = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error("Failed to fetch users");
+      toast.error("Failed to fetch users", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       setUsers([]);
       setTotalUsers(0);
       setTotalPages(0);
@@ -95,14 +98,23 @@ const ManageUsers = () => {
               : user
           )
         );
-        toast.success(`User role updated to ${selectedRole}`);
+        toast.success(`User role updated to ${selectedRole}`, {
+          position: "top-center",
+          autoClose: 2000,
+        });
         setRoleModalOpen(false);
         setEditingUser(null);
         setSelectedRole("");
       }
     } catch (error) {
-      console.error("Error updating user role:", error);
-      toast.error("Failed to update user role");
+      console.error("Error updating user role:", error, {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      toast.error("Failed to update user role", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
       setUpdating(false);
     }
@@ -124,17 +136,26 @@ const ManageUsers = () => {
             u._id === editingUser?._id ? { ...u, status: "active" } : u
           )
         );
-        toast.success("User approved");
+        toast.success("User approved", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         closeUpdateModal();
       }
     } catch {
-      toast.error("Approve failed");
+      toast.error("Approve failed", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     }
   };
 
   const handleSuspendUser = async () => {
     if (!suspendReason.trim()) {
-      toast.error("Suspension reason required");
+      toast.error("Suspension reason required", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
 
@@ -153,11 +174,17 @@ const ManageUsers = () => {
               : u
           )
         );
-        toast.success("User suspended");
+        toast.success("User suspended", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         closeUpdateModal();
       }
     } catch {
-      toast.error("Suspend failed");
+      toast.error("Suspend failed", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     }
   };
 
@@ -178,11 +205,17 @@ const ManageUsers = () => {
               u._id === editingUser?._id ? { ...u, status: "active" } : u
             )
           );
-          toast.success("User activated");
+          toast.success("User activated", {
+            position: "top-center",
+            autoClose: 2000,
+          });
           closeUpdateModal();
         }
       } catch {
-        toast.error("Activation failed");
+        toast.error("Activation failed", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       }
   };
 

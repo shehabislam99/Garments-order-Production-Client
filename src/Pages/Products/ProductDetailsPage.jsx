@@ -32,7 +32,10 @@ const ProductDetailsPage = () => {
        setProduct(res.data.data);
          
      } catch {
-       toast.error("Failed to load product details");
+       toast.error("Failed to load product details", {
+         position: "top-center",
+         autoClose: 2000,
+       });
      } finally {
        setLoading(false);
      }
@@ -47,11 +50,17 @@ const ProductDetailsPage = () => {
   const handleOrderNow = () => {
 
     if (role === "admin" || role === "manager") {
-      toast.error("Admins and Managers cannot place orders");
+      toast.error("Admins and Managers cannot place orders", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
   if (!selectedPayment) {
-    toast.error("Please select a payment method");
+    toast.error("Please select a payment method", {
+      position: "top-center",
+      autoClose: 2000,
+    });
     return;
   }
     // Redirect to booking page with product details

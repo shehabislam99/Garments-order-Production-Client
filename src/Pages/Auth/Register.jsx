@@ -65,8 +65,8 @@ const Register = () => {
       toast.error(
         "Please select a valid image file (JPEG, PNG, GIF, WebP, SVG)",
         {
-          position: "top-right",
-          autoClose: 5000,
+          position: "top-center",
+          autoClose: 2000,
         }
       );
       e.target.value = "";
@@ -116,8 +116,8 @@ const Register = () => {
 
       if (response.data?.data?.url) {
         toast.success("Profile photo uploaded successfully!", {
-          position: "top-right",
-          autoClose: 3000,
+          position: "top-center",
+          autoClose: 2000,
         });
         return response.data.data.url;
       } else {
@@ -126,8 +126,8 @@ const Register = () => {
     } catch (error) {
       console.error("Image upload error:", error);
       toast.error("Image upload failed", {
-        position: "top-right",
-        autoClose: 5000,
+        position: "top-center",
+        autoClose: 2000,
       });
       return null;
     } finally {
@@ -146,8 +146,8 @@ const Register = () => {
       !registerData.role
     ) {
       toast.error("Please fill in all required fields", {
-        position: "top-right",
-        autoClose: 5000,
+        position: "top-center",
+        autoClose: 2000,
       });
       setLoading(false);
       return;
@@ -156,7 +156,10 @@ const Register = () => {
     const validation = passwordValid(registerData.password);
     if (!validation.isValid) {
       validation.errors.forEach((error) =>
-        toast.error(error, { position: "top-right" })
+        toast.error(error, {
+        position: "top-center",
+        autoClose: 2000,
+      })
       );
       setLoading(false);
       return;
@@ -189,16 +192,16 @@ const Register = () => {
       await axiosInstance.post("/users", userInfo);
 
       toast.success("Account created successfully!", {
-        position: "top-right",
-        autoClose: 3000,
+        position: "top-center",
+        autoClose: 2000,
       });
 
       navigate("/", { replace: true });
     } catch (error) {
       console.error("Registration error:", error);
       toast.error(error.message || "Registration failed", {
-        position: "top-right",
-        autoClose: 5000,
+        position: "top-center",
+        autoClose: 2000,
       });
     } finally {
       setLoading(false);
@@ -421,7 +424,7 @@ const Register = () => {
                     />
                     <label
                       htmlFor="photoFile"
-                      className="flex items-center justify-center w-full pl-10 pr-4 py-3 text-gray-800 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 cursor-pointer"
+                      className="flex items-center justify-center w-full pl-10 pr-4 py-3 text-gray-800 bg-gray-100 border border-gray-300 rounded-full hover:bg-red-800 cursor-pointer"
                     >
                       <div className="absolute inset-y-0 left-3 flex items-center">
                         <MdAddAPhoto className="h-4 w-4 text-gray-600" />
@@ -477,7 +480,7 @@ const Register = () => {
               type="submit"
               disabled={loading || uploading}
               className="w-full bg-indigo-600
-                hover:bg-purple-600   text-white font-semibold
+                hover:bg-red-800   text-white font-semibold
                  py-3 px-4 rounded-full disabled:opacity-50 
                   disabled:cursor-not-allowed shadow-lg"
             >

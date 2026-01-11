@@ -59,7 +59,7 @@ const Feature = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-600 font-medium mb-4">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
             Why Choose Us
           </div>
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
@@ -81,12 +81,7 @@ const Feature = () => {
               whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
               className="relative group"
             >
-              <div
-                className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl blur-xl"
-                style={{
-                  backgroundImage: `linear-gradient(to bottom right, ${feature?.color})`,
-                }}
-              />
+              <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl blur-xl" />
 
               <div className="relative bg-amber-100 rounded-4xl p-8 shadow-xl group-hover:shadow-2xl transition-all duration-300 border border-gray-100">
                 <div
@@ -99,7 +94,6 @@ const Feature = () => {
                   {feature?.title}
                 </h3>
                 <p className="text-gray-700">{feature?.description}</p>
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent group-hover:via-gradient-to-r group-hover:from-blue-500 group-hover:to-purple-500 transition-all duration-500" />
               </div>
             </motion.div>
           ))}

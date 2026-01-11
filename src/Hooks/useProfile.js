@@ -19,7 +19,14 @@ const useProfile = () => {
         throw new Error(response.data.message || "Failed to fetch profile");
       }
     } catch (err) {
-      toast.error("Profile fetch error:", err);
+      toast.error(
+        "Profile fetch error:",
+        {
+          position: "top-center",
+          autoClose: 2000,
+        },
+        err
+      );
       setProfile(null);
     } finally {
       setLoading(false);

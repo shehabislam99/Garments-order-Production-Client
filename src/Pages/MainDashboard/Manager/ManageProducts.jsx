@@ -40,7 +40,10 @@ const ManageProducts = () => {
       setProducts(productsData);
     
     } catch {
-      toast.error("Failed to load products");
+      toast.error("Failed to load products", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
       setLoading(false);
     }
@@ -85,10 +88,16 @@ const filteredProducts = products.filter((product) => {
       setDeleting(true);
       await axiosSecure.delete(`/products/${selectedProduct._id}`);
       setProducts(products.filter((p) => p._id !== selectedProduct._id));
-      toast.success("Product deleted successfully");
+      toast.success("Product deleted successfully", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       closeDeleteModal();
     } catch {
-      toast.error("Delete failed");
+      toast.error("Delete failed", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
       setDeleting(false);
     }

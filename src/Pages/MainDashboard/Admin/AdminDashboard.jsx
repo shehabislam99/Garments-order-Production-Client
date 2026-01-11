@@ -19,7 +19,7 @@ import Loading from "../../../Components/Common/Loding/Loding";
         <p className="text-gray-600 mt-2">Here's your Dashboard.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-amber-100 rounded-4xl  shadow p-6">
           <div className="ml-4 text-center">
             <p className="text-xl font-medium text-gray-600">Total Products</p>
@@ -29,14 +29,7 @@ import Loading from "../../../Components/Common/Loding/Loding";
           </div>
         </div>
 
-        <div className="bg-amber-100 rounded-4xl shadow p-6">
-          <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">Pending Orders</p>
-            <p className="text-2xl mt-1 font-semibold text-amber-900">
-              {stats.pendingOrders || 0}
-            </p>
-          </div>
-        </div>
+        
 
         <div className="bg-amber-100 rounded-4xl shadow p-6">
           <div className="ml-4 text-center">
@@ -113,10 +106,8 @@ const AdminDashBoard = () => {
   const [loading, setLoading] = useState(true);
  const [stats, setStats] = useState({
    allProducts: 0,
-   allOrders: 0,
    allUsers: 0,
    totalRevenue: 0, 
-   pendingOrders: 0,
  });
   const axiosSecure = useAxiosSecure()
 

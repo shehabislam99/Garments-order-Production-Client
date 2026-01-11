@@ -8,6 +8,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
+import { BsClockHistory } from "react-icons/bs";
 import { SiGoogletasks } from "react-icons/si";
 import useAuth from "../../../Hooks/useAuth";
 import useRole from "../../../Hooks/useRole";
@@ -66,7 +67,7 @@ const roleConfig = {
       {
         path: "/dashboard/approved-orders",
         title: "Approved Orders",
-        icon: SiGoogletasks,
+        icon: BsClockHistory,
       },
       {
         path: "/dashboard/profile",
@@ -148,7 +149,7 @@ const Asidebar = () => {
             const Icon = link.icon;
             return (
               <li
-                className="hover:bg-blue-500 hover:rounded-2xl hover:px-2 hover:py-2"
+                className="hover:bg-red-800 hover:rounded-2xl hover:px-2 hover:py-2"
                 key={link.path}
               >
                 <NavLink

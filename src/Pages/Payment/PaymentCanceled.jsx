@@ -6,9 +6,8 @@ import { FaTimesCircle } from "react-icons/fa";
 const PaymentCancelled = () => {
   useEffect(() => {
     toast.error("Payment was cancelled. Please try again.", {
-      position: "top-right",
-      autoClose: 4000,
-      theme: "colored",
+      position: "top-center",
+      autoClose: 2000,
     });
   }, []);
 

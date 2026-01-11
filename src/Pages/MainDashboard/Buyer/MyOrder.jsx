@@ -80,13 +80,19 @@ const MyOrders = () => {
           )
         );
 
-        toast.success("Order cancelled successfully");
+        toast.success("Order cancelled successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         setCancelModalOpen(false);
         setSelectedOrder(null);
       }
     } catch (error) {
       console.error("Error cancelling order:", error);
-      toast.error(error?.response?.data?.message || "Failed to cancel order");
+      toast.error(error?.response?.data?.message || "Failed to cancel order", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
       setCancelling(false);
     }

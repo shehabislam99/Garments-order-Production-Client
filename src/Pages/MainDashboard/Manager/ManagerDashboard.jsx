@@ -16,10 +16,10 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
         <p className="mt-2">Here's Your Account Management</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-amber-100 rounded-4xl shadow p-6">
           <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">Total Products</p>
+            <p className="text-xl font-medium text-gray-600">My Products</p>
             <p className="text-2xl mt-1 font-semibold text-blue-600">
               {stats?.totalProducts || 0}
             </p>
@@ -40,15 +40,6 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
             <p className="text-xl font-medium text-gray-600">Approved Orders</p>
             <p className="text-2xl mt-1 font-semibold text-purple-600">
               {stats?.approvedOrders || 0}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-amber-100 rounded-4xl shadow p-6">
-          <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">Total Revenue</p>
-            <p className="text-2xl mt-1 font-semibold text-green-600">
-              ${stats?.totalRevenue?.toFixed(2) || "0.00"}
             </p>
           </div>
         </div>
@@ -129,7 +120,6 @@ const ManagerDashboard = () => {
     totalProducts: 0,
     pendingOrders: 0,
     approvedOrders: 0,
-    totalRevenue: 0,
   });
   const axiosSecure = useAxiosSecure()
 
