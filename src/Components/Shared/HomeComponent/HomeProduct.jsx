@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaStar, FaShoppingCart, FaEye, FaArrowRight } from "react-icons/fa";
+import { FaRegPlayCircle, FaEye, FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import {} from "react-icons/fa";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Loading from "../../../Components/Common/Loding/Loding";
 
@@ -17,9 +18,9 @@ const HomeProduct = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axiosSecure.get(
-        "/products?limit=6&sort=createdAt&order=desc"
-      );
+      const res = await axiosSecure.get("/products?limit=6&Pstatus=show");
+      ;
+
       setProducts(res.data.data || []);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -107,29 +108,23 @@ const HomeProduct = () => {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
 
-                    <div className="absolute top-4 left-4">
-                      {product?.show_on_homepage === "true" && (
-                        <span className="px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
-                          Featured
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors">
-                        <FaShoppingCart className="w-5 h-5 text-gray-700" />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center">
+                      <button className="p-2">
+                        {product?.demo_video_link && (
+                          <a
+                            href={product?.demo_video_link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2"
+                          >
+                            <FaRegPlayCircle className="w-12 h-12 text-red-600" />
+                          </a>
+                        )}
                       </button>
                     </div>
                   </div>
 
                   <div className="p-6 bg-amber-100">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full">
-                        {product?.category}
-                      </span>
-                      <div className="flex items-center"></div>
-                    </div>
-
                     <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
                       {product?.product_name}
                     </h3>
@@ -140,7 +135,7 @@ const HomeProduct = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-2xl font-bold text-green-500">
+                        <span className="text-lg font-bold text-violet-700 bg-violet-100 px-2 py-1 rounded-4xl">
                           {formatCurrency(product?.price)}
                         </span>
                       </div>

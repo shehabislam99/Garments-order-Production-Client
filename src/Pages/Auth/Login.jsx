@@ -35,28 +35,37 @@ const Login = () => {
   const handleToggle = () => {
     setshowPassword(!showPassword);
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    signIn(loginData.email, loginData.password)
-      .then(() => {
-        toast.success("Login successful.. Welcome back!", {
+  try {
+    await signIn(loginData.email, loginData.password);
+
+    toast.success("Login successful.. Welcome back!", {
+      position: "top-center",
+      autoClose: 2000,
+    });
+
+    navigate(from, { replace: true });
+  } catch (err) {
+      toast.error("Login failed. Try again!", err.message, {
         position: "top-center",
         autoClose: 2000,
       });
-      })
-      .then(() => {
-        setLoading(false);
-      });
-  };
+    }
+   finally {
+    setLoading(false);
+  }
+};
+
   if (loading) {
     return;
   }
   return (
     <div className="min-h-screen flex items-center justify-center py-8 px-4 ">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8">
-        <div className="w-1/2 bg-white p-8 rounded-4xl shadow-xl border border-gray-200">
+        <div className="w-1/2 bg-amber-100 p-8 rounded-4xl shadow-xl border border-gray-200">
           <div className=" text-center  mb-8">
             <Link
               className="flex justify-center hover:underline "

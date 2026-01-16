@@ -273,7 +273,6 @@ const AddProduct = () => {
                   name="payment_Options"
                   value={product?.payment_Options}
                   onChange={handleChange}
-                  required
                   className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 >
                   <option value="" disabled>
@@ -296,7 +295,7 @@ const AddProduct = () => {
                   name="demo_video_link"
                   value={product?.demo_video_link}
                   onChange={handleChange}
-                  placeholder="https://example.com/video.mp4"
+                  placeholder="https://example.com/video"
                   className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>

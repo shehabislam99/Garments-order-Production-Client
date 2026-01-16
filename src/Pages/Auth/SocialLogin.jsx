@@ -23,7 +23,7 @@ const SocialLogin = () => {
         role: "buyer", 
       };
 
-      await axiosSecure.post("/user", userInfo);
+      await axiosSecure.post("/users", userInfo);
 
       toast.success("Logged in with Google", {
         position: "top-center",

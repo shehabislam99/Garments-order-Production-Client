@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaTasks,
@@ -7,6 +7,7 @@ import {
   FaBox,
   FaUser,
 } from "react-icons/fa";
+import { TbSquareToggle } from "react-icons/tb";
 import { MdAddShoppingCart } from "react-icons/md";
 import { BsClockHistory } from "react-icons/bs";
 import { SiGoogletasks } from "react-icons/si";
@@ -101,6 +102,7 @@ const Asidebar = () => {
   const { user } = useAuth();
   const { role, loading } = useRole();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!user || loading || !role) return;
@@ -126,57 +128,65 @@ const Asidebar = () => {
   const config = roleConfig[role] || roleConfig.buyer;
 
   return (
-    <aside className="w-64 min-h-screen bg-base-300 flex flex-col">
-      <div className="p-6 flex justify-center border-b border-gray-300">
-        <h1 className="mt-1 font-bold text-3xl">{config.title}</h1>
-      </div>
-      <div className="p-6 border-b border-gray-300">
-        <div className="flex text-center space-x-4">
-          <div className="flex-1">
-            <h2 className="font-bold text-lg truncate">
-              {user?.displayName || "Unknown"}
-            </h2>
-            <div className={`badge ${config.badgeColor} mt-1`}>
-              {role.toUpperCase()}
+    <>
+      <button
+        className="lg:hidden z-80 bg-base-300"
+        onClick={() => setOpen(!open)}
+      >
+        <TbSquareToggle className="relative bottom-84 text-2xl" />
+      </button>
+      <aside
+        className={`
+    bg-base-300 border-r border-base-200
+    transition-all duration-300 overflow-hidden
+    ${open ? "w-64" : "w-0 lg:w-64"}
+    ${open ? "min-h-screen" : "min-h-0 lg:min-h-screen"}
+  `}
+      >
+        <div className="p-6 flex justify-center border-b border-gray-300">
+          <h1 className="mt-1 font-bold text-3xl">{config.title}</h1>
+        </div>
+
+        <div className="p-6 border-b border-gray-300">
+          <div className="flex text-center space-x-4">
+            <div className="flex-1">
+              <h2 className="font-bold text-lg truncate">
+                {user?.displayName || "Unknown"}
+              </h2>
+              <div className={`badge ${config.badgeColor} mt-1`}>
+                {role.toUpperCase()}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <nav className="flex-1 overflow-y-auto p-4">
-        <ul className="px-4 py-2 text-xl space-y-3 font-medium w-full">
-          {config.links.map((link) => {
-            const Icon = link.icon;
-            return (
-              <li
-                className="hover:bg-red-800 hover:rounded-2xl hover:px-2 hover:py-2"
-                key={link.path}
-              >
-                <NavLink
-                  to={link.path}
-                  end={link.path === `/dashboard/${role}`}
-                  className={({ isActive }) =>
-                    `flex items-center ${isActive ? "active" : ""}`
-                  }
+        <nav className="flex-1 overflow-y-auto p-4">
+          <ul className="px-4 py-2 text-xl space-y-3 font-medium w-full">
+            {config.links.map((link) => {
+              const Icon = link.icon;
+              return (
+                <li
+                  className="hover:bg-red-800 hover:rounded-2xl hover:px-2 hover:py-2"
+                  key={link.path}
+                  onClick={() => setOpen(false)}
                 >
-                  {Icon && <Icon className="w-5 h-5" />}
-                  <span className="ml-3 ">{link.title}</span>
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      <div className="p-6 border-t border-base-300">
-        <button
-          onClick={() => navigate("/")}
-          className="px-4 py-2 text-white bg-indigo-600 hover:bg-red-800 rounded-full btn-block"
-        >
-          Go back home
-        </button>
-      </div>
-    </aside>
+                  <NavLink
+                    to={link.path}
+                    end={link.path === `/dashboard/${role}`}
+                    className={({ isActive }) =>
+                      `flex items-center ${isActive ? "active" : ""}`
+                    }
+                  >
+                    {Icon && <Icon className="w-5 h-5" />}
+                    <span className="ml-3 ">{link.title}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </aside>
+    </>
   );
 };
 
