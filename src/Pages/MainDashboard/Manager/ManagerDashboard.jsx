@@ -21,7 +21,7 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
           <div className="ml-4 text-center">
             <p className="text-xl font-medium text-gray-600">My Products</p>
             <p className="text-2xl mt-1 font-semibold text-blue-600">
-              {stats?.totalProducts || 0}
+              {stats?.allProducts || 0}
             </p>
           </div>
         </div>
@@ -117,7 +117,7 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 const ManagerDashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState({
-    totalProducts: 0,
+    allProducts: 0,
     pendingOrders: 0,
     approvedOrders: 0,
   });
@@ -144,24 +144,10 @@ const ManagerDashboard = () => {
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
               <h1 className="text-xl  font-bold text-gray-800">Dashboard</h1>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">
+              <div className="items-center ">
+                <p className="text-sm text-gray-600">
                   Welcome, <span className="font-medium">{user?.email}</span>
-                </span>
-                <div className="h-8 w-8 rounded-full flex items-center justify-center">
-                  <span className="text-white font-medium">
-                    <div className="avatar">
-                      <div className="w-8 rounded-full">
-                        <img
-                          src={
-                            user?.photoURL || "https://via.placeholder.com/32"
-                          }
-                          alt="User"
-                        />
-                      </div>
-                    </div>
-                  </span>
-                </div>
+                </p>
               </div>
             </div>
           </div>

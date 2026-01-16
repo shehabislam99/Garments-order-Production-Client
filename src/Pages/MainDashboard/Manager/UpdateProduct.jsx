@@ -38,20 +38,20 @@ const UpdateProduct = () => {
       const res = await axiosSecure.get(`/products/${id}`);
       const productData = res.data.data;
       setProduct({
-        product_name: productData.product_name,
-        category: productData.category,
-        price: productData.price,
-        available_quantity: productData.available_quantity,
-        moq: productData.moq,
-        payment_Options: productData.payment_Options,
-        demo_video_link: productData.demo_video_link,
-        description: productData.description,
-        show_on_homepage: productData.show_on_homepage || false,
+        product_name: productData?.product_name,
+        category: productData?.category,
+        price: productData?.price,
+        available_quantity: productData?.available_quantity,
+        moq: productData?.moq,
+        payment_Options: productData?.payment_Options,
+        demo_video_link: productData?.demo_video_link,
+        description: productData?.description,
+        show_on_homepage: productData?.show_on_homepage || false,
       });
 
-      if (productData.images && Array.isArray(productData.images)) {
-        setExistingImages(productData.images);
-        setImagePreviews(productData.images);
+      if (productData?.images && Array.isArray(productData?.images)) {
+        setExistingImages(productData?.images);
+        setImagePreviews(productData?.images);
       }
     } catch (error) {
       toast.error("Failed to load product", {
@@ -157,14 +157,14 @@ const UpdateProduct = () => {
     e.preventDefault();
     setLoading(true);
 
-    let imageUrls = [...existingImages];
+    let imageFiles = [...existingImages];
     if (images.length > 0) {
       const uploadedImages = await uploadImagesToImgBB(images);
       if (uploadedImages.length === 0) {
         setLoading(false);
         return;
       }
-      imageUrls = [...existingImages, ...uploadedImages];
+      imageFiles = [...existingImages, ...uploadedImages];
     }
 
     const productData = {
@@ -172,8 +172,12 @@ const UpdateProduct = () => {
       price: Number(product.price),
       available_quantity: Number(product.available_quantity),
       moq: Number(product.moq),
-      images: imageUrls,
-      show_on_homepage: Boolean(product.show_on_homepage),
+      images: imageFiles,
+      show_on_homepage: Boolean(product?.show_on_homepage),
+      payment_Options:
+        product?.payment_Options === ""
+          ? paymentOptionsList
+          : product?.payment_Options,
     };
 
     try {
@@ -344,7 +348,7 @@ const UpdateProduct = () => {
                   name="demo_video_link"
                   value={product.demo_video_link}
                   onChange={handleChange}
-                  placeholder="https://example.com/video.mp4"
+                  placeholder="https://example.com/video"
                   className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>

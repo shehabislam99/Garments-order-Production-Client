@@ -17,6 +17,7 @@ import axios from "axios";
 import Logo from "../../Components/Common/Logo/Logo";
 import SocialLogin from "./SocialLogIn";
 import { axiosInstance } from "../../Hooks/useAxios";
+import Loading from "../../Components/Common/Loding/Loding";
 
 const Register = () => {
   const { createUser, updateUserProfile, user } = useAuth();
@@ -228,7 +229,7 @@ const Register = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+       <Loading></Loading>
           <p className="mt-4 text-gray-600">
             {uploading ? "Uploading your photo..." : "Creating your account..."}
           </p>

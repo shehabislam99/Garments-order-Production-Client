@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import useAuth from "../../Hooks/useAuth";
 import SocialLogin from "./SocialLogIn";
 import Logo from "../../Components/Common/Logo/Logo";
+import Loading from "../../Components/Common/Loding/Loding";
 
 const Login = () => {
   const { user, signIn } = useAuth();
@@ -59,9 +60,15 @@ const handleSubmit = async (e) => {
   }
 };
 
-  if (loading) {
-    return;
-  }
+   if (loading) {
+     return (
+       <div className="min-h-screen flex items-center justify-center">
+         <div className="text-center">
+           <Loading></Loading>
+         </div>
+       </div>
+     );
+   }
   return (
     <div className="min-h-screen flex items-center justify-center py-8 px-4 ">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8">

@@ -5,13 +5,11 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaEye,
-  FaBox,
-  FaCheckCircle,
+
   FaTimesCircle,
-  FaClock,
+
   FaShoppingCart,
 } from "react-icons/fa";
-import { MdPayment, MdCancel } from "react-icons/md";
 import useAuth from "../../../Hooks/useAuth";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";

@@ -6,6 +6,7 @@ import {
   FaTimes,
   FaChevronLeft,
   FaChevronRight,
+  FaCreditCard,
   FaBox,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -51,16 +52,16 @@ const ManageProducts = () => {
 
 const filteredProducts = products.filter((product) => {
   const search = searchTerm.toLowerCase().trim();
+    const paymentMethod = product?.payment_Options?.toString().toLowerCase() || "";
 
   const matchesSearch =
     product?.product_name?.toLowerCase().includes(search) ||
     product?.category?.toLowerCase().includes(search) ||
-    product?.payment_Options?.toLowerCase().includes(search);
+    paymentMethod.includes(search);
 
   const matchesPaymentMethod =
     filterpaymentMethod === "all" ||
-    product?.payment_Options?.toLowerCase().trim() ===
-      filterpaymentMethod.toLowerCase();
+    paymentMethod === filterpaymentMethod.toLowerCase();
 
   return matchesSearch && matchesPaymentMethod;
 });
@@ -115,16 +116,17 @@ const filteredProducts = products.filter((product) => {
 
 
 
-  const getPaymentColor = (paymentMethod) => {
-    switch (paymentMethod?.toLowerCase()) {
-      case "stripe":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "cash on delivery":
-        return "bg-violet-100 text-violet-800 border-violet-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
+ const getPaymentColor = (payment_Options) => {
+  const paymentMethod = payment_Options?.toString?.().toLowerCase() || "";
+   switch (paymentMethod) {
+     case "stripe":
+       return "bg-green-100 text-green-800 border-green-200";
+     case "cash on delivery":
+       return "bg-violet-100 text-violet-800 border-violet-200";
+     default:
+       return "bg-gray-100 text-gray-800 border-gray-200";
+   }
+ };
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
@@ -141,7 +143,7 @@ const filteredProducts = products.filter((product) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className=" justify-center items-center min-h-screen flex">
         <Loading />
       </div>
     );
@@ -237,13 +239,13 @@ const filteredProducts = products.filter((product) => {
                       Image
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Name
+                      Product Name
                     </th>
                     <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Price
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Payment Mode
+                      Payment Method
                     </th>
                     <th className="px-19 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
@@ -282,13 +284,13 @@ const filteredProducts = products.filter((product) => {
                         </div>
                       </td>
 
-                      {/* Payment Mode */}
+                      {/* Payment Method */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getPaymentColor(
                             product?.payment_Options
                           )}`}
-                        >
+                        >< FaCreditCard className="mr-1"/>
                           {product?.payment_Options || "N/A"}
                         </span>
                       </td>
@@ -404,7 +406,7 @@ const filteredProducts = products.filter((product) => {
       {/* Delete Confirmation Modal */}
       {deleteModalOpen && selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+          <div className="bg-base-200 rounded-4xl  max-w-md w-full">
             <div className="p-6">
               <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
                 Delete Product
@@ -414,18 +416,18 @@ const filteredProducts = products.filter((product) => {
                 <p className="ml-3 text-gray-600 mb-2">
                   Are you sure you want to delete this product?
                 </p>
-                <div className="bg-amber-100 rounded-4xl p-5">
-                  <p className="font-medium text-red-800">
+                <div className="bg-amber-100 rounded-4xl p-5 space-y-2">
+                  <p className="font-semibold text-red-800">
                     Product: {selectedProduct?.product_name}
                   </p>
-                  <p className="text-sm text-red-600">
+                  <p className="text-sm font-medium text-green-600">
                     Category: {selectedProduct?.category}
                   </p>
-                  <p className="text-sm text-red-600">
+                  <p className="text-sm font-medium text-violet-600">
                     Price: {formatCurrency(selectedProduct?.price)}
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 ml-3 mt-2">
+                <p className="text-xs text-red-500 ml-3 mt-2">
                   This action cannot be undone. All product data will be
                   permanently removed.
                 </p>
