@@ -102,7 +102,7 @@ const ProductDetailsPage = () => {
           </p>
           <button
             onClick={() => navigate("/all-products")}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
           >
             Back to Products
           </button>
@@ -127,8 +127,8 @@ const ProductDetailsPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              <div className="relative w-full h-96">
+            <div className="bg-white rounded-4xl shadow-lg overflow-hidden">
+              <div className="relative w-full h-96 ">
                 <img
                   src={product.images[imageIndex]}
                   alt={product.productName}
@@ -137,13 +137,12 @@ const ProductDetailsPage = () => {
               </div>
             </div>
 
-            {/* Thumbnail Images */}
             <div className="grid grid-cols-4 gap-2">
               {product.images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setImageIndex(idx)}
-                  className={`relative rounded-lg overflow-hidden border-2 ${
+                  className={`relative rounded-4xl overflow-hidden border-2 ${
                     imageIndex === idx
                       ? "border-blue-500"
                       : "border-transparent"
@@ -162,13 +161,13 @@ const ProductDetailsPage = () => {
           {/* Right Column - Product Info */}
           <div className="space-y-6">
             {/* Product Header */}
-            <div className="bg-white p-6 rounded-xl shadow">
+            <div className="bg-white p-6 rounded-4xl shadow">
               <h1 className="text-3xl font-bold text-gray-700">
                 {product.product_name}
               </h1>
               {/* Specifications Grid */}
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-center p-4 bg-amber-100 rounded-lg">
+                <div className="flex items-center p-4 bg-amber-100 rounded-xl">
                   <MdCategory className="text-2xl text-blue-500 mr-4" />
                   <div>
                     <p className="text-sm text-gray-500">Category</p>
@@ -176,7 +175,7 @@ const ProductDetailsPage = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center p-4 bg-amber-100 rounded-lg">
+                <div className="flex items-center p-4 bg-amber-100 rounded-xl">
                   <HiOutlineCurrencyDollar className="text-2xl text-purple-500 mr-4" />
                   <div>
                     <p className="text-sm text-gray-500">Price</p>
@@ -184,7 +183,7 @@ const ProductDetailsPage = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center p-4 bg-amber-100 rounded-lg">
+                <div className="flex items-center p-4 bg-amber-100 rounded-xl">
                   <FaShoppingCart className="text-2xl text-indigo-800 mr-4" />
                   <div>
                     <p className="text-sm text-gray-500">
@@ -194,7 +193,7 @@ const ProductDetailsPage = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center p-4 bg-amber-100 rounded-lg">
+                <div className="flex items-center p-4 bg-amber-100 rounded-xl">
                   <MdInventory className="text-2xl text-green-500 mr-4" />
                   <div>
                     <p className="text-sm text-gray-500">Avilable Quantity</p>
@@ -203,7 +202,7 @@ const ProductDetailsPage = () => {
                 </div>
               </div>
               <div className="my-4">
-                <div className=" p-4 bg-amber-100 rounded-lg max-w-none">
+                <div className=" p-4 bg-amber-100 rounded-xl max-w-none">
                   <h3 className="text-sm text-gray-500">Description </h3>
                   <p className="font-medium">
                     {product.description ||
@@ -213,9 +212,9 @@ const ProductDetailsPage = () => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow space-y-4">
+            <div className="bg-white p-6 rounded-4xl shadow space-y-4">
               <h2 className="text-3xl font-bold text-gray-700">Order Now</h2>
-              <div className="flex p-4  bg-amber-100 rounded-lg gap-4">
+              <div className="flex p-4  bg-amber-100 rounded-xl gap-4">
                 <p className="text-sm flex mt-3 text-gray-500">
                   <span>
                     <FaCreditCard className="text-2xl text-blue-500 mr-4" />
@@ -226,7 +225,7 @@ const ProductDetailsPage = () => {
                   name="payment_Options"
                   value={selectedPayment}
                   onChange={(e) => setSelectedPayment(e.target.value)}
-                  className="px-4 py-3 border border-green-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-4 py-3 border border-green-800 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="" disabled>
                     Select Payment Method
@@ -241,7 +240,7 @@ const ProductDetailsPage = () => {
               <button
                 onClick={handleOrderNow}
                 disabled={!canOrder()}
-                className={`w-full py-4 rounded-lg text-lg font-semibold transition-all flex items-center justify-center ${
+                className={`w-full py-4 rounded-xl text-lg font-semibold transition-all flex items-center justify-center ${
                   canOrder()
                     ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl"
                     : "bg-gray-200 text-gray-500 cursor-not-allowed"

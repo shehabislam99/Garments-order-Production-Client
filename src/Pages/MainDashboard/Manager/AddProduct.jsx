@@ -128,12 +128,13 @@ const AddProduct = () => {
     const productData = {
       ...product,
       createdByEmail: user?.email,
-      price: Number(product.price),
-      available_quantity: Number(product.available_quantity),
+      price: Number(product?.price),
+      available_quantity: Number(product?.available_quantity),
       moq: Number(product.moq),
       images: imageFiles,
       status: "pending",
-      show_on_homepage: Boolean(product.show_on_homepage),
+      show_on_homepage: Boolean(product?.show_on_homepage),
+      payment_Options: product?.payment_Options === "" ? paymentOptionsList : product?.payment_Options,
     };
 
     try {
