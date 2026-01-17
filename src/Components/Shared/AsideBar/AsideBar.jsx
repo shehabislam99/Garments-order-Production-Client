@@ -6,6 +6,7 @@ import {
   FaHome,
   FaBox,
   FaUser,
+  FaShoppingCart,
 } from "react-icons/fa";
 import { TbSquareToggle } from "react-icons/tb";
 import { MdAddShoppingCart } from "react-icons/md";
@@ -63,12 +64,12 @@ const roleConfig = {
       {
         path: "/dashboard/pending-orders",
         title: "Pending Orders",
-        icon: SiGoogletasks,
+        icon: BsClockHistory,
       },
       {
         path: "/dashboard/approved-orders",
         title: "Approved Orders",
-        icon: BsClockHistory,
+        icon: SiGoogletasks,
       },
       {
         path: "/dashboard/profile",
@@ -87,7 +88,11 @@ const roleConfig = {
         title: "My Dashboard",
         icon: FaHome,
       },
-      { path: "/dashboard/my-orders", title: "My Orders", icon: FaTasks },
+      {
+        path: "/dashboard/my-orders",
+        title: "My Orders",
+        icon: FaShoppingCart,
+      },
       {
         path: "/dashboard/profile",
         title: "My Profile",

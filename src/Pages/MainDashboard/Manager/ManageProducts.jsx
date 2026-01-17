@@ -36,7 +36,7 @@ const ManageProducts = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axiosSecure.get("/products");
+      const res = await axiosSecure.get("/manage/products");
       const productsData = res?.data?.data || [];
       setProducts(productsData);
     
@@ -247,7 +247,7 @@ const filteredProducts = products.filter((product) => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Payment Method
                     </th>
-                    <th className="px-19 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-14 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -262,7 +262,7 @@ const filteredProducts = products.filter((product) => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <img
-                            src={product?.images?.[0]}
+                            src={product?.images?.[0] || "null"}
                             alt={product?.product_name}
                             className="h-12 w-12 rounded-full object-cover border border-gray-300"
                           />
@@ -273,14 +273,14 @@ const filteredProducts = products.filter((product) => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium ">
                           <h2 className="text-gray-900">
-                            {product?.product_name}
+                            {product?.product_name||"Unknown Product"}
                           </h2>
                         </div>
                       </td>
                       {/* Price */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                          {formatCurrency(product?.price)}
+                          {formatCurrency(product?.price || 0)}
                         </div>
                       </td>
 
@@ -296,7 +296,7 @@ const filteredProducts = products.filter((product) => {
                       </td>
 
                       {/* Actions */}
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs font-medium">
                         <div className="flex space-x-3">
                           <button
                             onClick={() =>
@@ -304,7 +304,7 @@ const filteredProducts = products.filter((product) => {
                                 `/dashboard/update-product/${product?._id}`
                               )
                             }
-                            className="px-3 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-red-800"
+                            className="px-2 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-red-800"
                             title="Edit Product"
                           >
                             <FaEdit className="mr-1" />
@@ -313,7 +313,7 @@ const filteredProducts = products.filter((product) => {
 
                           <button
                             onClick={() => openDeleteModal(product)}
-                            className="px-3 py-1 flex items-center rounded-full bg-red-600 text-white hover:bg-red-700"
+                            className="px-2 py-1 flex items-center rounded-full bg-red-600 text-white hover:bg-red-700"
                             title="Delete Product"
                           >
                             <FaTrash className="mr-1" />
@@ -328,7 +328,7 @@ const filteredProducts = products.filter((product) => {
             </div>
 
             {filteredProducts.length === 0 && (
-              <div className="text-center py-12">
+              <div className="text-center py-12 bg-amber-100">
                 <div className="text-gray-400 mb-4">
                   <FaBox className="mx-auto h-12 w-12" />
                 </div>
@@ -340,14 +340,6 @@ const filteredProducts = products.filter((product) => {
                     ? "Try changing your search or filter criteria"
                     : "No products available"}
                 </p>
-                {(searchTerm || filterpaymentMethod !== "all") && (
-                  <button
-                    onClick={clearFilters}
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-red-800"
-                  >
-                    Clear Filters
-                  </button>
-                )}
               </div>
             )}
           </div>

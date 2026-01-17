@@ -50,8 +50,8 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
           Quick Actions
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 p-6">
-          <Link to="/dashboard/manager/manage-products">
-            <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
+          <Link to="/dashboard/manage-products">
+            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
               <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-lg p-3 mr-4">
                 <FaTasks className="w-5 h-5" />
               </div>
@@ -64,8 +64,8 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
             </button>
           </Link>
 
-          <Link to="/dashboard/manager/orders/pending">
-            <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
+          <Link to="/dashboard/pending-orders">
+            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
               <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
                 <BsClockHistory className="w-5 h-5" />
               </div>
@@ -80,8 +80,8 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
             </button>
           </Link>
 
-          <Link to="/dashboard/manager/orders/approved">
-            <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
+          <Link to="/dashboard/approved-orders">
+            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
               <div className="flex-shrink-0 text-purple-500 bg-purple-100 rounded-lg p-3 mr-4">
                 <SiGoogletasks className="w-5 h-5" />
               </div>
@@ -94,8 +94,8 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
             </button>
           </Link>
 
-          <Link to="/dashboard/manager/add-product">
-            <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
+          <Link to="/dashboard/add-product">
+            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
               <div className="flex-shrink-0 text-amber-500 bg-violet-100 rounded-lg p-3 mr-4">
                 <MdAddShoppingCart className="w-5 h-5" />
               </div>

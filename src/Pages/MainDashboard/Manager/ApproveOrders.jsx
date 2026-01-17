@@ -4,38 +4,34 @@ import {
   FaChevronRight,
   FaEye,
   FaTruck,
+  FaClock,
   FaBox,
-  FaSync,
-  FaMapMarkerAlt,
-  FaClipboardCheck,
-  FaShippingFast,
   FaTimes,
 } from "react-icons/fa";
+import { MdLocationOn} from "react-icons/md";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import Loading from "../../../Components/Common/Loding/Loding";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+
 
 const ApprovedOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const ordersPerPage = 6;
-
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [trackingTimeline, setTrackingTimeline] = useState([]);
-
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
   const [viewTrackingModalOpen, setViewTrackingModalOpen] = useState(false);
-
   const [trackingForm, setTrackingForm] = useState({
     location: "",
     note: "",
     status: "",
     dateTime: new Date().toISOString().slice(0, 16),
   });
-  const [addingTracking, setAddingTracking] = useState(false);
-
+ const [addingTracking, setAddingTracking] = useState(false);
+ const [trackingTimeline, setTrackingTimeline] = useState([]);
+ const [loadingTimeline, setLoadingTimeline] = useState(false);
   const axiosSecure = useAxiosSecure();
 
   const fetchApprovedOrders = async () => {
@@ -60,55 +56,39 @@ const ApprovedOrders = () => {
     fetchApprovedOrders();
   }, []);
 
-  // --- MODAL HANDLERS ---
   const openAddTrackingModal = (order) => {
     setSelectedOrder(order);
     setTrackingModalOpen(true);
   };
-
   const openViewTrackingModal = async (order) => {
     setSelectedOrder(order);
+    setLoadingTimeline(true);
     setViewTrackingModalOpen(true);
 
     try {
-      const res = await axiosSecure.get(`/track-order/${order._id}/timeline`);
-      
-
-      // Check if data exists in the expected format
-      if (res.data.success && res.data.data) {
-        setTrackingTimeline(res.data.data);
-      } else {
-        toast.error("No tracking history found", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        setTrackingTimeline([]);
-      }
+      const res = await axiosSecure.get(`/track-order/timeline/${order?._id}`);
+      const timeline = res?.data?.data?.timeline || [];
+      setTrackingTimeline(timeline);
     } catch (err) {
       console.error("Error fetching timeline:", err);
-      toast.error("Failed to load tracking history", {
-        position: "top-center",
-        autoClose: 2000,
-      });
       setTrackingTimeline([]);
+    } finally {
+      setLoadingTimeline(false);
     }
   };
 
   const closeModals = () => {
     setTrackingModalOpen(false);
-    setViewTrackingModalOpen(false);
+     setViewTrackingModalOpen(false);
     setSelectedOrder(null);
-    setTrackingTimeline([]);
-    // Reset form
     setTrackingForm({
       location: "",
       note: "",
       status: "Cutting Completed",
       dateTime: new Date().toISOString().slice(0, 16),
-    });
+    });  setTrackingTimeline([]);
   };
 
-  // --- API ACTIONS ---
   const handleAddTracking = async () => {
     if (!trackingForm.location) {
       toast.error("Location required", {
@@ -120,7 +100,7 @@ const ApprovedOrders = () => {
     try {
       setAddingTracking(true);
       await axiosSecure.post(
-        `/orders/${selectedOrder._id}/tracking`,
+        `/orders/tracking/${selectedOrder._id}`,
         trackingForm
       );
       toast.success("Tracking added successfully", {
@@ -139,7 +119,6 @@ const ApprovedOrders = () => {
     }
   };
 
-  // --- HELPERS ---
   const paginatedOrders = orders.slice(
     currentPage * ordersPerPage,
     (currentPage + 1) * ordersPerPage
@@ -147,14 +126,13 @@ const ApprovedOrders = () => {
 
   const handlePageClick = (e) => setCurrentPage(e.selected);
 
-  const formatDate = (d) =>
-    d
-      ? new Date(d).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })
-      : "N/A";
+   const formatDate = (date) => {
+     if (!date) return "Date not available";
+     return new Date(date).toLocaleString("en-US", {
+       dateStyle: "medium",
+       timeStyle: "short",
+     });
+   };
 
   const formatCurrency = (amt) =>
     new Intl.NumberFormat("en-US", {
@@ -162,14 +140,6 @@ const ApprovedOrders = () => {
       currency: "USD",
     }).format(amt || 0);
 
-  const getTrackingStatusIcon = (status) => {
-    const s = status?.toUpperCase();
-    if (s?.includes("CUTTING")) return <FaBox className="mr-1" />;
-    if (s?.includes("SEWING")) return <FaClipboardCheck className="mr-1" />;
-    if (s?.includes("SHIPPED")) return <FaShippingFast className="mr-1" />;
-    if (s?.includes("DELIVERY")) return <FaTruck className="mr-1" />;
-    return <FaMapMarkerAlt className="mr-1" />;
-  };
 
   if (loading)
     return (
@@ -180,19 +150,18 @@ const ApprovedOrders = () => {
 
   return (
     <div className="p-3">
-      {/* Title & Refresh */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Approved Orders</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Approved Orders</h2>
         <button
           onClick={fetchApprovedOrders}
-          className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+          disabled={loading}
+          className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-red-800 transition-colors flex items-center disabled:opacity-50"
         >
-          <FaSync />
+          {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
-
       {/* ORDERS TABLE */}
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="mt-4 bg-white rounded-4xl shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -204,64 +173,91 @@ const ApprovedOrders = () => {
                   Customer
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Product
+                  Product name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  Price
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
-                  Qty
+                  Quantity
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Date
+                  Approve Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-15 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-amber-100 divide-y divide-gray-200">
               {paginatedOrders.map((order) => (
                 <tr
-                  key={order._id}
+                  key={order?._id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    #{order.orderId?.substring(0, 10) || "N/A"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order.user?.name ||
-                      order.customer?.firstName ||
-                      "Customer"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div>
-                      {order.items?.[0]?.name ||
-                        order.product_name ||
-                        "Product"}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {formatCurrency(order.totalAmount || order.price)}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className=" items-center">
+                      <div className="text-sm font-semibold text-gray-900">
+                        #{order?._id?.substring(0, 12) || "N/A"}
+                      </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-center">
-                    <span className="px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">
-                      {order.items?.[0]?.quantity || order.quantity || 1}
-                    </span>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="items-center">
+                      <div className="inline-flex text-sm font-semibold text-violet-500">
+                        {order?.customer?.firstName || "Unknown"}
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        {order?.CustomerEmail || "No Email"}
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {formatDate(order.approvedAt || order.createdAt)}
+
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="items-center">
+                      <div className="font-semibold text-gray-900">
+                        {order?.product_name || "Unknown Product"}
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-3">
-                      <button
-                        onClick={() => openViewTrackingModal(order)}
-                        className="px-3 py-1 flex items-center rounded-full bg-indigo-500 text-white hover:bg-indigo-600"
-                      >
-                        <FaEye className="mr-1" /> View
-                      </button>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className=" items-center">
+                      <div className="px-2 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-blue-100 text-green-800">
+                        {formatCurrency(order?.price || 0)}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-center">
+                      <span className="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                        {order?.quantity || 0}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="items-center">
+                      <div className="font-medium text-gray-600">
+                        {formatDate(
+                          order?.approvedAt || order?.createdAt || "N/A"
+                        )}
+                      </div>
+                    </div>
+                  </td>
+
+                  <td className="px-6 py-4 whitespace-nowrap text-xs font-medium">
+                    <div className="flex space-x-2">
                       <button
                         onClick={() => openAddTrackingModal(order)}
-                        className="px-3 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700"
+                        className="px-2 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700"
                       >
-                        <FaTruck className="mr-1" /> Track
+                        <FaTruck className="mr-1" />
+                        Add Track
+                      </button>
+                      <button
+                        onClick={() => openViewTrackingModal(order)}
+                        className="px-2 py-1 flex items-center rounded-full bg-indigo-600 text-white hover:bg-indigo-600"
+                      >
+                        <FaEye className="mr-1" /> View Track
                       </button>
                     </div>
                   </td>
@@ -270,10 +266,17 @@ const ApprovedOrders = () => {
             </tbody>
           </table>
         </div>
+        {orders?.length === 0 && (
+          <div className="text-center py-12 bg-amber-100">
+            <FaBox className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900">
+              No Approved orders
+            </h3>
+          </div>
+        )}
       </div>
-
       {/* PAGINATION */}
-      {Math.ceil(orders.length / ordersPerPage) > 1 && (
+      {Math.ceil(orders?.length / ordersPerPage) > 1 && (
         <div className="flex flex-col md:flex-row justify-center items-center mt-6">
           <ReactPaginate
             breakLabel="..."
@@ -313,38 +316,36 @@ const ApprovedOrders = () => {
           <div className="ml-0 md:ml-4 text-sm text-gray-700">
             Page <span className="font-medium">{currentPage + 1}</span> of{" "}
             <span className="font-medium">
-              {Math.ceil(orders.length / ordersPerPage)}
+              {Math.ceil(orders?.length / ordersPerPage)}
             </span>
             {" • "}
-            <span className="font-medium">{orders.length}</span> total orders
+            <span className="font-medium">{orders?.length}</span> total orders
           </div>
         </div>
       )}
-
       {/* ADD TRACKING MODAL */}
       {trackingModalOpen && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+          <div className="bg-amber-100 rounded-4xl shadow-xl max-w-md w-full">
             <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold text-gray-900">
+              <div className="flex justify-between mb-4">
+                <h3 className="text-lg ml-25 font-bold text-gray-900">
                   Add Tracking Update
                 </h3>
                 <button
                   onClick={closeModals}
-                  className="text-gray-400 hover:text-gray-600"
+                  className=" text-red-500 hover:text-red-800"
                 >
                   <FaTimes className="h-5 w-5" />
                 </button>
               </div>
 
               <div className="mb-4">
-                <p className="text-sm text-gray-600 mb-2">
-                  Order: #
-                  {selectedOrder.orderId || selectedOrder._id?.substring(18)}
+                <p className="text-sm font-semibold text-gray-600 mb-2">
+                  Order Id: #{selectedOrder?._id?.substring(18) || "N/A"}
                 </p>
-                <p className="text-sm text-gray-600">
-                  Product: {selectedOrder.items?.[0]?.name || "Unknown"}
+                <p className="text-sm font-semibold text-gray-600">
+                  Product: {selectedOrder?.product_name || "Unknown"}
                 </p>
               </div>
 
@@ -358,10 +359,10 @@ const ApprovedOrders = () => {
                     onChange={(e) =>
                       setTrackingForm({
                         ...trackingForm,
-                        status: e.target.value,
+                        status: e.target?.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   >
                     <option value="Cutting Completed">Cutting Completed</option>
                     <option value="Sewing Started">Sewing Started</option>
@@ -379,15 +380,15 @@ const ApprovedOrders = () => {
                   </label>
                   <input
                     type="text"
-                    value={trackingForm.location}
+                    value={trackingForm?.location}
                     onChange={(e) =>
                       setTrackingForm({
                         ...trackingForm,
-                        location: e.target.value,
+                        location: e.target?.value,
                       })
                     }
                     placeholder="Enter location"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   />
                 </div>
 
@@ -396,30 +397,16 @@ const ApprovedOrders = () => {
                     Note
                   </label>
                   <textarea
-                    value={trackingForm.note}
-                    onChange={(e) =>
-                      setTrackingForm({ ...trackingForm, note: e.target.value })
-                    }
-                    placeholder="Enter tracking note"
-                    rows="3"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Date & Time
-                  </label>
-                  <input
-                    type="datetime-local"
-                    value={trackingForm.dateTime}
+                    value={trackingForm?.note}
                     onChange={(e) =>
                       setTrackingForm({
                         ...trackingForm,
-                        dateTime: e.target.value,
+                        note: e.target?.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter tracking note"
+                    rows="3"
+                    className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   />
                 </div>
               </div>
@@ -427,14 +414,14 @@ const ApprovedOrders = () => {
               <div className="flex justify-end space-x-3 mt-6">
                 <button
                   onClick={closeModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                  className="px-3 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-800 rounded-full transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddTracking}
                   disabled={addingTracking}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors"
+                  className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-red-800 disabled:opacity-50 rounded-full transition-colors"
                 >
                   {addingTracking ? "Adding..." : "Add Tracking"}
                 </button>
@@ -442,110 +429,107 @@ const ApprovedOrders = () => {
             </div>
           </div>
         </div>
-      )}
-
-      {/* VIEW TRACKING MODAL */}
+      )}{" "}
       {viewTrackingModalOpen && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-amber-100 rounded-4xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-gray-900">
-                  Tracking History - #{selectedOrder.orderId?.substring(0, 10)}
-                </h3>
+                <div>
+                  <p className="text-gray-900 font-bold">
+                    Order Id #{selectedOrder?._id || "N/A"}
+                  </p>
+                </div>
                 <button
                   onClick={closeModals}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full"
                 >
-                  <FaTimes className="h-5 w-5" />
+                  <FaTimes className="h-6 w-6 text-red-600" />
                 </button>
-              </div>
-
-              <div className="mb-6 bg-blue-50 rounded-lg p-4">
-                <h4 className="text-lg font-semibold text-gray-800 mb-3">
-                  Order Information
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">
-                      Latest Status
-                    </p>
-                    <p className="text-gray-900 font-bold">
-                      {/* Show the most recent status from the timeline */}
-                      {trackingTimeline[0]?.step || "Approved"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">
-                      Current Location
-                    </p>
-                    <p className="text-gray-900 font-bold">
-                      {trackingTimeline[0]?.location || "Factory"}
-                    </p>
-                  </div>
-                </div>
               </div>
 
               <div className="mb-6">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4">
-                  Tracking Timeline
-                </h4>
-                {trackingTimeline.length > 0 ? (
-                  <div className="space-y-4">
-                    {trackingTimeline.map((track, index) => (
-                      <div key={track.id || index} className="flex">
-                        <div className="flex flex-col items-center mr-4">
+                <div className="flex justify-between items-center mb-6">
+                  <h4 className="text-xl font-bold text-gray-800">
+                    Production Tracking Timeline
+                  </h4>
+                  <span className="text-sm text-indigo-600 font-semibold flex items-center">
+                    <FaTruck className="mr-2" />
+                    {trackingTimeline?.length} Updates
+                  </span>
+                </div>
+
+                {loadingTimeline ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Loading />
+                  </div>
+                ) : trackingTimeline.length > 0 ? (
+                  <div className="relative">
+                    <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 to-green-200" />
+
+                    <div className="space-y-8">
+                      {trackingTimeline.map((track, idx) => (
+                        <div key={idx} className="relative flex group">
                           <div
-                            className={`w-3 h-3 rounded-full ${
-                              track.status === "current"
-                                ? "bg-green-500"
-                                : "bg-blue-500"
+                            className={`absolute left-8 -translate-x-1/2 h-5 w-5 rounded-full border-4 border-white z-10 flex items-center justify-center ${
+                              track?.status === "current"
+                                ? "bg-blue-600 animate-pulse ring-4 ring-blue-200"
+                                : "bg-green-600"
                             }`}
-                          ></div>
-                          {index < trackingTimeline.length - 1 && (
-                            <div className="w-0.5 h-full bg-gray-300 mt-2"></div>
-                          )}
-                        </div>
-                        <div className="flex-1 pb-4">
-                          <div className="bg-gray-50 rounded-lg p-4">
-                            <div className="flex items-center mb-2">
-                              {getTrackingStatusIcon(track.step)}
-                              <span className="font-medium text-gray-900">
-                                {track.step}
-                              </span>
-                              <span className="ml-auto text-sm text-gray-500">
-                                {formatDate(track.date)}
-                              </span>
+                          >
+                            {track?.status === "current" && (
+                              <div className="h-2 w-2 bg-white rounded-full"></div>
+                            )}
+                          </div>
+
+                          <div className="ml-12 w-full">
+                            <div>
+                              <div className="flex-1 pb-6">
+                                <div className="bg-gray-50 rounded-4xl p-5 border border-gray-200 hover:border-blue-200 transition-colors">
+                                  <div className="flex items-center mb-3">
+                                    <span className="font-bold text-gray-900 text-lg">
+                                      {track?.step}
+                                    </span>
+                                    <span className="ml-auto text-sm font-semibold text-gray-500">
+                                      {formatDate(track?.date)}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center text-sm text-gray-700 mb-2">
+                                    <MdLocationOn className="mr-1 w-5 h-5 text-violet-500" />
+                                    <span className="font-medium">
+                                      {track?.location ||
+                                        "Location not specified"}
+                                    </span>
+                                  </div>
+                                  <div className="mt-3 p-3 bg-white rounded-xl border-b-4 border-amber-400">
+                                    <p className="text-gray-900">
+                                      "{track?.Note || "No additional details"}"
+                                    </p>
+                                  </div>
+                                  {track?.status === "current" && (
+                                    <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm">
+                                      <FaTruck className="mr-1" />
+                                      Currently Active
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
                             </div>
-                            <p className="text-sm text-gray-700 mb-1">
-                              <FaMapMarkerAlt className="inline mr-1" />
-                              {track.location}
-                            </p>
-                            {track.description &&
-                              track.description !== "No additional details" && (
-                                <p className="text-sm text-gray-600 italic">
-                                  "{track.description}"
-                                </p>
-                              )}
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 ) : (
-                  <div className="text-center py-8">
-                    <FaTruck className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                    <p className="text-gray-500">No tracking updates yet</p>
+                  <div className="text-center py-12">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                      <FaClock className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                      Tracking Updates Pending
+                    </h4>
                   </div>
                 )}
-              </div>
-              <div className="flex justify-end">
-                <button
-                  onClick={closeModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
-                >
-                  Close
-                </button>
               </div>
             </div>
           </div>

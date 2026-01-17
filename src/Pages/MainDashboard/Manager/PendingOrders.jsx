@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from "react";
 import {
-  FaTimes,
   FaChevronLeft,
   FaChevronRight,
   FaEye,
   FaCheckCircle,
   FaTimesCircle,
-  FaUser,
   FaBox,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import Loading from "../../../Components/Common/Loding/Loding";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { useNavigate } from "react-router";
 
 const PendingOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [ordersPerPage] = useState(6);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [viewModalOpen, setViewModalOpen] = useState(false);
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
-
+ const navigator = useNavigate();
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
@@ -35,7 +32,7 @@ const PendingOrders = () => {
       setLoading(true);
       const res = await axiosSecure.get("/orders?status=pending");
       if (res.data?.success) {
-        setOrders(res.data.data || []);
+        setOrders(res.data?.data || []);
       } else {
         setOrders([]);
       }
@@ -64,7 +61,6 @@ const PendingOrders = () => {
          position: "top-center",
          autoClose: 2000,
        });
-       if (viewModalOpen) closeViewModal();
      } else {
        toast.error(res.data?.message || "Failed to approve order", {
          position: "top-center",
@@ -96,7 +92,7 @@ const PendingOrders = () => {
     try {
       setRejecting(true);
 
-      const res = await axiosSecure.put(`/order/status/${orderId}`, {
+      const res = await axiosSecure.put(`/orders/status/${orderId}`, {
         status: "rejected",
         rejectionReason: reason,
         rejectedAt: new Date().toISOString(),
@@ -107,7 +103,6 @@ const PendingOrders = () => {
       if (res.data?.success) {
         setOrders((prev) => prev.filter((o) => o._id !== orderId));
         toast.success("Order rejected successfully");
-        if (viewModalOpen) closeViewModal();
       } else {
         toast.error(res.data?.message || "Failed to reject order", {
           position: "top-center",
@@ -145,15 +140,6 @@ const PendingOrders = () => {
 
   const handlePageClick = (event) => setCurrentPage(event.selected);
 
-  const openViewModal = (order) => {
-    setSelectedOrder(order);
-    setViewModalOpen(true);
-  };
-
-  const closeViewModal = () => {
-    setSelectedOrder(null);
-    setViewModalOpen(false);
-  };
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -164,13 +150,19 @@ const PendingOrders = () => {
     });
   };
 
-  const formatCurrency = (amount) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount || 0);
+ 
 
-  
+   const getPaymentColor = (payment_Status) => {
+     const paymentStatus = payment_Status?.toString?.().toLowerCase() || "";
+     switch (paymentStatus) {
+       case "paid":
+         return "bg-green-100 text-green-800 border-green-200";
+       case "cod":
+         return "bg-violet-100 text-purple-800 border-violet-200";
+       default:
+         return "bg-gray-100 text-gray-800 border-gray-200";
+     }
+   };
 
   if (loading) {
     return (
@@ -198,22 +190,25 @@ const PendingOrders = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                   Order ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                   User
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                   Product
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                   Quanttity
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6  py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                  Payment
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                   Order Date
                 </th>
-                <th className="px-10 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-13 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                   Actions
                 </th>
               </tr>
@@ -221,53 +216,71 @@ const PendingOrders = () => {
             <tbody className="bg-amber-100 divide-y divide-gray-200">
               {paginatedOrders.map((order) => (
                 <tr
-                  key={order._id}
+                  key={order?._id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                    #{order.orderId.substring(0,10)}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="inline-flex text-sm font-semibold text-gray-900">
-                      {order.customer?.firstName}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {order.CustomerEmail}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className=" items-center">
+                      <div className="text-sm font-semibold text-gray-900">
+                        #{order?._id?.substring(0, 12) || "N/A"}
+                      </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="inline-flex text-sm font-semibold text-violet-500">
+                      {order?.customer?.firstName || "Unknown"}
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      {order?.CustomerEmail || "No Email"}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
-                      {order.product_name}
-  
+                      {order?.product_name || "Unnamed Product"}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">
-                      {order.quantity}
+                      {order?.quantity || 0}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {formatDate(order.createdAt)}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getPaymentColor(
+                        order?.paymentStatus
+                      )}`}
+                    >
+                      {order?.paymentStatus || "N/A"}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="items-center">
+                      <div className="font-medium text-gray-600">
+                        {formatDate(order?.createdAt || "N/A")}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-xs font-medium">
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => openViewModal(order)}
-                        className="px-3 py-1 flex items-center rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+                        onClick={() =>
+                          navigator(`/order-details/${order?._id}`)
+                        }
+                        className="px-2 py-1 flex items-center rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
                       >
-                        <FaEye className="mr-1" /> View
+                        <FaEye className="mr-1" /> View Order
                       </button>
                       <button
-                        onClick={() => handleApprove(order._id)}
+                        onClick={() => handleApprove(order?._id)}
                         disabled={approving}
-                        className="px-3 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
+                        className="px-2 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
                       >
                         <FaCheckCircle className="mr-1" /> Approve
                       </button>
                       <button
-                        onClick={() => handleReject(order._id)}
+                        onClick={() => handleReject(order?._id)}
                         disabled={rejecting}
-                        className="px-3 py-1 flex items-center rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50"
+                        className="px-2 py-1 flex items-center rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50"
                       >
                         <FaTimesCircle className="mr-1" /> Reject
                       </button>
@@ -279,7 +292,7 @@ const PendingOrders = () => {
           </table>
         </div>
 
-        {orders.length === 0 && (
+        {orders?.length === 0 && (
           <div className="text-center py-12 bg-amber-100">
             <FaBox className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900">
@@ -289,7 +302,7 @@ const PendingOrders = () => {
         )}
       </div>
 
-      {Math.ceil(orders.length / ordersPerPage) > 1 && (
+      {Math.ceil(orders?.length / ordersPerPage) > 1 && (
         <div className="flex justify-center mt-6">
           <ReactPaginate
             breakLabel="..."
@@ -301,7 +314,7 @@ const PendingOrders = () => {
             onPageChange={handlePageClick}
             pageRangeDisplayed={3}
             marginPagesDisplayed={2}
-            pageCount={Math.ceil(orders.length / ordersPerPage)}
+            pageCount={Math.ceil(orders?.length / ordersPerPage)}
             previousLabel={
               <div className="flex items-center">
                 <FaChevronLeft className="mr-1 h-3 w-3" /> Previous
@@ -315,64 +328,6 @@ const PendingOrders = () => {
             nextClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md border"
             disabledClassName="opacity-50 cursor-not-allowed"
           />
-        </div>
-      )}
-
-      {viewModalOpen && selectedOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold">
-                  Order Details - #{selectedOrder.orderId}
-                </h3>
-                <button
-                  onClick={closeViewModal}
-                  className="p-2 hover:bg-gray-100 rounded-full"
-                >
-                  <FaTimes />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-50 p-4 rounded-2xl">
-                  <h4 className="font-bold flex items-center mb-2">
-                    <FaUser className="mr-2" /> User Info
-                  </h4>
-                  <p className="text-sm">Name: {selectedOrder.user?.name}</p>
-                  <p className="text-sm">Email: {selectedOrder.user?.email}</p>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-2xl">
-                  <h4 className="font-bold flex items-center mb-2">
-                    <FaBox className="mr-2" /> Summary
-                  </h4>
-                  <p className="text-sm">
-                    Total: {formatCurrency(selectedOrder.totalAmount)}
-                  </p>
-                  <p className="text-sm">
-                    Date: {formatDate(selectedOrder.createdAt)}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-end space-x-3">
-                <button
-                  onClick={() => handleApprove(selectedOrder._id)}
-                  disabled={approving}
-                  className="px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 disabled:opacity-50"
-                >
-                  {approving ? "Approving..." : "Confirm Approval"}
-                </button>
-                <button
-                  onClick={() => handleReject(selectedOrder._id)}
-                  disabled={rejecting}
-                  className="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 disabled:opacity-50"
-                >
-                  {rejecting ? "Rejecting..." : "Reject Order"}
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       )}
     </div>

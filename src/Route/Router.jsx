@@ -31,6 +31,7 @@ import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payment/PaymentCanceled";
 import UpdateProduct from "../Pages/MainDashboard/Manager/UpdateProduct";
 import BuyerProfile from "../Pages/MainDashboard/Buyer/BuyerProfile";
+import OrderDetails from "../Pages/MainDashboard/Manager/OrderDetails";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,16 @@ const router = createBrowserRouter([
       {
         path: "/order/:id",
         element: <Booking />,
+      },
+      {
+        path: "/order-details/:id",
+        element: (
+            <OrderDetails />
+        ),
+      },
+      {
+        path: "/track-order/:orderId",
+        element: <TrackOrder />,
       },
       {
         path: "payment-success",
@@ -160,6 +171,7 @@ const router = createBrowserRouter([
           </ManagerRout>
         ),
       },
+
       {
         path: "/dashboard/approved-orders",
         element: (
@@ -188,13 +200,10 @@ const router = createBrowserRouter([
         path: "/dashboard/my-orders",
         element: <MyOrder />,
       },
-      {
-        path: "/dashboard/track-order/:orderId",
-        element: <TrackOrder />,
-      },
+
       {
         path: "/dashboard/profile",
-        element: <BuyerProfile/>
+        element: <BuyerProfile />,
       },
     ],
   },

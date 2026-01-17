@@ -139,25 +139,14 @@ useEffect(() => {
   return (
     <div className="flex h-screen bg-gray-50">
       <div className="flex flex-col flex-1 overflow-hidden">
-        <header className="bg-white shadow">
+        <header className="bg-white rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl  font-bold text-gray-800">
-                 Dashboard
-              </h1>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">
+              <h1 className="text-xl  font-bold text-gray-800">Dashboard</h1>
+              <div className="items-center ">
+                <p className="text-sm text-gray-600">
                   Welcome, <span className="font-medium">{user?.email}</span>
-                </span>
-                <div className="h-8 w-8 rounded-full flex items-center justify-center">
-                  <span className="text-white font-medium">
-                    <div className="avatar">
-                      <div className="w-8 rounded-full">
-                        <img src={user?.photoURL} alt="User" />
-                      </div>
-                    </div>
-                  </span>
-                </div>
+                </p>
               </div>
             </div>
           </div>

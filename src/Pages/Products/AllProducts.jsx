@@ -60,10 +60,6 @@ const AllProducts = () => {
   }, [searchTerm]);
 
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-  };
-
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -119,16 +115,18 @@ const AllProducts = () => {
           </p>
 
           <div className="flex justify-end">
-            <form onSubmit={handleSearch} className="relative">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <FaSearch className="h-5 w-5 text-gray-400" />
+                            </div>
               <input
                 type="text"
-                placeholder="Search by name, category, or description..."
+                placeholder="Search by name, category..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 pr-10 placeholder-green-500 py-3 w-full md:w-96 rounded-full border border-gray-300"
+                className="pl-10 w-full px-3 py-2 border placeholder-green-500 border-amber-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-            </form>
+              </div>
           </div>
         </motion.div>
 
@@ -181,7 +179,8 @@ const AllProducts = () => {
                   <div className="p-6 bg-amber-100">
                     <div className="flex items-center justify-between mb-2">
                       <span className="inline-flex px-3 py-1 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full">
-                       <MdCategory className="mr-1 mt-0.5"/> {product?.category}
+                        <MdCategory className="mr-1 mt-0.5" />{" "}
+                        {product?.category}
                       </span>
                       <div className="flex items-center"></div>
                     </div>

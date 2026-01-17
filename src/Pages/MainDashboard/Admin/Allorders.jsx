@@ -185,7 +185,7 @@ const AllOrders = () => {
                       Order ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User 
+                      User
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Product name
@@ -211,7 +211,7 @@ const AllOrders = () => {
                         <div className="flex items-center">
                           <div>
                             <div className="text-sm font-medium text-gray-900">
-                              #{order?.orderId?.substring(0, 12) || "N/A"}
+                              #{order?._id?.substring(0, 12) || "N/A"}
                             </div>
                           </div>
                         </div>

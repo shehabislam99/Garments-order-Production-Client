@@ -11,9 +11,7 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 const DashboardOverview = ({ stats }) => (
   <div className="p-6">
     <div className="mb-8 text-center item-center">
-      <h2 className="text-3xl flex justify-center font-bold">
-        Welcome back
-      </h2>
+      <h2 className="text-3xl flex justify-center font-bold">Welcome back</h2>
       <p className="mt-2">Here's Your Dashboard</p>
     </div>
 
@@ -51,40 +49,38 @@ const DashboardOverview = ({ stats }) => (
       </h3>
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-3">
         <Link to="/dashboard/my-orders">
-          <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
+          <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
             <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-lg p-3 mr-4">
               <FaTasks className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-2xl font-semibold text-gray-900">My Orders</p>
-              <p className="text-xl text-gray-500">View your order history</p>
+              <p className="text-lg font-semibold text-gray-900">My Orders</p>
+              <p className="text-lg text-gray-500">View your order history</p>
             </div>
           </button>
         </Link>
 
         <Link to="/dashboard/track-order/:orderId">
-          <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
+          <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
             <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
               <FaMapMarkerAlt className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-2xl font-semibold text-gray-900">
-                Track Order
-              </p>
-              <p className="text-xl text-gray-500">
+              <p className="text-lg font-semibold text-gray-900">Track Order</p>
+              <p className="text-lg text-gray-500">
                 Tracking your order status
               </p>
             </div>
           </button>
         </Link>
-        <Link to="/dashboard/my-profile">
-          <button className="flex items-center bg-amber-100 p-3 rounded-lg hover:bg-red-200">
+        <Link to="/dashboard/profile">
+          <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
             <div className="flex-shrink-0 text-amber-500 bg-amber-100 rounded-lg p-3 mr-4">
               <FaUser className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-2xl font-semibold text-gray-900">My Profile</p>
-              <p className="text-xl text-gray-500">Manage account settings</p>
+              <p className="text-lg font-semibold text-gray-900">My Profile</p>
+              <p className="text-lg text-gray-500">Manage account settings</p>
             </div>
           </button>
         </Link>
@@ -123,25 +119,11 @@ const BuyerDashboard = () => {
         <header className="bg-white rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl  font-bold text-gray-800">
-               Dashboard
-              
-              </h1>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">
+              <h1 className="text-xl  font-bold text-gray-800">Dashboard</h1>
+              <div className="items-center ">
+                <p className="text-sm text-gray-600">
                   Welcome, <span className="font-medium">{user?.email}</span>
-                </span>
-                <div className="h-8 w-8 rounded-full flex items-center justify-center">
-                  <span className="text-white font-medium">
-                    
-                      <div className="avatar">
-                        <div className="w-8 rounded-full">
-                          <img src={user.photoURL} alt="User" />
-                        </div>
-                      </div>
-                   
-                  </span>
-                </div>
+                </p>
               </div>
             </div>
           </div>

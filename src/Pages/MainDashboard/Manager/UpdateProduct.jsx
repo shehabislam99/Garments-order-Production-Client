@@ -3,7 +3,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import { FaUpload, FaTimes, FaSpinner, FaCheck } from "react-icons/fa";
+import { FaUpload, FaTimes, FaSpinner} from "react-icons/fa";
+import Loading from "../../../Components/Common/Loding/Loding";
 
 const UpdateProduct = () => {
   const navigate = useNavigate();
@@ -218,7 +219,7 @@ const UpdateProduct = () => {
   if (loading && !product.product_name) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <FaSpinner className="w-8 h-8 animate-spin text-blue-600" />
+       <Loading/>
       </div>
     );
   }

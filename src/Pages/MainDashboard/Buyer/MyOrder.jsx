@@ -5,9 +5,8 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaEye,
-
+  FaTruck,
   FaTimesCircle,
-
   FaShoppingCart,
 } from "react-icons/fa";
 import useAuth from "../../../Hooks/useAuth";
@@ -266,22 +265,25 @@ const MyOrders = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Order ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Product & Price
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Product name
                     </th>
-                    <th className="px-7 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Price
+                    </th>
+                    <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                       Quantity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Order Status
                     </th>
-                    <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Payment Status
                     </th>
-                    <th className="px-15 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-11 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Actions
                     </th>
                   </tr>
@@ -296,7 +298,7 @@ const MyOrders = () => {
                         <div className="flex items-center">
                           <div>
                             <div className="text-sm font-semibold text-gray-900">
-                              #{order?.orderId?.substring(0, 12) || "N/A"}
+                              #{order?._id?.substring(0, 12) || "N/A"}
                             </div>
                             <div className="text-sm font-medium  text-gray-500">
                               {formatDate(order?.createdAt)}
@@ -306,14 +308,16 @@ const MyOrders = () => {
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div>
-                            <div className="font-semibold text-gray-900">
-                              {order?.product_name || "Unknown Product"}
-                            </div>
-                            <div className="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-blue-100 text-green-800">
-                              {formatCurrency(order?.price)}
-                            </div>
+                        <div className="items-center">
+                          <div className="font-semibold text-gray-900">
+                            {order?.product_name || "Unknown Product"}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className=" items-center">
+                          <div className="px-2 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-blue-100 text-green-800">
+                            {formatCurrency(order?.price || 0)}
                           </div>
                         </div>
                       </td>
@@ -349,8 +353,8 @@ const MyOrders = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-3">
                           <Link
-                            to={`/dashboard/track-order/${order?.orderId}`}
-                            className="px-3 py-1 flex items-center rounded-full bg-indigo-500 text-white hover:bg-red-800"
+                            to={`/track-order/${order?._id}`}
+                            className="px-3 py-1 flex items-center rounded-full bg-indigo-600 text-white hover:bg-red-800"
                             title="View Order Details"
                           >
                             <FaEye className="mr-1" />
@@ -375,8 +379,8 @@ const MyOrders = () => {
               </table>
             </div>
 
-            {orders.length === 0 && !loading && (
-              <div className="text-center py-12">
+            {orders?.length === 0 && !loading && (
+              <div className="text-center bg-amber-100 py-12">
                 <div className="text-gray-400 mb-4">
                   <FaShoppingCart className="mx-auto h-12 w-12" />
                 </div>
@@ -389,14 +393,7 @@ const MyOrders = () => {
                     ? "You haven't placed any orders yet."
                     : "Please login to view your orders."}
                 </p>
-                {!user && (
-                  <Link
-                    to="/login"
-                    className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-red-800"
-                  >
-                    Login to View Orders
-                  </Link>
-                )}
+
                 <Link
                   to="/all-products"
                   className="mt-1 inline-block px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-red-800"
@@ -468,8 +465,8 @@ const MyOrders = () => {
                 <div className="bg-amber-100 rounded-4xl p-5">
                   <p className="font-medium text-red-800">
                     Order: #
-                    {selectedOrder?.orderId ||
-                      selectedOrder?._id?.substring(18)}
+                    {
+                      selectedOrder?._id?.substring(18)|| "N/A"}
                   </p>
                   <p className="text-sm text-red-600">
                     Product: {selectedOrder?.product_name}
