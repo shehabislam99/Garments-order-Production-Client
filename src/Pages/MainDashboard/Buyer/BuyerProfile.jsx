@@ -1,7 +1,8 @@
 
 import React from "react";
-import Profile from "../../../Components/Shared/Profile";
+
 import useAuth from "../../../Hooks/useAuth";
+import Profile from "../../../Components/Shared/Profile";
 
 const BuyerProfile = () => {
   const { user } = useAuth();

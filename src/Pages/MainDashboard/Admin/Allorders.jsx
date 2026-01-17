@@ -267,7 +267,7 @@ const AllOrders = () => {
                         <div className="flex space-x-3">
                           {/* View Button */}
                           <Link
-                            to={`/dashboard/order-details/${order?._id}`}
+                            to={`/dashboard/orderTracking/${order?._id}`}
                             className="flex items-center bg-blue-600 text-white hover:bg-red-800 rounded-full px-3 py-1 transition-all duration-300"
                             title="View Order Details"
                           >

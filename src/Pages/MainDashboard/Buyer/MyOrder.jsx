@@ -353,7 +353,7 @@ const MyOrders = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-3">
                           <Link
-                            to={`/track-order/${order?._id}`}
+                            to={`/dashboard/track-order/${order?._id}`}
                             className="px-3 py-1 flex items-center rounded-full bg-indigo-600 text-white hover:bg-red-800"
                             title="View Order Details"
                           >
@@ -464,9 +464,7 @@ const MyOrders = () => {
                 </p>
                 <div className="bg-amber-100 rounded-4xl p-5">
                   <p className="font-medium text-red-800">
-                    Order: #
-                    {
-                      selectedOrder?._id?.substring(18)|| "N/A"}
+                    Order: #{selectedOrder?._id?.substring(18) || "N/A"}
                   </p>
                   <p className="text-sm text-red-600">
                     Product: {selectedOrder?.product_name}

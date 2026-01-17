@@ -24,10 +24,10 @@ const AllProductAdmin = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [currentPage, setCurrentPage] = useState(0);
   const [productsPerPage] = useState(6);
-  const [editingProduct, setEditingProduct] = useState(null);
+  const [selectedProduct, setselectedProduct] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
+  const [deleting, setdeleting] = useState(false);
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [categories, setCategories] = useState([]); 
@@ -86,14 +86,16 @@ const AllProductAdmin = () => {
     try {
       const response = await axiosSecure.patch(
         `/admin/products/show-on-home/${productId}`,
-        { showOnHome: !currentValue }
+        {
+          show_on_homepage: !currentValue,
+        }
       );
 
       if (response.data.success) {
         setProducts(
           products.map((product) =>
             product._id === productId
-              ? { ...product, showOnHome: !currentValue }
+              ? { ...product, show_on_homepage: !currentValue }
               : product
           )
         );
@@ -106,36 +108,35 @@ const AllProductAdmin = () => {
             autoClose: 2000,
           }
         );
-        
       }
     } catch (error) {
       console.error("Error toggling show on home:", error);
-      toast.error("Failed to update product visibility", {
+      toast.error("Failed to update product visibility on home page", {
         position: "top-center",
         autoClose: 2000,
       });
     }
   };
 
-  const handleDeleteProduct = async () => {
-    if (!editingProduct) return;
+  const handleDelete = async () => {
+    if (!selectedProduct) return;
 
     try {
-      setUpdating(true);
+      setdeleting(true);
       const response = await axiosSecure.delete(
-        `/products/${editingProduct?._id}`
+        `/products/${selectedProduct?._id}`
       );
 
       if (response.data.success) {
         setProducts(
-          products.filter((product) => product._id !== editingProduct._id)
+          products.filter((product) => product._id !== selectedProduct._id)
         );
         toast.success("Product deleted successfully", {
           position: "top-center",
           autoClose: 2000,
         });
         setDeleteModalOpen(false);
-        setEditingProduct(null);
+        setselectedProduct(null);
       }
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -144,7 +145,7 @@ const AllProductAdmin = () => {
         autoClose: 2000,
       });
     } finally {
-      setUpdating(false);
+      setdeleting(false);
     }
   };
 
@@ -153,12 +154,12 @@ const AllProductAdmin = () => {
   };
 
   const openDeleteModal = (product) => {
-    setEditingProduct(product);
+    setselectedProduct(product);
     setDeleteModalOpen(true);
   };
 
   const closeDeleteModal = () => {
-    setEditingProduct(null);
+    setselectedProduct(null);
     setDeleteModalOpen(false);
   };
 
@@ -346,8 +347,10 @@ const AllProductAdmin = () => {
                         {/* Price */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <span className="px-3 py-1 inline-flex text-sm leading-5 
-                            font-semibold rounded-full bg-blue-100 text-blue-800">
+                            <span
+                              className="px-3 py-1 inline-flex text-sm leading-5 
+                            font-semibold rounded-full bg-blue-100 text-blue-800"
+                            >
                               {formatCurrency(product?.price || 0)}
                             </span>
                           </div>
@@ -381,16 +384,16 @@ const AllProductAdmin = () => {
                             onClick={() =>
                               handleToggleShowOnHome(
                                 product._id,
-                                product.showOnHome
+                                product.show_on_homepage
                               )
                             }
                             className={`flex items-center px-3 py-1 rounded-full text-sm font-semibold transition-colors ${
-                              product?.showOnHome
+                              product?.show_on_homepage
                                 ? "bg-green-600 text-white hover:bg-red-800"
                                 : "bg-gray-600 text-white hover:bg-red-800"
                             }`}
                           >
-                            {product?.showOnHome ? (
+                            {product?.show_on_homepage ? (
                               <>
                                 <FaEye className="mr-1" />
                                 Showing
@@ -504,47 +507,48 @@ const AllProductAdmin = () => {
       )}
 
       {/* Delete Confirmation Modal */}
-      {deleteModalOpen && editingProduct && (
+      {deleteModalOpen && selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+          <div className="bg-base-200 rounded-4xl  max-w-md w-full">
             <div className="p-6">
               <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
                 Delete Product
               </h3>
 
               <div className="mb-6">
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="ml-3 text-gray-600 mb-2">
                   Are you sure you want to delete this product?
                 </p>
-                <div className="bg-red-50 border border-red-200 rounded-md p-3">
-                  <p className="font-medium text-red-800">
-                    {editingProduct?.product_name || "Unnamed Product"}
+                <div className="bg-amber-100 rounded-4xl p-5 space-y-2">
+                  <p className="font-semibold text-red-800">
+                    Product: {selectedProduct?.product_name}
                   </p>
-                  <p className="text-sm text-red-600">
-                    Price: ${editingProduct?.price || 0}
+                  <p className="text-sm font-medium text-green-600">
+                    Category: {selectedProduct?.category}
                   </p>
-                  <p className="text-sm text-red-600">
-                    Category: {editingProduct?.category || "Uncategorized"}
+                  <p className="text-sm font-medium text-violet-600">
+                    Price: {formatCurrency(selectedProduct?.price)}
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  This action cannot be undone.
+                <p className="text-xs text-red-500 ml-3 mt-2">
+                  This action cannot be undone. All product data will be
+                  permanently removed.
                 </p>
               </div>
 
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={closeDeleteModal}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-red-800 rounded-full"
                 >
-                  Cancel
+                  Keep Product
                 </button>
                 <button
-                  onClick={handleDeleteProduct}
-                  disabled={updating}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors disabled:opacity-50"
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-full"
                 >
-                  {updating ? "Deleting..." : "Delete Product"}
+                  {deleting ? "Deleting..." : "Yes, Delete Product"}
                 </button>
               </div>
             </div>

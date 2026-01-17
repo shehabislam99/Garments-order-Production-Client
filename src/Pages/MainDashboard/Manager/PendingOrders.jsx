@@ -264,7 +264,7 @@ const PendingOrders = () => {
                     <div className="flex space-x-2">
                       <button
                         onClick={() =>
-                          navigator(`/order-details/${order?._id}`)
+                          navigator(`/dashboard/order-details/${order?._id}`)
                         }
                         className="px-2 py-1 flex items-center rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
                       >

@@ -32,6 +32,8 @@ import PaymentCancelled from "../Pages/Payment/PaymentCanceled";
 import UpdateProduct from "../Pages/MainDashboard/Manager/UpdateProduct";
 import BuyerProfile from "../Pages/MainDashboard/Buyer/BuyerProfile";
 import OrderDetails from "../Pages/MainDashboard/Manager/OrderDetails";
+import AdminManagerRout from "./AdminManagerRout";
+import OrderTracking from "../Pages/MainDashboard/Admin/OrderTracking";
 
 const router = createBrowserRouter([
   {
@@ -51,20 +53,12 @@ const router = createBrowserRouter([
         path: "/products/:id",
         element: <ProductDetailsPage />,
       },
+
       {
         path: "/order/:id",
         element: <Booking />,
       },
-      {
-        path: "/order-details/:id",
-        element: (
-            <OrderDetails />
-        ),
-      },
-      {
-        path: "/track-order/:orderId",
-        element: <TrackOrder />,
-      },
+
       {
         path: "payment-success",
         element: <PaymentSuccess />,
@@ -138,6 +132,14 @@ const router = createBrowserRouter([
           </AdminRout>
         ),
       },
+      {
+        path: "/dashboard/orderTracking/:orderId",
+        element: (
+          <AdminRout>
+            <OrderTracking />
+          </AdminRout>
+        ),
+      },
 
       {
         path: "/dashboard/manager",
@@ -171,6 +173,14 @@ const router = createBrowserRouter([
           </ManagerRout>
         ),
       },
+      {
+        path: "/dashboard/order-details/:id",
+        element: (
+          <ManagerRout>
+            <OrderDetails />
+          </ManagerRout>
+        ),
+      },
 
       {
         path: "/dashboard/approved-orders",
@@ -181,17 +191,18 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/dashboard/update-product/:id",
+        element: (
+          <AdminManagerRout>
+            <UpdateProduct />
+          </AdminManagerRout>
+        ),
+      },
+      {
         path: "/dashboard/profile",
         element: <ManagerProfile />,
       },
-      {
-        path: "/dashboard/update-product/:id",
-        element: (
-          <ManagerRout>
-            <UpdateProduct />
-          </ManagerRout>
-        ),
-      },
+
       {
         path: "/dashboard/buyer",
         element: <BuyerDashboard />,
@@ -204,6 +215,11 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/profile",
         element: <BuyerProfile />,
+      },
+
+      {
+        path: "/dashboard/track-order/:orderId",
+        element: <TrackOrder />,
       },
     ],
   },

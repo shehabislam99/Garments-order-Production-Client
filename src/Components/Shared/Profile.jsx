@@ -15,7 +15,7 @@ const Rowinformation = ({ label, value }) => (
   </div>
 );
 
-const ManagerProfile = () => {
+const Profile = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { profile: user, loading } = useProfile();
@@ -92,26 +92,30 @@ const ManagerProfile = () => {
               </div>
 
               <div className="text-center space-y-3">
-                <div className="flex items-center justify-center">
-                  <span className="font-semibold text-gray-900">
-                    Last Login:
-                  </span>
-                  <span className="ml-2 text-blue-700">
-                    {user?.metadata?.lastSignInTime
-                      ? new Date(user.metadata.lastSignInTime).toLocaleString()
-                      : "Recently"}
-                  </span>
-                </div>
                 <div>
                   <span className="font-semibold text-gray-900">Status:</span>
                   <span
                     className={`ml-2 px-2 py-1 rounded-full text-sm font-medium ${
-                      user?.status === "active"
+                      user?.status === "active" || user?.status === "pending"
                         ? "bg-green-100 text-green-800"
                         : "bg-red-100 text-red-800"
                     }`}
                   >
                     {user?.status?.toUpperCase() || "ACTIVE"}
+                  </span>
+                </div>
+                <div
+                  className={`${
+                    user?.status === "active" || user?.status === "pending"
+                      ? "hidden"
+                      : "flex"
+                  } items-center justify-center`}
+                >
+                  <span className="font-semibold text-gray-900">
+                    Suspend Reason:
+                  </span>
+                  <span className="ml-2 font-medium text-red-600">
+                    {user?.suspendReason || "N/A"}
                   </span>
                 </div>
               </div>
@@ -155,4 +159,4 @@ const ManagerProfile = () => {
   );
 };
 
-export default ManagerProfile;
+export default Profile;

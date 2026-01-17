@@ -53,6 +53,10 @@ const TrackOrder = () => {
              timelineRes.data.data.timeline
            );
            setTrackingHistory(processedTimeline);
+           toast.success("tracking and Order details loaded successfully", {
+             position: "top-center",
+             autoClose: 2000,
+           });
          } else {
            setTrackingHistory([]);
          }
@@ -135,6 +139,9 @@ const TrackOrder = () => {
       <div className="flex justify-center items-center mb-8">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Order Tracking</h2>
+          <p className="text-gray-700 font-medium mt-2 text-center">
+            Here is summary of order and Production progress
+          </p>
         </div>
       </div>
 
@@ -220,8 +227,7 @@ const TrackOrder = () => {
                       </div>
 
                       <div className="ml-12 w-full">
-                        <div
-                        >
+                        <div>
                           <div className="flex-1 pb-6">
                             <div className="bg-gray-50 rounded-4xl p-5 border border-gray-200 hover:border-blue-200 transition-colors">
                               <div className="flex items-center mb-3">
