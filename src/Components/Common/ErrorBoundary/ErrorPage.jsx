@@ -98,8 +98,8 @@ const StyledWrapper = styled.div`
     width: 5em;
     height: 5em;
     border-radius: 50%;
-    border: 2px solid black;
-    background-color: #f27405;
+    border: 2px solid #2742F5;
+    background-color: #2742F5;
     margin-bottom: -6em;
     margin-left: 0em;
     z-index: -1;
@@ -113,8 +113,7 @@ const StyledWrapper = styled.div`
     border-radius: 45%;
     transform: rotate(140deg);
     border: 4px solid transparent;
-    box-shadow: inset 0px 16px #a85103, inset 0px 16px 1px 1px #a85103;
-    -moz-box-shadow: inset 0px 16px #a85103, inset 0px 16px 1px 1px #a85103;
+    -moz-box-shadow: inset 0px 16px #2742F5, inset 0px 16px 1px 1px ;
   }
   .antenna::after {
     content: "";
@@ -136,7 +135,7 @@ const StyledWrapper = styled.div`
     width: 1.5em;
     height: 0.8em;
     border-radius: 50%;
-    background-color: #f69e50;
+    background-color: #fa1414;
   }
   .a1 {
     position: relative;
@@ -174,7 +173,7 @@ const StyledWrapper = styled.div`
     width: 12em;
     height: 4em;
     border-radius: 50px;
-    background-color: #fa1414;
+    background-color: #2742F5;
     background-image: linear-gradient(
       #fa1414,
       #fa1414,
@@ -209,12 +208,11 @@ const StyledWrapper = styled.div`
 
   .notfound_text {
     background-color: red;
-    padding-left: 0.5em;
-    padding-right: 0.3em;
-    font-size: 1em;
+    padding: 0.5em  1em 0.5em 1em;
+    font-size: 1.1em;
     color: white;
     letter-spacing: 0;
-    border-radius: 5px;
+    border-radius: 20px;
     z-index: 10;
   }
   .tv {
@@ -222,26 +220,16 @@ const StyledWrapper = styled.div`
     height: 9em;
     margin-top: 3em;
     border-radius: 15px;
-    background-color: #fa1414;
+    background-color:#2742F5;
     display: flex;
     justify-content: center;
-    border: 2px solid #1d0e01;
-    box-shadow: inset 0.2em 0.2em #e69635;
+    border: 2px solid #2742F5;
   }
   .tv::after {
-    content: "";
     position: absolute;
     width: 17em;
     height: 9em;
     border-radius: 15px;
-    background: repeating-radial-gradient(
-          #d36604 0 0.0001%,
-          #00000070 0 0.0002%
-        )
-        50% 0/2500px 2500px,
-      repeating-conic-gradient(#d36604 0 0.0001%, #00000070 0 0.0002%) 60% 60%/2500px
-        2500px;
-    background-blend-mode: difference;
     opacity: 0.09;
   }
   .curve_svg {
@@ -256,13 +244,12 @@ const StyledWrapper = styled.div`
     align-items: center;
     align-self: center;
     justify-content: center;
-    border-radius: 15px;
-    box-shadow: 3.5px 3.5px 0px #e69635;
+    border-radius: 30px;
+  
   }
   .screen_out {
     width: auto;
     height: auto;
-
     border-radius: 10px;
   }
   .screen_out1 {
@@ -277,7 +264,7 @@ const StyledWrapper = styled.div`
     width: 13em;
     height: 7.85em;
     font-family: Montserrat;
-    border: 2px solid #1d0e01;
+    border: 2px solid #2742F5;
     background: repeating-radial-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 50%
         0/2500px 2500px,
       repeating-conic-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 60% 60%/2500px
@@ -321,7 +308,6 @@ const StyledWrapper = styled.div`
     overflow: hidden;
   }
   .screen:before, .screen:after {
-    content: "";
     position: absolute;
     left: 0;
     z-index: 1;
@@ -365,7 +351,7 @@ const StyledWrapper = styled.div`
     width: 4.25em;
     align-self: center;
     height: 8em;
-    background-color: #e69635;
+    background-color: #2742F5;
     border: 2px solid #1d0e01;
     padding: 0.6em;
     border-radius: 10px;
@@ -374,15 +360,15 @@ const StyledWrapper = styled.div`
     justify-content: center;
     flex-direction: column;
     row-gap: 0.75em;
-    box-shadow: 3px 3px 0px #e69635;
+    box-shadow: 3px 3px 0px #2742F5;
   }
   .b1 {
     width: 1.65em;
     height: 1.65em;
     border-radius: 50%;
-    background-color: #7f5934;
+    background-color: #3D7048;
     border: 2px solid black;
-    box-shadow: inset 2px 2px 1px #b49577, -2px 0px #513721,
+    box-shadow: inset 2px 2px 1px #3D7048, -2px 0px #3D7048,
       -2px 0px 0px 1px black;
   }
   .b1::before {
@@ -421,9 +407,9 @@ const StyledWrapper = styled.div`
     width: 1.65em;
     height: 1.65em;
     border-radius: 50%;
-    background-color: #7f5934;
+    background-color: #3D7048;
     border: 2px solid black;
-    box-shadow: inset 2px 2px 1px #b49577, -2px 0px #513721,
+    box-shadow: inset 2px 2px 1px #3D7048, -2px 0px #3D7048,
       -2px 0px 0px 1px black;
   }
   .b2::before {
@@ -462,9 +448,9 @@ const StyledWrapper = styled.div`
     width: 0.65em;
     height: 0.65em;
     border-radius: 50%;
-    background-color: #7f5934;
+    background-color: #3D7048;
     border: 2px solid black;
-    box-shadow: inset 1.25px 1.25px 1px #b49577;
+    box-shadow: inset 1.25px 1.25px 1px #3D7048;
   }
   .speakers .g {
     width: auto;
@@ -517,7 +503,7 @@ const StyledWrapper = styled.div`
     font-family: Montserrat;
     font-weight: bold;
     font-size: 1.5rem;
-    color: purple;
+    color: indigo;
   }
   .text_4041 {
     transform: scaleY(24.5) scaleX(9);

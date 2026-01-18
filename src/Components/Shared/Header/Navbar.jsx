@@ -5,9 +5,11 @@ import MenuSideBar from "./MenuSideBar";
 import Logo from "../../Common/Logo/Logo";
 import useAuth from "../../../Hooks/useAuth";
 import toast from "react-hot-toast";
+import useRole from "../../../Hooks/useRole";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const{role} = useRole()
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
@@ -93,17 +95,15 @@ const Navbar = () => {
                 isDarkTheme ? "Switch to light theme" : "Switch to dark theme"
               }
             >
-              {isDarkTheme ? (
+              {isDarkTheme ?
                 <HiSun className="w-6 h-6" />
-              ) : (
-                <HiMoon className="w-6 h-6 " />
-              )}
+              : <HiMoon className="w-6 h-6 " />}
             </button>
 
-            {user ? (
+            {user ?
               <div className="flex relative gap-4">
                 <button className="font-medium hover:text-red-800 hover:underline">
-                  <Link to="/dashboard" className="">
+                  <Link to={`/dashboard/${role}`}>
                     Dashboard
                   </Link>
                 </button>
@@ -113,17 +113,14 @@ const Navbar = () => {
                   className="w-10 h-10 rounded-full border-2 border-indigo-500"
                 />
 
-              
-                  <button
-                 
-                    onClick={handleLogout}
-                    className="w-full font-medium hover:underline  hover:text-red-800 text-red-600">
-                    Logout
-                  </button>
-               
+                <button
+                  onClick={handleLogout}
+                  className="w-full font-medium hover:underline  hover:text-red-800 text-red-600"
+                >
+                  Logout
+                </button>
               </div>
-            ) : (
-              <div className="flex gap-2">
+            : <div className="flex gap-2">
                 <Link
                   className="bg-indigo-600 border-none
                rounded-full text-white  hover:bg-red-800 
@@ -144,7 +141,7 @@ const Navbar = () => {
                   <button>Sign Up </button>
                 </Link>
               </div>
-            )}
+            }
           </div>
         </div>
       </nav>

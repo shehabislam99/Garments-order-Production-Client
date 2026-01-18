@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +26,40 @@ const AddProduct = () => {
     payment_Options: "",
     show_on_homepage: false,
   });
+
+  useEffect(() => {
+    const accessUser = async () => {
+      if (!user) {
+        toast.error("Please login to place an order");
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const res = await AxiosSecure.get("/users?status=suspended");
+        const suspended = res.data?.data || [];
+        const isSuspended = suspended.find((u) => u.email === user.email);
+
+        if (isSuspended) {
+          toast.error("Your account is suspended. You cannot add product");
+          navigate("/dashboard/profile");
+          return;
+        }
+      } catch (err) {
+        toast.error("Failed to verify user status",err);
+        navigate("/dashboard/profile");
+        return;
+      }
+
+      
+     
+    };
+
+    accessUser();
+  }, [user, navigate, AxiosSecure]);
+
+
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -153,6 +187,7 @@ const AddProduct = () => {
       setLoading(false);
     }
   };
+
 
   const categories = [
     "Shirt",

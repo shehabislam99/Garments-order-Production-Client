@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { FaCheckCircle, FaReceipt, FaShippingFast, FaHome } from "react-icons/fa";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
@@ -114,9 +114,9 @@ useEffect(() => {
               <div key={num} className="flex flex-col items-center z-10">
                 <div
                   className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    step >= num
-                      ? "bg-indigo-600 text-white"
-                      : "bg-white text-gray-400 border-2 border-gray-200"
+                    step >= num ?
+                      "bg-indigo-600 text-white"
+                    : "bg-white text-gray-400 border-2 border-gray-200"
                   }`}
                 >
                   {num === 1 && <FaReceipt />}
@@ -167,6 +167,9 @@ useEffect(() => {
             </div>
           </div>
         </div>
+        <Link to="/dashboard/my-orders">
+          <button className="w-full font-medium px-3 py-3 rounded-full bg-indigo-600 hover:bg-red-800 text-white">Go to Order</button>
+        </Link>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, {  useState } from "react";
+import { NavLink } from "react-router-dom";
 import {
   FaTasks,
   FaUsers,
@@ -106,20 +106,8 @@ const roleConfig = {
 const Asidebar = () => {
   const { user } = useAuth();
   const { role, loading } = useRole();
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (!user || loading || !role) return;
-
-    if (role === "admin") {
-      navigate("/dashboard/admin", { replace: true });
-    } else if (role === "manager") {
-      navigate("/dashboard/manager", { replace: true });
-    } else {
-      navigate("/dashboard/buyer", { replace: true });
-    }
-  }, [user, role, loading, navigate]);
 
   if (!user) return null;
 
@@ -135,7 +123,7 @@ const Asidebar = () => {
   return (
     <>
       <button
-        className="lg:hidden z-80 bg-base-300"
+        className="lg:hidden z-50 bg-base-300 "
         onClick={() => setOpen(!open)}
       >
         <TbSquareToggle className="relative bottom-84 text-2xl" />
@@ -145,7 +133,7 @@ const Asidebar = () => {
     bg-base-300 border-r border-base-200
     transition-all duration-300 overflow-hidden
     ${open ? "w-64" : "w-0 lg:w-64"}
-    ${open ? "min-h-screen" : "min-h-0 lg:min-h-screen"}
+   
   `}
       >
         <div className="p-6 flex justify-center border-b border-gray-300">
@@ -173,7 +161,7 @@ const Asidebar = () => {
                 <li
                   className="hover:bg-red-800 hover:rounded-2xl hover:px-2 hover:py-2"
                   key={link.path}
-                  onClick={() => setOpen(false)}
+                  onClick={() => setOpen(open)}
                 >
                   <NavLink
                     to={link.path}

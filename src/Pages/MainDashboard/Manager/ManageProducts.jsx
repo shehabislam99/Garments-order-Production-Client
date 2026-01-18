@@ -273,7 +273,7 @@ const filteredProducts = products.filter((product) => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium ">
                           <h2 className="text-gray-900">
-                            {product?.product_name||"Unknown Product"}
+                            {product?.product_name || "Unknown Product"}
                           </h2>
                         </div>
                       </td>
@@ -290,7 +290,8 @@ const filteredProducts = products.filter((product) => {
                           className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getPaymentColor(
                             product?.payment_Options
                           )}`}
-                        >< FaCreditCard className="mr-1"/>
+                        >
+                          <FaCreditCard className="mr-1" />
                           {product?.payment_Options || "N/A"}
                         </span>
                       </td>
@@ -336,16 +337,16 @@ const filteredProducts = products.filter((product) => {
                   No products found
                 </h3>
                 <p className="text-gray-500">
-                  {searchTerm || filterpaymentMethod !== "all"
-                    ? "Try changing your search or filter criteria"
-                    : "No products available"}
+                  {searchTerm || filterpaymentMethod !== "all" ?
+                    "Try changing your search or filter criteria"
+                  : "No products available"}
                 </p>
               </div>
             )}
           </div>
 
           {/* Pagination */}
-          {Math.ceil(filteredProducts.length / productsPerPage) > 1 && (
+          {Math.ceil(filteredProducts.length / productsPerPage) && (
             <div className="flex flex-col md:flex-row justify-center items-center mt-6">
               <ReactPaginate
                 breakLabel="..."
@@ -358,9 +359,7 @@ const filteredProducts = products.filter((product) => {
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={Math.ceil(
-                  filteredProducts?.length / productsPerPage
-                )}
+                pageCount={Math.ceil(filteredProducts.length / productsPerPage)}
                 forcePage={currentPage}
                 previousLabel={
                   <div className="flex items-center">
@@ -371,25 +370,18 @@ const filteredProducts = products.filter((product) => {
                 renderOnZeroPageCount={null}
                 containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
                 pageClassName="hidden sm:block"
-                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
                 activeClassName="hidden sm:block"
-                activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                previousClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+                activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
+                previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
                 previousLinkClassName="flex items-center px-2 py-1"
-                nextClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+                nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
                 nextLinkClassName="flex items-center px-2 py-1"
                 breakClassName="hidden sm:block"
                 breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
               />
-
-              <div className="ml-0 md:ml-4 text-sm text-gray-700">
-                Page <span className="font-medium">{currentPage + 1}</span> of{" "}
-                <span className="font-medium">
-                  {Math.ceil(filteredProducts.length / productsPerPage)}
-                </span>
-              </div>
             </div>
           )}
         </>

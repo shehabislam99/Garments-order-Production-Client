@@ -20,12 +20,32 @@ const PendingOrders = () => {
   const [ordersPerPage] = useState(6);
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
- const navigator = useNavigate();
+  const [isSuspended, setIsSuspended] = useState(false);
+ const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    fetchPendingOrders();
+    const init = async () => {
+      await fetchSuspended();
+      await fetchPendingOrders();
+    };
+    init();
   }, []);
+const fetchSuspended = async () => {
+  
+      try {
+      const res = await axiosSecure.get("/users?status=suspended");
+      const list = res.data?.data || [];
+      const myEmail = localStorage.getItem("email");
+      const suspended = !!list.find((u) => u.email === myEmail);
+      setIsSuspended(suspended);
+      return suspended;
+    } catch (error) {
+      console.error("Suspension check failed:", error);
+      setIsSuspended(false);
+      return false;
+    }
+};
 
   const fetchPendingOrders = async () => {
     try {
@@ -48,13 +68,18 @@ const PendingOrders = () => {
   };
 
  const handleApprove = async (orderId) => {
+
+     if (isSuspended) {
+       toast.error("Your account is suspended. You cannot approve orders");
+       navigate("/dashboard/profile");
+       return;
+     }
    try {
      setApproving(true);
      const res = await axiosSecure.put(`/orders/status/${orderId}`, {
        status: "approved",
        approvedAt: new Date().toISOString(),
      });
-
      if (res.data?.success) {
        setOrders((prev) => prev.filter((o) => o._id !== orderId));
        toast.success("Order approved successfully", {
@@ -79,6 +104,12 @@ const PendingOrders = () => {
  };
 
   const handleReject = async (orderId) => {
+  if (isSuspended) {
+    toast.error("Your account is suspended. You cannot reject orders");
+    navigate("/dashboard/profile");
+    return;
+  }
+
     const reason = window.prompt("Please provide a reason for rejection:");
     if (reason === null) return;
     if (!reason.trim()) {
@@ -91,8 +122,7 @@ const PendingOrders = () => {
 
     try {
       setRejecting(true);
-
-      const res = await axiosSecure.put(`/orders/status/${orderId}`, {
+   const res = await axiosSecure.put(`/orders/status/${orderId}`, {
         status: "rejected",
         rejectionReason: reason,
         rejectedAt: new Date().toISOString(),
@@ -264,7 +294,7 @@ const PendingOrders = () => {
                     <div className="flex space-x-2">
                       <button
                         onClick={() =>
-                          navigator(`/dashboard/order-details/${order?._id}`)
+                          navigate(`/dashboard/order-details/${order?._id}`)
                         }
                         className="px-2 py-1 flex items-center rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
                       >
@@ -272,14 +302,14 @@ const PendingOrders = () => {
                       </button>
                       <button
                         onClick={() => handleApprove(order?._id)}
-                        disabled={approving}
+                        disabled={approving || isSuspended}
                         className="px-2 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
                       >
                         <FaCheckCircle className="mr-1" /> Approve
                       </button>
                       <button
                         onClick={() => handleReject(order?._id)}
-                        disabled={rejecting}
+                        disabled={rejecting || isSuspended}
                         className="px-2 py-1 flex items-center rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50"
                       >
                         <FaTimesCircle className="mr-1" /> Reject
@@ -302,31 +332,41 @@ const PendingOrders = () => {
         )}
       </div>
 
-      {Math.ceil(orders?.length / ordersPerPage) > 1 && (
-        <div className="flex justify-center mt-6">
+      {Math.ceil(orders?.length / ordersPerPage) && (
+        <div className="flex flex-col md:flex-row justify-center items-center mt-6">
           <ReactPaginate
             breakLabel="..."
             nextLabel={
               <div className="flex items-center">
-                Next <FaChevronRight className="ml-1 h-3 w-3" />
+                Next
+                <FaChevronRight className="ml-1 h-3 w-3" />
               </div>
             }
             onPageChange={handlePageClick}
             pageRangeDisplayed={3}
             marginPagesDisplayed={2}
             pageCount={Math.ceil(orders?.length / ordersPerPage)}
+            forcePage={currentPage}
             previousLabel={
               <div className="flex items-center">
-                <FaChevronLeft className="mr-1 h-3 w-3" /> Previous
+                <FaChevronLeft className="mr-1 h-3 w-3" />
+                Previous
               </div>
             }
-            containerClassName="flex items-center justify-center space-x-2"
+            renderOnZeroPageCount={null}
+            containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
             pageClassName="hidden sm:block"
-            pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border"
-            activeLinkClassName="bg-blue-600 text-white border-blue-600 hover:text-white"
-            previousClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md border"
-            nextClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md border"
+            pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
+            activeClassName="hidden sm:block"
+            activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
+            previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
+            previousLinkClassName="flex items-center px-2 py-1"
+            nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
+            nextLinkClassName="flex items-center px-2 py-1"
+            breakClassName="hidden sm:block"
+            breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
             disabledClassName="opacity-50 cursor-not-allowed"
+            disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
           />
         </div>
       )}

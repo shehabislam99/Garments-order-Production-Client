@@ -276,7 +276,7 @@ const ApprovedOrders = () => {
         )}
       </div>
       {/* PAGINATION */}
-      {Math.ceil(orders?.length / ordersPerPage) > 1 && (
+      {Math.ceil(orders?.length / ordersPerPage) && (
         <div className="flex flex-col md:flex-row justify-center items-center mt-6">
           <ReactPaginate
             breakLabel="..."
@@ -289,7 +289,7 @@ const ApprovedOrders = () => {
             onPageChange={handlePageClick}
             pageRangeDisplayed={3}
             marginPagesDisplayed={2}
-            pageCount={Math.ceil(orders.length / ordersPerPage)}
+            pageCount={Math.ceil(orders?.length / ordersPerPage)}
             forcePage={currentPage}
             previousLabel={
               <div className="flex items-center">
@@ -300,27 +300,18 @@ const ApprovedOrders = () => {
             renderOnZeroPageCount={null}
             containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
             pageClassName="hidden sm:block"
-            pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+            pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
             activeClassName="hidden sm:block"
-            activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-            previousClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+            activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
+            previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
             previousLinkClassName="flex items-center px-2 py-1"
-            nextClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+            nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
             nextLinkClassName="flex items-center px-2 py-1"
             breakClassName="hidden sm:block"
             breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
             disabledClassName="opacity-50 cursor-not-allowed"
             disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
           />
-
-          <div className="ml-0 md:ml-4 text-sm text-gray-700">
-            Page <span className="font-medium">{currentPage + 1}</span> of{" "}
-            <span className="font-medium">
-              {Math.ceil(orders?.length / ordersPerPage)}
-            </span>
-            {" • "}
-            <span className="font-medium">{orders?.length}</span> total orders
-          </div>
         </div>
       )}
       {/* ADD TRACKING MODAL */}
@@ -459,11 +450,11 @@ const ApprovedOrders = () => {
                   </span>
                 </div>
 
-                {loadingTimeline ? (
+                {loadingTimeline ?
                   <div className="flex justify-center items-center py-10">
                     <Loading />
                   </div>
-                ) : trackingTimeline.length > 0 ? (
+                : trackingTimeline.length > 0 ?
                   <div className="relative">
                     <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 to-green-200" />
 
@@ -472,9 +463,9 @@ const ApprovedOrders = () => {
                         <div key={idx} className="relative flex group">
                           <div
                             className={`absolute left-8 -translate-x-1/2 h-5 w-5 rounded-full border-4 border-white z-10 flex items-center justify-center ${
-                              track?.status === "current"
-                                ? "bg-blue-600 animate-pulse ring-4 ring-blue-200"
-                                : "bg-green-600"
+                              track?.status === "current" ?
+                                "bg-blue-600 animate-pulse ring-4 ring-blue-200"
+                              : "bg-green-600"
                             }`}
                           >
                             {track?.status === "current" && (
@@ -520,8 +511,7 @@ const ApprovedOrders = () => {
                       ))}
                     </div>
                   </div>
-                ) : (
-                  <div className="text-center py-12">
+                : <div className="text-center py-12">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
                       <FaClock className="h-8 w-8 text-blue-600" />
                     </div>
@@ -529,7 +519,7 @@ const ApprovedOrders = () => {
                       Tracking Updates Pending
                     </h4>
                   </div>
-                )}
+                }
               </div>
             </div>
           </div>

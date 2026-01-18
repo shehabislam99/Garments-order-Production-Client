@@ -30,32 +30,41 @@ const axiosSecure = useAxiosSecure()
     notes: "",
   });
 
-  useEffect(() => {
+useEffect(() => {
+  const AccessUserProduct = async () => {
     if (!user) {
-      toast.error("Please login to place an order", {
-        position: "top-center",
-        autoClose: 2000,
-      });
+      toast.error("Please login to place an order");
       navigate("/login");
       return;
     }
 
+    const res = await axiosSecure.get("/users?status=suspended");
+const suspended = res.data?.data || [];
+const isSuspended = suspended.find(u => u.email === user.email);
+
+if (isSuspended) {
+  toast.error("Your account is suspended. You cannot place orders");
+  navigate("/dashboard/profile");
+  return;
+}
+
+   
     if (role === "admin" || role === "manager") {
-      toast.error("Admins / Managers cannot place orders", {
-        position: "top-center",
-        autoClose: 2000,
-      });
+      toast.error("Admins / Managers cannot place orders");
       navigate(-1);
+      return;
     }
 
     if (!product) {
-      toast.error("Invalid product selection", {
-        position: "top-center",
-        autoClose: 2000,
-      });
+      toast.error("Invalid product selection");
       navigate("/all-products");
+      return;
     }
-  }, [user, role, product, navigate]);
+  };
+
+  AccessUserProduct();
+}, [user, role, product, navigate, axiosSecure]);
+
 
   useEffect(() => {
     if (product?.moq) {

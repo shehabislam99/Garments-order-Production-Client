@@ -392,7 +392,7 @@ const ManageUsers = () => {
                       Role
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    User  Status
+                      User Status
                     </th>
                     <th className="px-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Manage Actions
@@ -408,13 +408,14 @@ const ManageUsers = () => {
                       {/* User Info */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                         
-                            <img
-                              className="h-10 w-10 rounded-full"
-                              src={user?.photoURL || "https://via.placeholder.com/48"}
-                              alt={user?.name}
-                            />
-                         
+                          <img
+                            className="h-10 w-10 rounded-full"
+                            src={
+                              user?.photoURL || "https://via.placeholder.com/48"
+                            }
+                            alt={user?.name}
+                          />
+
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
                               {user?.name || "No Name"}
@@ -472,9 +473,9 @@ const ManageUsers = () => {
                             onClick={() => openRoleModal(user)}
                             disabled={user?.role === "admin"}
                             className={`flex items-center ${
-                              user?.role === "admin"
-                                ? "text-gray-400 cursor-not-allowed"
-                                : "hover:bg-red-800 px-3 py-1 rounded-full text-white bg-indigo-600 "
+                              user?.role === "admin" ?
+                                "text-gray-400 cursor-not-allowed"
+                              : "hover:bg-red-800 px-3 py-1 rounded-full text-white bg-indigo-600 "
                             }`}
                             title="Update Role"
                           >
@@ -486,9 +487,9 @@ const ManageUsers = () => {
                           <button
                             onClick={() => openUpdateModal(user)}
                             className={`flex items-center ${
-                              user?.role === "admin"
-                                ? "text-gray-400 cursor-not-allowed"
-                                : "hover:bg-red-800 px-3 py-1 rounded-full text-white bg-green-600"
+                              user?.role === "admin" ?
+                                "text-gray-400 cursor-not-allowed"
+                              : "hover:bg-red-800 px-3 py-1 rounded-full text-white bg-green-600"
                             }`}
                           >
                             <GrDocumentUpdate className="mr-1" />
@@ -504,7 +505,7 @@ const ManageUsers = () => {
 
             {/* Empty State */}
             {users.length === 0 && !loading && (
-              <div className="text-center py-12">
+              <div className="text-center bg-amber-100 py-12">
                 <div className="text-gray-400 mb-4">
                   <FaUser className="mx-auto h-12 w-12" />
                 </div>
@@ -543,24 +544,18 @@ const ManageUsers = () => {
                 renderOnZeroPageCount={null}
                 containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
                 pageClassName="hidden sm:block"
-                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
                 activeClassName="hidden sm:block"
-                activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                previousClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+                activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
+                previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
                 previousLinkClassName="flex items-center px-2 py-1"
-                nextClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+                nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
                 nextLinkClassName="flex items-center px-2 py-1"
                 breakClassName="hidden sm:block"
                 breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
               />
-
-              {/* Page info */}
-              <div className="ml-0 md:ml-4 text-sm text-gray-700">
-                Page <span className="font-medium">{currentPage + 1}</span> of{" "}
-                <span className="font-medium">{totalPages}</span>
-              </div>
             </div>
           )}
         </>

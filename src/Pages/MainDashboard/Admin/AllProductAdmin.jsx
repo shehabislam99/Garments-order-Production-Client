@@ -8,8 +8,9 @@ import {
   FaChevronRight,
   FaEye,
   FaEyeSlash,
+  FaBox,
 } from "react-icons/fa";
-import { MdEmail, MdImage } from "react-icons/md";
+import { MdEmail } from "react-icons/md";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
@@ -388,22 +389,21 @@ const AllProductAdmin = () => {
                               )
                             }
                             className={`flex items-center px-3 py-1 rounded-full text-sm font-semibold transition-colors ${
-                              product?.show_on_homepage
-                                ? "bg-green-600 text-white hover:bg-red-800"
-                                : "bg-gray-600 text-white hover:bg-red-800"
+                              product?.show_on_homepage ?
+                                "bg-green-600 text-white hover:bg-red-800"
+                              : "bg-gray-600 text-white hover:bg-red-800"
                             }`}
                           >
-                            {product?.show_on_homepage ? (
+                            {product?.show_on_homepage ?
                               <>
                                 <FaEye className="mr-1" />
                                 Showing
                               </>
-                            ) : (
-                              <>
+                            : <>
                                 <FaEyeSlash className="mr-1" />
                                 Hidden
                               </>
-                            )}
+                            }
                           </button>
                         </td>
 
@@ -441,9 +441,9 @@ const AllProductAdmin = () => {
 
             {/* Empty State */}
             {products.length === 0 && !loading && (
-              <div className="text-center py-12">
+              <div className="text-center bg-amber-100 py-12">
                 <div className="text-gray-400 mb-4">
-                  <MdImage className="mx-auto h-12 w-12" />
+                  <FaBox className="mx-auto h-12 w-12" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No products found
@@ -480,27 +480,18 @@ const AllProductAdmin = () => {
                 renderOnZeroPageCount={null}
                 containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
                 pageClassName="hidden sm:block"
-                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
                 activeClassName="hidden sm:block"
-                activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                previousClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+                activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
+                previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
                 previousLinkClassName="flex items-center px-2 py-1"
-                nextClassName="px-3 py-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md border border-gray-300"
+                nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
                 nextLinkClassName="flex items-center px-2 py-1"
                 breakClassName="hidden sm:block"
                 breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
               />
-
-              {/* Page info */}
-              <div className="ml-0 md:ml-4 text-sm text-gray-700">
-                Page <span className="font-medium">{currentPage + 1}</span> of{" "}
-                <span className="font-medium">{totalPages}</span>
-                {" • "}
-                <span className="font-medium">{totalProducts}</span> total
-                products
-              </div>
             </div>
           )}
         </>
