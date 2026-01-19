@@ -90,7 +90,7 @@ const AllOrders = () => {
   ];
 
   return (
-    <div className="p-3">
+    <div className="p-3 min-h-screen">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">All Orders</h2>
         <button

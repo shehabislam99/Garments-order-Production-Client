@@ -6,10 +6,10 @@ import Logo from "../../Common/Logo/Logo";
 const Footer = () => {
   return (
     <>
-      <footer className="text-indigo-500 bg-amber-100 text-center py-4">
+      <footer className="text-indigo-500 bg-amber-100 footers text-center py-4">
         <div className="mx-auto ">
           <h1 className="text-center flex justify-center">
-              <Logo></Logo>
+            <Logo></Logo>
           </h1>
           <div
             className="grid grid-cols-1 md:grid-cols-2
@@ -93,7 +93,6 @@ const Footer = () => {
               </h3>
               <div className="flex flex-wrap justify-center gap-4 md:gap-6">
                 <div
-                 
                   className="text-sm gap-2
                  font-bold flex 
                    flex-col hover:text-red-800  
@@ -109,7 +108,6 @@ const Footer = () => {
                 </div>
 
                 <div
-                 
                   className=" text-sm gap-2
                  font-bold flex
                    flex-col hover:text-red-800  
@@ -125,7 +123,6 @@ const Footer = () => {
                 </div>
 
                 <div
-                
                   className="text-sm gap-2
                  font-bold flex
                    flex-col hover:text-red-800  
@@ -141,7 +138,6 @@ const Footer = () => {
                 </div>
 
                 <div
-               
                   className="text-sm gap-2
                  font-bold flex
                    flex-col hover:text-red-800 

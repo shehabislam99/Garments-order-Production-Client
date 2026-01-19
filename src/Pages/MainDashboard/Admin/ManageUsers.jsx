@@ -8,7 +8,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { GrDocumentUpdate } from "react-icons/gr";
-import { MdEmail, MdPerson,MdInfo } from "react-icons/md";
+import { MdEmail,MdInfo } from "react-icons/md";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
@@ -271,7 +271,7 @@ const ManageUsers = () => {
   };
 
   return (
-    <div className="p-3">
+    <div className="p-3 min-h-screen">
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">Manage Users</h2>

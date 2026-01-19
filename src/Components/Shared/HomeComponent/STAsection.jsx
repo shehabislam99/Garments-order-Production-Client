@@ -159,11 +159,11 @@ const STAsection = () => {
             >
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  to="/all-products"
+                  to="/about"
                   className="inline-flex items-center justify-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-full hover:bg-red-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
-                  Browse Collection
-                  <FaArrowRight className="ml-3" />
+                  About Us
+                  
                 </Link>
                 <Link
                   to="/contact"

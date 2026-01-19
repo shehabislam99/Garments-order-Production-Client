@@ -15,7 +15,6 @@ import { AuthContext } from "./AuthContext";
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const googleProvider = new GoogleAuthProvider();
 
   const createUser = (email, password) => {
     setLoading(true);
@@ -42,16 +41,18 @@ const AuthProvider = ({ children }) => {
     return auth.currentUser;
   };
 
-  const signInWithGoogle = () => {
-    setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.addScope("profile");
+    provider.addScope("email");
+
+    return await signInWithPopup(auth, provider);
   };
 
-  const resetPassword = (email) =>
-   {  sendPasswordResetEmail(auth, email);}
-
-      
-  
+  const resetPassword = (email) => {
+    sendPasswordResetEmail(auth, email);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -76,6 +77,6 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
-};
+};;
 
 export default AuthProvider;

@@ -15,9 +15,9 @@ import { MdAddAPhoto } from "react-icons/md";
 import useAuth from "../../Hooks/useAuth";
 import axios from "axios";
 import Logo from "../../Components/Common/Logo/Logo";
-import SocialLogin from "./SocialLogIn";
 import { axiosInstance } from "../../Hooks/useAxios";
 import Loading from "../../Components/Common/Loding/Loding";
+import SocialLogin from "./SocialLogin";
 
 const Register = () => {
   const { createUser, updateUserProfile, user } = useAuth();

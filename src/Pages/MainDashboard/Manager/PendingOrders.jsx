@@ -203,7 +203,7 @@ const PendingOrders = () => {
   }
 
   return (
-    <div className="p-3 relative">
+    <div className="p-3 relative min-h-screen">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Pending Orders</h2>
         <button

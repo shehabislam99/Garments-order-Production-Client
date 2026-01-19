@@ -17,22 +17,22 @@ const Contact = () => {
       icon: <FaMapMarkerAlt className="text-2xl" />,
       title: "Our Location",
       details: [
-        "StitchCraft Garments Pvt. Ltd.",
-        "Industrial Zone, Dhaka, Bangladesh",
+        "Textile Flow Garments Pvt. Ltd.",
+        "Industrial Zone, Chittagong, Bangladesh",
       ],
       color: "bg-violet-100 text-violet-600",
     },
     {
       icon: <FaPhoneAlt className="text-2xl" />,
       title: "Phone Number",
-      details: ["+880 1234 567890", "+880 9876 543210"],
+      details: ["+880 1700 000000", "+880 9876 543210"],
 
       color: "bg-green-100 text-green-600",
     },
     {
       icon: <FaEnvelope className="text-2xl" />,
       title: "Email Address",
-      details: ["support@stitchcraft.com", "sales@stitchcraft.com"],
+      details: ["support@textileflow.com", "sales@textileflow.com"],
       color: "bg-blue-100 text-blue-600",
     },
     {

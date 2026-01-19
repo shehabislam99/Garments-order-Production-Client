@@ -7,7 +7,7 @@ import Footer from "../../Components/Shared/Footer/Footer";
 const DashBoardLayout = () => {
 
   return (
-    <div>
+    <div >
       <Navbar />
       <div className="flex flex-1 ">
           <Asidebar />

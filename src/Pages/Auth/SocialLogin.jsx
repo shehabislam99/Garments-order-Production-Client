@@ -4,7 +4,6 @@ import useAuth from "../../Hooks/useAuth";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 
-
 const SocialLogin = () => {
   const { signInWithGoogle } = useAuth();
   const axiosSecure = useAxiosSecure();
@@ -14,21 +13,37 @@ const SocialLogin = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithGoogle();
-      const user = result.user;
-
+      const user = result?.user;
       const userInfo = {
-        name: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        role: "buyer", 
+        name: user?.displayName,
+        email: user?.email,
+        photoURL: user?.photoURL || "https://i.ibb.co/0jZqyvJ/user.png",
+        role: "buyer",
       };
+      let userExists = false;
+      try {
+        const checkUser = await axiosSecure.get(`/users/email/${user.email}`);
+        userExists = checkUser.data?.success === true;
+      } catch (error) {
+        if (error.response?.status === 404) {
+          userExists = false;
+        } else {
+          throw error;
+        }
+      }
 
-      await axiosSecure.post("/users", userInfo);
-
-      toast.success("Logged in with Google", {
-        position: "top-center",
-        autoClose: 2000,
-      });
+      if (!userExists) {
+        await axiosSecure.post("/users", userInfo);
+        toast.success("Account created and logged in with Google", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.success("Logged in with Google", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
       navigate(location.state?.from || "/", { replace: true });
     } catch (error) {
       console.error(error);
@@ -37,7 +52,7 @@ const SocialLogin = () => {
         autoClose: 2000,
       });
     }
-  }
+  };
   return (
     <div className="text-center">
       <button

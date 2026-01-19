@@ -128,7 +128,7 @@ const TrackOrder = () => {
   const progressPercentage = getProgressPercentage();
 
   return (
-    <div className="p-4 max-w-6xl mx-auto">
+    <div className="p-4 max-w-6xl mx-auto min-h-screen">
       <Link
         to="/dashboard/my-orders"
         className="text-indigo-600 hover:text-red-800 flex gap-2"
