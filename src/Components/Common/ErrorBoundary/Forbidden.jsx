@@ -108,7 +108,7 @@ const AnimationContainer = styled.div`
       width: 200px;
       height: 200px;
       box-sizing: border-box;
-      padding: 8px 2px 4px 46px;
+      padding: 8px 2px 4px 50px;
       border-radius: 50%;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
@@ -129,7 +129,7 @@ const AnimationContainer = styled.div`
       width: 200px;
       height: 200px;
       box-sizing: border-box;
-      padding: 8px 2px 4px 46px;
+      padding: 8px 2px 4px 50px;
       border-radius: 50%;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;

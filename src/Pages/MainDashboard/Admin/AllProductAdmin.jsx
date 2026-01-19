@@ -337,8 +337,8 @@ const AllProductAdmin = () => {
                               }
                             />
 
-                            <div className="inline-flex ml-4">
-                              <div className="text-sm  font-medium text-gray-900">
+                            <div className="whitespace-nowrap ml-4">
+                              <div className="text-sm inline-flex leading-5 font-medium text-gray-900">
                                 {product?.product_name || "Unnamed Product"}
                               </div>
                             </div>

@@ -12,6 +12,7 @@ import ReactPaginate from "react-paginate";
 import Loading from "../../../Components/Common/Loding/Loding";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { useNavigate } from "react-router";
+import useAuth from "../../../Hooks/useAuth";
 
 const PendingOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -20,32 +21,42 @@ const PendingOrders = () => {
   const [ordersPerPage] = useState(6);
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
-  const [isSuspended, setIsSuspended] = useState(false);
- const navigate = useNavigate();
+  const navigate = useNavigate();
+   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    const init = async () => {
-      await fetchSuspended();
-      await fetchPendingOrders();
-    };
-    init();
+     fetchPendingOrders();
   }, []);
-const fetchSuspended = async () => {
-  
+
+  useEffect(() => {
+    const UserSuspended = async () => {
+      if (!user) {
+        toast.error("Please login to place an order");
+        navigate("/login");
+        return;
+      }
+
       try {
-      const res = await axiosSecure.get("/users?status=suspended");
-      const list = res.data?.data || [];
-      const myEmail = localStorage.getItem("email");
-      const suspended = !!list.find((u) => u.email === myEmail);
-      setIsSuspended(suspended);
-      return suspended;
-    } catch (error) {
-      console.error("Suspension check failed:", error);
-      setIsSuspended(false);
-      return false;
-    }
-};
+        const res = await axiosSecure.get("/users?status=suspended");
+        const suspended = res.data?.data || [];
+        const isSuspended = suspended.find((u) => u.email === user.email);
+
+        if (isSuspended) {
+          toast.error("Your account is suspended. You cannot approve or reject order");
+          navigate("/dashboard/profile");
+          return;
+        }
+      } catch (err) {
+        toast.error("Failed to verify user status", err);
+        navigate("/dashboard/profile");
+        return;
+      }
+    };
+
+    UserSuspended();
+  }, [user, navigate, axiosSecure]);
+
 
   const fetchPendingOrders = async () => {
     try {
@@ -67,48 +78,38 @@ const fetchSuspended = async () => {
     }
   };
 
- const handleApprove = async (orderId) => {
-
-     if (isSuspended) {
-       toast.error("Your account is suspended. You cannot approve orders");
-       navigate("/dashboard/profile");
-       return;
-     }
-   try {
-     setApproving(true);
-     const res = await axiosSecure.put(`/orders/status/${orderId}`, {
-       status: "approved",
-       approvedAt: new Date().toISOString(),
-     });
-     if (res.data?.success) {
-       setOrders((prev) => prev.filter((o) => o._id !== orderId));
-       toast.success("Order approved successfully", {
-         position: "top-center",
-         autoClose: 2000,
-       });
-     } else {
-       toast.error(res.data?.message || "Failed to approve order", {
-         position: "top-center",
-         autoClose: 2000,
-       });
-     }
-   } catch (error) {
-     console.error("Approve error:", error.response?.data || error.message);
-     toast.error(error.response?.data?.message || "Failed to approve order", {
-       position: "top-center",
-       autoClose: 2000,
-     });
-   } finally {
-     setApproving(false);
-   }
- };
+  const handleApprove = async (orderId) => {
+ 
+    try {
+      setApproving(true);
+      const res = await axiosSecure.put(`/orders/status/${orderId}`, {
+        status: "approved",
+        approvedAt: new Date().toISOString(),
+      });
+      if (res.data?.success) {
+        setOrders((prev) => prev.filter((o) => o._id !== orderId));
+        toast.success("Order approved successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error(res.data?.message || "Failed to approve order", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.error("Approve error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.message || "Failed to approve order", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    } finally {
+      setApproving(false);
+    }
+  };
 
   const handleReject = async (orderId) => {
-  if (isSuspended) {
-    toast.error("Your account is suspended. You cannot reject orders");
-    navigate("/dashboard/profile");
-    return;
-  }
 
     const reason = window.prompt("Please provide a reason for rejection:");
     if (reason === null) return;
@@ -122,13 +123,11 @@ const fetchSuspended = async () => {
 
     try {
       setRejecting(true);
-   const res = await axiosSecure.put(`/orders/status/${orderId}`, {
+      const res = await axiosSecure.put(`/orders/status/${orderId}`, {
         status: "rejected",
         rejectionReason: reason,
         rejectedAt: new Date().toISOString(),
       });
-
-      
 
       if (res.data?.success) {
         setOrders((prev) => prev.filter((o) => o._id !== orderId));
@@ -163,13 +162,14 @@ const fetchSuspended = async () => {
     }
   };
 
+
+
   const paginatedOrders = orders.slice(
     currentPage * ordersPerPage,
     (currentPage + 1) * ordersPerPage
   );
 
   const handlePageClick = (event) => setCurrentPage(event.selected);
-
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -180,19 +180,19 @@ const fetchSuspended = async () => {
     });
   };
 
- 
+  const getPaymentColor = (payment_Status) => {
+    const paymentStatus = payment_Status?.toString?.().toLowerCase() || "";
+    switch (paymentStatus) {
+      case "paid":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "cod":
+        return "bg-violet-100 text-purple-800 border-violet-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
 
-   const getPaymentColor = (payment_Status) => {
-     const paymentStatus = payment_Status?.toString?.().toLowerCase() || "";
-     switch (paymentStatus) {
-       case "paid":
-         return "bg-green-100 text-green-800 border-green-200";
-       case "cod":
-         return "bg-violet-100 text-purple-800 border-violet-200";
-       default:
-         return "bg-gray-100 text-gray-800 border-gray-200";
-     }
-   };
+  const pageCount = Math.ceil(orders.length / ordersPerPage);
 
   if (loading) {
     return (
@@ -203,7 +203,7 @@ const fetchSuspended = async () => {
   }
 
   return (
-    <div className="p-3">
+    <div className="p-3 relative">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Pending Orders</h2>
         <button
@@ -220,25 +220,25 @@ const fetchSuspended = async () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase  whitespace-nowrap">
                   Order ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   User
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Product
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-                  Quanttity
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  Quantity
                 </th>
-                <th className="px-6  py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Payment
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase  whitespace-nowrap">
                   Order Date
                 </th>
-                <th className="px-13 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                <th className="px-13 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Actions
                 </th>
               </tr>
@@ -250,7 +250,7 @@ const fetchSuspended = async () => {
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className=" items-center">
+                    <div className="items-center">
                       <div className="text-sm font-semibold text-gray-900">
                         #{order?._id?.substring(0, 12) || "N/A"}
                       </div>
@@ -302,14 +302,14 @@ const fetchSuspended = async () => {
                       </button>
                       <button
                         onClick={() => handleApprove(order?._id)}
-                        disabled={approving || isSuspended}
+                        disabled={approving}
                         className="px-2 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
                       >
                         <FaCheckCircle className="mr-1" /> Approve
                       </button>
                       <button
                         onClick={() => handleReject(order?._id)}
-                        disabled={rejecting || isSuspended}
+                        disabled={rejecting}
                         className="px-2 py-1 flex items-center rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50"
                       >
                         <FaTimesCircle className="mr-1" /> Reject
@@ -332,7 +332,7 @@ const fetchSuspended = async () => {
         )}
       </div>
 
-      {Math.ceil(orders?.length / ordersPerPage) && (
+      {pageCount > 1 && (
         <div className="flex flex-col md:flex-row justify-center items-center mt-6">
           <ReactPaginate
             breakLabel="..."
@@ -345,7 +345,7 @@ const fetchSuspended = async () => {
             onPageChange={handlePageClick}
             pageRangeDisplayed={3}
             marginPagesDisplayed={2}
-            pageCount={Math.ceil(orders?.length / ordersPerPage)}
+            pageCount={pageCount}
             forcePage={currentPage}
             previousLabel={
               <div className="flex items-center">
@@ -356,15 +356,15 @@ const fetchSuspended = async () => {
             renderOnZeroPageCount={null}
             containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
             pageClassName="hidden sm:block"
-            pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
+            pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 rounded-full transition-colors hover:bg-gray-100"
             activeClassName="hidden sm:block"
-            activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
-            previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
+            activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700"
+            previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300 transition-colors"
             previousLinkClassName="flex items-center px-2 py-1"
-            nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
+            nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300 transition-colors"
             nextLinkClassName="flex items-center px-2 py-1"
             breakClassName="hidden sm:block"
-            breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
+            breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100"
             disabledClassName="opacity-50 cursor-not-allowed"
             disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
           />

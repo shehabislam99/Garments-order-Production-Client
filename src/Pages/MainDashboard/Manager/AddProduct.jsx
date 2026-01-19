@@ -28,7 +28,7 @@ const AddProduct = () => {
   });
 
   useEffect(() => {
-    const accessUser = async () => {
+    const UserSuspended = async () => {
       if (!user) {
         toast.error("Please login to place an order");
         navigate("/login");
@@ -55,7 +55,7 @@ const AddProduct = () => {
      
     };
 
-    accessUser();
+    UserSuspended();
   }, [user, navigate, AxiosSecure]);
 
 

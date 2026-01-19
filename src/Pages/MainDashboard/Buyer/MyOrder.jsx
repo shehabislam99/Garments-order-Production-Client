@@ -270,7 +270,7 @@ const MyOrders = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Order ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
                       Product name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -279,10 +279,10 @@ const MyOrders = () => {
                     <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                       Quantity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
                       Order Status
                     </th>
-                    <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
                       Payment Status
                     </th>
                     <th className="px-11 py-3 text-left text-xs font-medium text-gray-500 uppercase">

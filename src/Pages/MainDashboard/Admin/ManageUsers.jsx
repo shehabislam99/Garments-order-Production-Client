@@ -391,10 +391,10 @@ const ManageUsers = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Role
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                       User Status
                     </th>
-                    <th className="px-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                       Manage Actions
                     </th>
                   </tr>

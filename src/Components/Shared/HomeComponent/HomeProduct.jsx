@@ -73,17 +73,16 @@ const HomeProduct = () => {
           <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
             Featured Products
           </h2>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
             Discover our premium garments items
           </p>
         </motion.div>
 
-        {loading ? (
+        {loading ?
           <div className="flex justify-center items-center h-64">
             <Loading />
           </div>
-        ) : (
-          <>
+        : <>
             <motion.div
               variants={containerVariants}
               initial="hidden"
@@ -169,7 +168,7 @@ const HomeProduct = () => {
               </Link>
             </motion.div>
           </>
-        )}
+        }
       </div>
     </section>
   );

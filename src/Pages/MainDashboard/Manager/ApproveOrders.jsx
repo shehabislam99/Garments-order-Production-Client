@@ -19,7 +19,7 @@ const ApprovedOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-  const ordersPerPage = 6;
+   const [ordersPerPage] = useState(6);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
   const [viewTrackingModalOpen, setViewTrackingModalOpen] = useState(false);
@@ -139,7 +139,7 @@ const ApprovedOrders = () => {
       style: "currency",
       currency: "USD",
     }).format(amt || 0);
-
+  const pageCount = Math.ceil(orders.length / ordersPerPage);
 
   if (loading)
     return (
@@ -166,13 +166,13 @@ const ApprovedOrders = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
                   Order ID
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Customer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
                   Product name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -181,7 +181,7 @@ const ApprovedOrders = () => {
                 <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                   Quantity
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
                   Approve Date
                 </th>
                 <th className="px-15 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -276,7 +276,7 @@ const ApprovedOrders = () => {
         )}
       </div>
       {/* PAGINATION */}
-      {Math.ceil(orders?.length / ordersPerPage) && (
+      {pageCount > 1 && (
         <div className="flex flex-col md:flex-row justify-center items-center mt-6">
           <ReactPaginate
             breakLabel="..."
@@ -289,7 +289,7 @@ const ApprovedOrders = () => {
             onPageChange={handlePageClick}
             pageRangeDisplayed={3}
             marginPagesDisplayed={2}
-            pageCount={Math.ceil(orders?.length / ordersPerPage)}
+            pageCount={pageCount}
             forcePage={currentPage}
             previousLabel={
               <div className="flex items-center">

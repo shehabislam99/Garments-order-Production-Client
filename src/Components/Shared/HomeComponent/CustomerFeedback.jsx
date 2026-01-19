@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaStar,
@@ -6,30 +6,54 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
+import imgfed1 from "../../../assets/photo-1507003211169-0a1dd7228f2d.avif";
+import imgfed2 from "../../../assets/photo-1500648767791-00dcc994a43e.avif";
+import imgfed3 from "../../../assets/photo-1438761681033-6461ffad8d80.avif";
 
 const CustomerFeedback = () => {
  const [currentSlide, setCurrentSlide] = useState(0);
- const [rating, setRating] = useState([]);
+const feedBack = [
+  {
+   
+    name: "David Park",
+    role: "Photographer",
+    image: imgfed1 ,
+    rating: 5,
+    comment:
+      "As a photographer, I appreciate quality fabrics. These products are perfect for my photoshoots. Great value for money!",
+    date: "2 weeks ago",
+  },
 
- useEffect(() => {
-   fetch("/rating.json")
-     .then((res) => res.json())
-     .then((data) => setRating(data));
- }, []);
+  {
+ 
+    name: "Michael Chen",
+    role: "Business Owner",
+    image: imgfed2,
+    rating: 5,
+    comment:
+      "Outstanding customer service and premium quality products. The shipping was faster than expected. Highly recommended!",
+    date: "1 week ago",
+  },
+  {
+    
+    name: "Emily Rodriguez",
+    role: "Interior Designer",
+    image: imgfed3,
+    rating: 4,
+    comment:
+      "Love the attention to detail in every product. The materials feel luxurious and the designs are timeless.",
+    date: "3 days ago",
+  },
+];
 
- if (!rating.length) {
-   return <div className="text-center py-20">Loading testimonials...</div>;
- }
 
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % rating.length);
+    setCurrentSlide((prev) => (prev + 1) % feedBack.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + rating.length) % rating.length
-    );
+    setCurrentSlide((prev) => (prev - 1 + feedBack.length) % feedBack.length);
   };
 
   const slideVariants = {
@@ -63,7 +87,7 @@ const CustomerFeedback = () => {
           <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
             What Our Customers Say
           </h2>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
             Don't just take our word for it. Hear from our satisfied customers
           </p>
         </motion.div>
@@ -89,7 +113,7 @@ const CustomerFeedback = () => {
                       <FaQuoteLeft className="w-12 h-12 text-white/30 mb-3" />
 
                       <p className="text-xl lg:text-2xl font-light mb-8 leading-relaxed">
-                        "{rating[currentSlide].comment}"
+                        "{feedBack[currentSlide].comment}"
                       </p>
 
                       <div className="flex items-center mb-2">
@@ -97,9 +121,9 @@ const CustomerFeedback = () => {
                           <FaStar
                             key={i}
                             className={`w-5 h-5 ${
-                              i < rating[currentSlide].rating
-                                ? "text-yellow-400 fill-current"
-                                : "text-white/30"
+                              i < feedBack[currentSlide].rating ?
+                                "text-yellow-400 fill-current"
+                              : "text-white/30"
                             }`}
                           />
                         ))}
@@ -107,21 +131,21 @@ const CustomerFeedback = () => {
 
                       <div>
                         <h4 className="text-2xl font-bold mb-1">
-                          {rating[currentSlide].name}
+                          {feedBack[currentSlide].name}
                         </h4>
                         <p className="text-white/80">
-                          {rating[currentSlide].role}
+                          {feedBack[currentSlide].role}
                         </p>
                         <p className="text-white/60 text-sm mt-2">
-                          {rating[currentSlide].date}
+                          {feedBack[currentSlide].date}
                         </p>
                       </div>
                     </div>
                     <div className="flex-1 relative hidden lg:block">
                       <div className="absolute inset-0 bg-gradient-to-l from-indigo-600 to-transparent z-10"></div>
                       <img
-                        src={rating[currentSlide].image}
-                        alt={rating[currentSlide].name}
+                        src={feedBack[currentSlide].image}
+                        alt={feedBack[currentSlide].name}
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute bottom-8 right-8 bg-white/10 backdrop-blur-sm rounded-2xl p-4">
@@ -149,14 +173,14 @@ const CustomerFeedback = () => {
           </button>
 
           <div className="flex justify-center mt-6 space-x-2">
-            {rating.map((_, index) => (
+            {feedBack.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide
-                    ? "bg-indigo-600 w-8"
-                    : "bg-gray-300 hover:bg-gray-400"
+                  index === currentSlide ? "bg-indigo-600 w-8" : (
+                    "bg-gray-300 hover:bg-gray-400"
+                  )
                 }`}
               />
             ))}
@@ -170,9 +194,9 @@ const CustomerFeedback = () => {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
         >
-          {rating.slice(0, 3).map((testimonial, index) => (
+          {feedBack.map((testimonial, index) => (
             <motion.div
-              key={testimonial.id}
+              key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -199,15 +223,15 @@ const CustomerFeedback = () => {
                   <FaStar
                     key={i}
                     className={`w-4 h-4 ${
-                      i < testimonial.rating
-                        ? "text-yellow-400 fill-current"
-                        : "text-gray-300"
+                      i < testimonial.rating ?
+                        "text-yellow-400 fill-current"
+                      : "text-gray-300"
                     }`}
                   />
                 ))}
               </div>
 
-              <p className="text-gray-600 italic">
+              <p className="text-gray-600 font-medium italic">
                 "{testimonial.comment.substring(0, 100)}..."
               </p>
             </motion.div>

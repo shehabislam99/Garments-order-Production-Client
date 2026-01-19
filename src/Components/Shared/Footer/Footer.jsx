@@ -92,8 +92,8 @@ const Footer = () => {
                 Follow Us
               </h3>
               <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-                <a
-                  href="https://www.facebook.com/"
+                <div
+                 
                   className="text-sm gap-2
                  font-bold flex 
                    flex-col hover:text-red-800  
@@ -105,11 +105,11 @@ const Footer = () => {
                    h-14 bg-blue-800 rounded-full flex items-center justify-center"
                   ></SocialIcon>
 
-                  <span className="lg:mt-2"> Facebook</span>
-                </a>
+                  <span className="lg:mt-2"> Youtube</span>
+                </div>
 
-                <a
-                  href="https://x.com"
+                <div
+                 
                   className=" text-sm gap-2
                  font-bold flex
                    flex-col hover:text-red-800  
@@ -122,10 +122,10 @@ const Footer = () => {
                   ></SocialIcon>
 
                   <span className="lg:mt-2">Twitter</span>
-                </a>
+                </div>
 
-                <a
-                  href="https://github.com/shehabislam99"
+                <div
+                
                   className="text-sm gap-2
                  font-bold flex
                    flex-col hover:text-red-800  
@@ -138,10 +138,10 @@ const Footer = () => {
                   ></SocialIcon>
 
                   <span className="lg:mt-2"> GitHub</span>
-                </a>
+                </div>
 
-                <a
-                  href="https://www.linkedin.com/"
+                <div
+               
                   className="text-sm gap-2
                  font-bold flex
                    flex-col hover:text-red-800 
@@ -154,7 +154,7 @@ const Footer = () => {
                   ></SocialIcon>
 
                   <span className="lg:mt-2 "> LinkedIn </span>
-                </a>
+                </div>
               </div>
             </div>
           </div>

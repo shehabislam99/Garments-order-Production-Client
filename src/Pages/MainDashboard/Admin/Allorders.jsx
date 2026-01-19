@@ -187,7 +187,7 @@ const AllOrders = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 whitespace-nowrap text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Product name
                     </th>
                     <th className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -232,7 +232,7 @@ const AllOrders = () => {
 
                       {/* Product */}
                       <td className="px-6 py-4">
-                        <div className="flex items-center">
+                        <div className="flex items-center whitespace-nowrap">
                           <div>
                             <div className="text-sm font-medium text-gray-900">
                               {order?.product_name || "Unknown Product"}

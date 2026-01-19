@@ -3,8 +3,9 @@ import Banner from "../../Components/Shared/HomeComponent/Banner";
 import HomeProduct from "../../Components/Shared/HomeComponent/HomeProduct";
 import HowWorks from "../../Components/Shared/HomeComponent/HowWorks";
 import CustomerFeedback from "../../Components/Shared/HomeComponent/CustomerFeedback";
-import Feature from "../../Components/Shared/HomeComponent/Feature";
-import CTAsection from "../../Components/Shared/HomeComponent/CTAsection";
+import PartnershipWith from "../../Components/Shared/HomeComponent/PartnershipWith";
+import STAsection from "../../Components/Shared/HomeComponent/STAsection";
+
 
 const Home = () => {
   
@@ -15,8 +16,8 @@ const Home = () => {
        <HomeProduct></HomeProduct>
       <HowWorks></HowWorks>
       <CustomerFeedback></CustomerFeedback>
-      <Feature></Feature>
-      <CTAsection></CTAsection>
+      <PartnershipWith></PartnershipWith>
+      <STAsection></STAsection>
 
 
     </div>
