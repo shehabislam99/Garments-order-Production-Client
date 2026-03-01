@@ -46,3 +46,9 @@ Textile Flow Garments ,where passion meets precision. We transform fabric into f
 
 # Link
 - **Live Link**:https://garments-production-tracker.web.app
+
+# Email password
+Admin Email: admin@gmail.com 
+ Admin Password: s@14567eR 
+ Manager Email: shihabkhan@gmail.com 
+  Manager Password: ssssAAAA$$$ 
