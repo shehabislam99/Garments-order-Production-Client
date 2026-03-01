@@ -88,27 +88,26 @@ const Asidebar = () => {
 
   return (
     <>
-     
       <button
-        className=" bg-base-300 fixed top-4 left-4 z-20 p-2 rounded-md shadow"
+        className="bg-base-300 fixed top-4 left-4 z-40 p-2 rounded-md shadow lg:hidden"
         onClick={() => setOpen(!open)}
       >
         <TbSquareToggle className="text-2xl" />
       </button>
       {open && (
         <div
-          className="fixed inset-0 bg-black/40 z-10 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-20 lg:hidden"
           onClick={() => setOpen(false)}
         />
       )}
       <aside
         className={`
-          bg-base-300 border-r border-base-200
-          fixed top-0 left-0 h-full z-20
-          transition-all duration-300 overflow-hidden
-          ${open ? "w-64" : "w-0"}
-          lg:block
-        `}
+    bg-base-300 border-r border-base-200
+    fixed top-0 left-0 h-full z-30
+    transition-all duration-300 overflow-hidden
+    ${open ? "translate-x-0 w-64" : "-translate-x-full w-64"}
+    lg:translate-x-0
+  `}
       >
         <div className="p-6 flex justify-center border-b border-gray-300">
           <h1 className="mt-1 font-bold text-3xl">{config.title}</h1>

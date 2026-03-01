@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { FaSearch, FaRegPlayCircle, FaEye } from "react-icons/fa";
-import {  MdCategory } from "react-icons/md";
+import { MdCategory } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Loading from "../../Components/Common/Loding/Loding";
 import { axiosInstance } from "../../Hooks/useAxios";
@@ -12,7 +12,7 @@ const AllProducts = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const wasSearching = useRef(false); 
+  const wasSearching = useRef(false);
 
   const fetchProducts = async () => {
     try {
@@ -27,7 +27,6 @@ const AllProducts = () => {
     }
   };
 
-
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -38,7 +37,7 @@ const AllProducts = () => {
       return;
     }
 
-    wasSearching.current = true; 
+    wasSearching.current = true;
 
     const term = searchTerm.toLowerCase();
     const filtered = products.filter(
@@ -46,7 +45,7 @@ const AllProducts = () => {
         product?.product_name?.toLowerCase().includes(term) ||
         product?.name?.toLowerCase().includes(term) ||
         product?.category?.toLowerCase().includes(term) ||
-        product?.description?.toLowerCase().includes(term)
+        product?.description?.toLowerCase().includes(term),
     );
 
     setFilteredProducts(filtered);
@@ -58,7 +57,6 @@ const AllProducts = () => {
       wasSearching.current = false;
     }
   }, [searchTerm]);
-
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
@@ -96,7 +94,7 @@ const AllProducts = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="py-10 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -107,18 +105,18 @@ const AllProducts = () => {
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
             All Products
           </div>
-          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl lg:text-4xl font-bold  mb-4">
             Explore Our Collection
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-lg  max-w-2xl mx-auto mb-8">
             Discover our complete range of premium garments
           </p>
 
           <div className="flex justify-end">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                              <FaSearch className="h-5 w-5 text-gray-400" />
-                            </div>
+                <FaSearch className="h-5 w-5 " />
+              </div>
               <input
                 type="text"
                 placeholder="Search by name, category..."
@@ -126,29 +124,28 @@ const AllProducts = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 w-full px-3 py-2 border placeholder-green-500 border-amber-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              </div>
+            </div>
           </div>
         </motion.div>
 
-        {loading ? (
+        {loading ?
           <div className="flex justify-center items-center h-64">
             <Loading />
           </div>
-        ) : (
-          <>
+        : <>
             <motion.div
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
             >
               {filteredProducts.map((product, index) => (
                 <motion.div
                   key={product?._id}
                   variants={cardVariants}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+                  className="group bg-white rounded-3xl overflow-hidden shadow-md  hover:shadow-2xl transition-all duration-300"
                 >
                   <div className="relative h-64 overflow-hidden">
                     <img
@@ -176,32 +173,32 @@ const AllProducts = () => {
                     </div>
                   </div>
 
-                  <div className="p-6 bg-amber-100">
+                  <div className="custom-bg p-6">
                     <div className="flex items-center justify-between mb-2">
                       <span className="inline-flex px-3 py-1 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full">
                         <MdCategory className="mr-1 mt-0.5" />{" "}
-                        {product?.category}
+                        {product?.category||"Uncategorized"}
                       </span>
                       <div className="flex items-center"></div>
                     </div>
 
                     <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
-                      {product?.product_name}
+                      {product?.product_name||"Untitled Product"}
                     </h3>
 
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {product?.description?.substring(0, 50)}...
+                      {product?.description ? product?.description?.substring(0, 50) + "..." : "No description available"}
                     </p>
 
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-violet-700 bg-violet-100 px-2 py-1 rounded-4xl">
-                        {formatCurrency(product?.price)}
+                        {formatCurrency(product?.price||0)}
                       </span>
 
-                      <p className="text-lg text-green-500">
+                      <p className="text-lg text-amber-700">
                         In Stock:
                         <span className="ml-1 text-lg font-medium text-green-700">
-                          {product?.available_quantity}
+                          {product?.available_quantity||0}
                         </span>
                       </p>
                     </div>
@@ -219,7 +216,7 @@ const AllProducts = () => {
               ))}
             </motion.div>
           </>
-        )}
+        }
       </div>
     </div>
   );

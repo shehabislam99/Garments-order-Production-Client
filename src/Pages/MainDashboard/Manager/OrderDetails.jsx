@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import Loading from "../../../Components/Common/Loding/Loding";
@@ -34,7 +34,6 @@ const OrderDetails = () => {
       setLoading(false);
     }
   };
-
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -79,7 +78,7 @@ const OrderDetails = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="col-span-1 lg:col-span-2 space-y-6">
-            <div className="bg-amber-100 rounded-4xl shadow-sm border border-gray-200">
+            <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900">
                   Order Summary
@@ -121,7 +120,7 @@ const OrderDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-amber-100 rounded-4xl shadow-sm border border-gray-200">
+            <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900">
                   Product Summary
@@ -166,7 +165,7 @@ const OrderDetails = () => {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-amber-100 rounded-4xl shadow-sm border border-gray-200">
+            <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center">
                   <h2 className="text-lg font-semibold text-gray-900">
@@ -213,7 +212,7 @@ const OrderDetails = () => {
               </div>
             </div>
 
-            <div className="bg-amber-100 rounded-4xl shadow-sm border border-gray-200">
+            <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center">
                   <h2 className="text-lg font-semibold text-gray-900">

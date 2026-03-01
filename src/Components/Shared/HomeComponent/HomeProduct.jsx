@@ -19,8 +19,6 @@ const HomeProduct = () => {
     try {
       setLoading(true);
       const res = await axiosSecure.get("/products?limit=6&Pstatus=show");
-      ;
-
       setProducts(res.data.data || []);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -58,14 +56,14 @@ const HomeProduct = () => {
   };
 
   return (
-    <section className="py-16 ">
+    <section className="mt-10 lg:mt-15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
             Our Collection
@@ -73,7 +71,7 @@ const HomeProduct = () => {
           <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
             Featured Products
           </h2>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="text-lg  max-w-2xl mx-auto">
             Discover our premium garments items
           </p>
         </motion.div>
@@ -95,7 +93,7 @@ const HomeProduct = () => {
                   key={product?._id}
                   variants={cardVariants}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+                  className="group bg-white rounded-3xl overflow-hidden shadow-md  hover:shadow-2xl transition-all duration-300"
                 >
                   <div className="relative h-64 overflow-hidden">
                     <img
@@ -123,7 +121,7 @@ const HomeProduct = () => {
                     </div>
                   </div>
 
-                  <div className="p-6 bg-amber-100">
+                  <div className="p-6 custom-bg">
                     <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
                       {product?.product_name}
                     </h3>
@@ -157,11 +155,11 @@ const HomeProduct = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-center mt-12"
+              className="text-center mt-10"
             >
               <Link
                 to="/all-products"
-                className="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-full hover:from-red-700 hover:to-red-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-full hover:from-red-700 hover:to-red-800 transform hover:-translate-y-1 transition-all duration-300 shadow-md  hover:shadow-xl"
               >
                 View All Products
                 <FaArrowRight className="ml-3" />

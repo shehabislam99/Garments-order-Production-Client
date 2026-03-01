@@ -31,7 +31,7 @@ const AllProductAdmin = () => {
   const [deleting, setdeleting] = useState(false);
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [categories, setCategories] = useState([]); 
+  const [categories, setCategories] = useState([]);
 
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
@@ -42,7 +42,7 @@ const AllProductAdmin = () => {
       const res = await axiosInstance.get(
         `/products?searchText=${searchTerm}&page=${
           currentPage + 1
-        }&limit=${productsPerPage}&category=${filterCategory}&status=${filterStatus}`
+        }&limit=${productsPerPage}&category=${filterCategory}&status=${filterStatus}`,
       );
 
       if (res.data && res.data?.success) {
@@ -50,10 +50,9 @@ const AllProductAdmin = () => {
         setTotalProducts(res.data?.total || 0);
         setTotalPages(
           res?.data?.totalPages ||
-            Math.ceil((res.data?.total || 0) / productsPerPage)
+            Math.ceil((res.data?.total || 0) / productsPerPage),
         );
 
-       
         const uniqueCategories = [
           ...new Set(res.data?.data?.map((p) => p.category)),
         ].filter(Boolean);
@@ -76,11 +75,8 @@ const AllProductAdmin = () => {
     }
   };
 
-  
-
   useEffect(() => {
     fetchProducts();
-  
   }, [currentPage, searchTerm, filterCategory, filterStatus]);
 
   const handleToggleShowOnHome = async (productId, currentValue) => {
@@ -89,25 +85,25 @@ const AllProductAdmin = () => {
         `/admin/products/show-on-home/${productId}`,
         {
           show_on_homepage: !currentValue,
-        }
+        },
       );
 
       if (response.data.success) {
         setProducts(
           products.map((product) =>
-            product._id === productId
-              ? { ...product, show_on_homepage: !currentValue }
-              : product
-          )
+            product._id === productId ?
+              { ...product, show_on_homepage: !currentValue }
+            : product,
+          ),
         );
         toast.success(
-          !currentValue
-            ? "Product will now show on home page"
-            : "Product removed from home page",
+          !currentValue ?
+            "Product will now show on home page"
+          : "Product removed from home page",
           {
             position: "top-center",
             autoClose: 2000,
-          }
+          },
         );
       }
     } catch (error) {
@@ -125,12 +121,12 @@ const AllProductAdmin = () => {
     try {
       setdeleting(true);
       const response = await axiosSecure.delete(
-        `/products/${selectedProduct?._id}`
+        `/products/${selectedProduct?._id}`,
       );
 
       if (response.data.success) {
         setProducts(
-          products.filter((product) => product._id !== selectedProduct._id)
+          products.filter((product) => product._id !== selectedProduct._id),
         );
         toast.success("Product deleted successfully", {
           position: "top-center",
@@ -164,16 +160,12 @@ const AllProductAdmin = () => {
     setDeleteModalOpen(false);
   };
 
-
- 
-
   const clearFilters = () => {
     setSearchTerm("");
     setFilterCategory("all");
     setFilterStatus("all");
     setCurrentPage(0);
   };
-
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
@@ -188,7 +180,6 @@ const AllProductAdmin = () => {
     }
     return null;
   };
-
 
   return (
     <div className="p-3 min-h-screen">
@@ -205,7 +196,7 @@ const AllProductAdmin = () => {
         </button>
       </div>
       {/* Filters and Search */}
-      <div className="mt-4 bg-amber-100  rounded-4xl shadow p-4">
+      <div className="mt-4 custom-bg  rounded-4xl shadow p-4">
         <div className="flex items-center justify-between mb-4">
           {(searchTerm ||
             filterCategory !== "all" ||
@@ -228,7 +219,7 @@ const AllProductAdmin = () => {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="h-5 w-5 text-gray-400" />
+                <FaSearch className="h-5 w-5 " />
               </div>
               <input
                 type="text"
@@ -300,27 +291,27 @@ const AllProductAdmin = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Product
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Price
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Category
                     </th>
-                    <th className="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-5 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Created By
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Show on Home
                     </th>
-                    <th className="px-14 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-14 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-amber-100 divide-y divide-gray-200">
+                <tbody className="custom-bg divide-y divide-gray-200">
                   {products.map((product) => {
                     const productImage = getProductImage(product);
                     return (
@@ -372,7 +363,7 @@ const AllProductAdmin = () => {
                         {/* Created By */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <MdEmail className="h-4 w-4 text-gray-400 mr-2" />
+                            <MdEmail className="h-4 w-4  mr-2" />
                             <span className="text-sm text-gray-700">
                               {product.createdBy || "Unknown"}
                             </span>
@@ -385,7 +376,7 @@ const AllProductAdmin = () => {
                             onClick={() =>
                               handleToggleShowOnHome(
                                 product._id,
-                                product.show_on_homepage
+                                product.show_on_homepage,
                               )
                             }
                             className={`flex items-center px-3 py-1 rounded-full text-sm font-semibold transition-colors ${
@@ -413,7 +404,7 @@ const AllProductAdmin = () => {
                             <button
                               onClick={() =>
                                 navigate(
-                                  `/dashboard/update-product/${product?._id}`
+                                  `/dashboard/update-product/${product?._id}`,
                                 )
                               }
                               className="flex items-center rounded-full px-3 py-1 text-white bg-blue-600 hover:bg-red-800 hover:underline transition-all duration-300"
@@ -441,16 +432,14 @@ const AllProductAdmin = () => {
 
             {/* Empty State */}
             {products.length === 0 && !loading && (
-              <div className="text-center bg-amber-100 py-12">
-                <div className="text-gray-400 mb-4">
+              <div className="text-center custom-bg py-12">
+                <div className=" mb-4">
                   <FaBox className="mx-auto h-12 w-12" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No products found
                 </h3>
-                <p className="text-gray-500">
-                  Try adjusting your search or filter criteria
-                </p>
+                <p className="">Try adjusting your search or filter criteria</p>
               </div>
             )}
           </div>
@@ -490,7 +479,7 @@ const AllProductAdmin = () => {
                 breakClassName="hidden sm:block"
                 breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
                 disabledClassName="opacity-50 cursor-not-allowed"
-                disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
+                disabledLinkClassName=" hover: hover:bg-transparent"
               />
             </div>
           )}
@@ -510,7 +499,7 @@ const AllProductAdmin = () => {
                 <p className="ml-3 text-gray-600 mb-2">
                   Are you sure you want to delete this product?
                 </p>
-                <div className="bg-amber-100 rounded-4xl p-5 space-y-2">
+                <div className="custom-bg rounded-4xl p-5 space-y-2">
                   <p className="font-semibold text-red-800">
                     Product: {selectedProduct?.product_name}
                   </p>

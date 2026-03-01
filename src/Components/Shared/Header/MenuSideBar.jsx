@@ -11,7 +11,7 @@ const MenuSideBar = ({ links, isOpen, onClose }) => {
       onClick={onClose}
     >
       <div
-        className="dropdown-content fixed left-0 top-0 h-full w-64 backdrop-blur-xl shadow-lg z-50"
+        className="dropdown-content fixed left-0 top-0 h-full w-64 backdrop-blur-xl shadow-md  z-50"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6">
@@ -29,9 +29,9 @@ const MenuSideBar = ({ links, isOpen, onClose }) => {
                   to={link.to}
                   className={({ isActive }) =>
                     `block py-3 px-4 rounded-lg transition-all duration-200 ${
-                      isActive
-                        ? " hover:text-red-800 hover:underline"
-                        : " hover:text-red-800 "
+                      isActive ?
+                        " hover:text-red-800 hover:underline"
+                      : " hover:text-red-800 "
                     }`
                   }
                   onClick={onClose}

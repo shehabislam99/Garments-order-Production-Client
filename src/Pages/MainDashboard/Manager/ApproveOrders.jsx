@@ -8,18 +8,17 @@ import {
   FaBox,
   FaTimes,
 } from "react-icons/fa";
-import { MdLocationOn} from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import Loading from "../../../Components/Common/Loding/Loding";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
-
 const ApprovedOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-   const [ordersPerPage] = useState(6);
+  const [ordersPerPage] = useState(6);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
   const [viewTrackingModalOpen, setViewTrackingModalOpen] = useState(false);
@@ -29,9 +28,9 @@ const ApprovedOrders = () => {
     status: "",
     dateTime: new Date().toISOString().slice(0, 16),
   });
- const [addingTracking, setAddingTracking] = useState(false);
- const [trackingTimeline, setTrackingTimeline] = useState([]);
- const [loadingTimeline, setLoadingTimeline] = useState(false);
+  const [addingTracking, setAddingTracking] = useState(false);
+  const [trackingTimeline, setTrackingTimeline] = useState([]);
+  const [loadingTimeline, setLoadingTimeline] = useState(false);
   const axiosSecure = useAxiosSecure();
 
   const fetchApprovedOrders = async () => {
@@ -79,14 +78,15 @@ const ApprovedOrders = () => {
 
   const closeModals = () => {
     setTrackingModalOpen(false);
-     setViewTrackingModalOpen(false);
+    setViewTrackingModalOpen(false);
     setSelectedOrder(null);
     setTrackingForm({
       location: "",
       note: "",
       status: "Cutting Completed",
       dateTime: new Date().toISOString().slice(0, 16),
-    });  setTrackingTimeline([]);
+    });
+    setTrackingTimeline([]);
   };
 
   const handleAddTracking = async () => {
@@ -101,7 +101,7 @@ const ApprovedOrders = () => {
       setAddingTracking(true);
       await axiosSecure.post(
         `/orders/tracking/${selectedOrder._id}`,
-        trackingForm
+        trackingForm,
       );
       toast.success("Tracking added successfully", {
         position: "top-center",
@@ -121,18 +121,18 @@ const ApprovedOrders = () => {
 
   const paginatedOrders = orders.slice(
     currentPage * ordersPerPage,
-    (currentPage + 1) * ordersPerPage
+    (currentPage + 1) * ordersPerPage,
   );
 
   const handlePageClick = (e) => setCurrentPage(e.selected);
 
-   const formatDate = (date) => {
-     if (!date) return "Date not available";
-     return new Date(date).toLocaleString("en-US", {
-       dateStyle: "medium",
-       timeStyle: "short",
-     });
-   };
+  const formatDate = (date) => {
+    if (!date) return "Date not available";
+    return new Date(date).toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
 
   const formatCurrency = (amt) =>
     new Intl.NumberFormat("en-US", {
@@ -166,30 +166,30 @@ const ApprovedOrders = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase whitespace-nowrap">
                   Order ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase">
                   Customer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase whitespace-nowrap">
                   Product name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase">
                   Price
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-center text-xs font-medium  uppercase">
                   Quantity
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase whitespace-nowrap">
                   Approve Date
                 </th>
-                <th className="px-15 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-15 py-3 text-left text-xs font-medium  uppercase">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-amber-100 divide-y divide-gray-200">
+            <tbody className="custom-bg divide-y divide-gray-200">
               {paginatedOrders.map((order) => (
                 <tr
                   key={order?._id}
@@ -238,7 +238,7 @@ const ApprovedOrders = () => {
                     <div className="items-center">
                       <div className="font-medium text-gray-600">
                         {formatDate(
-                          order?.approvedAt || order?.createdAt || "N/A"
+                          order?.approvedAt || order?.createdAt || "N/A",
                         )}
                       </div>
                     </div>
@@ -267,8 +267,8 @@ const ApprovedOrders = () => {
           </table>
         </div>
         {orders?.length === 0 && (
-          <div className="text-center py-12 bg-amber-100">
-            <FaBox className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <div className="text-center py-12 bgcolor">
+            <FaBox className="mx-auto h-12 w-12  mb-4" />
             <h3 className="text-lg font-medium text-gray-900">
               No Approved orders
             </h3>
@@ -310,14 +310,14 @@ const ApprovedOrders = () => {
             breakClassName="hidden sm:block"
             breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
             disabledClassName="opacity-50 cursor-not-allowed"
-            disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
+            disabledLinkClassName=" hover: hover:bg-transparent"
           />
         </div>
       )}
       {/* ADD TRACKING MODAL */}
       {trackingModalOpen && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-amber-100 rounded-4xl shadow-xl max-w-md w-full">
+          <div className="custom-bg rounded-4xl shadow-xl max-w-md w-full">
             <div className="p-6">
               <div className="flex justify-between mb-4">
                 <h3 className="text-lg ml-25 font-bold text-gray-900">
@@ -423,7 +423,7 @@ const ApprovedOrders = () => {
       )}{" "}
       {viewTrackingModalOpen && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-amber-100 rounded-4xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="custom-bg rounded-4xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
@@ -433,7 +433,7 @@ const ApprovedOrders = () => {
                 </div>
                 <button
                   onClick={closeModals}
-                  className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full"
+                  className=" hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full"
                 >
                   <FaTimes className="h-6 w-6 text-red-600" />
                 </button>
@@ -481,7 +481,7 @@ const ApprovedOrders = () => {
                                     <span className="font-bold text-gray-900 text-lg">
                                       {track?.step}
                                     </span>
-                                    <span className="ml-auto text-sm font-semibold text-gray-500">
+                                    <span className="ml-auto text-sm font-semibold ">
                                       {formatDate(track?.date)}
                                     </span>
                                   </div>

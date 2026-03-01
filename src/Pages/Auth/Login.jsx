@@ -4,9 +4,9 @@ import { FaEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import toast from "react-hot-toast";
 import useAuth from "../../Hooks/useAuth";
-import SocialLogin from "./SocialLogIn";
 import Logo from "../../Components/Common/Logo/Logo";
 import Loading from "../../Components/Common/Loding/Loding";
+import SocialLogin from "./SocialLogin";
 
 const Login = () => {
   const { user, signIn } = useAuth();
@@ -36,48 +36,44 @@ const Login = () => {
   const handleToggle = () => {
     setshowPassword(!showPassword);
   };
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    await signIn(loginData.email, loginData.password);
+    try {
+      await signIn(loginData.email, loginData.password);
 
-    toast.success("Login successful.. Welcome back!", {
-      position: "top-center",
-      autoClose: 2000,
-    });
+      toast.success("Login successful.. Welcome back!", {
+        position: "top-center",
+        autoClose: 2000,
+      });
 
-    navigate(from, { replace: true });
-  } catch (err) {
+      navigate(from, { replace: true });
+    } catch (err) {
       toast.error("Login failed. Try again!", err.message, {
         position: "top-center",
         autoClose: 2000,
       });
+    } finally {
+      setLoading(false);
     }
-   finally {
-    setLoading(false);
-  }
-};
+  };
 
-   if (loading) {
-     return (
-       <div className="min-h-screen flex items-center justify-center">
-         <div className="text-center">
-           <Loading></Loading>
-         </div>
-       </div>
-     );
-   }
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loading></Loading>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex items-center justify-center py-8 px-4 ">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8">
-        <div className="w-1/2 bg-amber-100 p-8 rounded-4xl shadow-xl border border-gray-200">
+        <div className="w-1/2 custom-bg p-8 rounded-4xl shadow-xl border border-gray-200">
           <div className=" text-center  mb-8">
-            <Link
-              className="flex justify-center hover:underline "
-              to="/"
-            >
+            <Link className="flex justify-center hover:underline " to="/">
               <Logo></Logo>
             </Link>
             <h2 className=" text-2xl font-bold text-gray-800">Welcome Back!</h2>
@@ -148,9 +144,11 @@ const handleSubmit = async (e) => {
                 <button
                   type="button"
                   onClick={handleToggle}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center "
                 >
-                  {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                  {showPassword ?
+                    <FaRegEye />
+                  : <FaRegEyeSlash />}
                 </button>
               </div>
             </div>

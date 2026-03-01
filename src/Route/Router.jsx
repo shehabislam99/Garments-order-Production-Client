@@ -4,8 +4,8 @@ import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
 import ProductDetailsPage from "../Pages/Products/ProductDetailsPage";
 import AllProducts from "../Pages/Products/AllProducts";
-import About from "../Pages/About and Contact page/About";
-import Contact from "../Pages/About and Contact page/Contact";
+import About from "../Pages/Additional Page/About";
+import Contact from "../Pages/Additional Page/Contact";
 import AdminDashboard from "../Pages/MainDashboard/Admin/AdminDashboard";
 import ManageUsers from "../Pages/MainDashboard/Admin/ManageUsers";
 import AllProductAdmin from "../Pages/MainDashboard/Admin/AllProductAdmin";
@@ -34,6 +34,8 @@ import BuyerProfile from "../Pages/MainDashboard/Buyer/BuyerProfile";
 import OrderDetails from "../Pages/MainDashboard/Manager/OrderDetails";
 import AdminManagerRout from "./AdminManagerRout";
 import OrderTracking from "../Pages/MainDashboard/Admin/OrderTracking";
+import TermCondition from "../Pages/Additional Page/TermCondition";
+import PrivacyPolicy from "../Pages/Additional Page/PrivacyPolicy";
 
 const router = createBrowserRouter([
   {
@@ -74,6 +76,14 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />,
+      },
+      {
+        path: "/terms-condition",
+        element: <TermCondition></TermCondition>
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy></PrivacyPolicy>
       },
     ],
   },

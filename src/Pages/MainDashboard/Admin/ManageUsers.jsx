@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaEdit,
   FaUser,
@@ -8,7 +8,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { GrDocumentUpdate } from "react-icons/gr";
-import { MdEmail,MdInfo } from "react-icons/md";
+import { MdEmail, MdInfo } from "react-icons/md";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
@@ -19,7 +19,7 @@ const ManageUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
-  const [currentPage, setCurrentPage] = useState(0); 
+  const [currentPage, setCurrentPage] = useState(0);
   const [usersPerPage] = useState(6);
   const [editingUser, setEditingUser] = useState(null);
   const [roleModalOpen, setRoleModalOpen] = useState(false);
@@ -33,22 +33,22 @@ const ManageUsers = () => {
   const [totalPages, setTotalPages] = useState(0);
   const axiosSecure = useAxiosSecure();
 
-
   const fetchUsers = async () => {
     try {
       setLoading(true);
-    
+
       const res = await axiosSecure.get(
         `/users?searchText=${searchTerm}&page=${
           currentPage + 1
-        }&limit=${usersPerPage}&role=${filterRole}&status=${filterStatus}`
+        }&limit=${usersPerPage}&role=${filterRole}&status=${filterStatus}`,
       );
 
       if (res.data && res.data?.success) {
         setUsers(res.data?.data || []);
         setTotalUsers(res.data?.total || 0);
         setTotalPages(
-          res?.data?.totalPages || Math.ceil((res.data?.total || 0) / usersPerPage)
+          res?.data?.totalPages ||
+            Math.ceil((res.data?.total || 0) / usersPerPage),
         );
       } else if (Array.isArray(res.data)) {
         setUsers(res.data);
@@ -74,12 +74,10 @@ const ManageUsers = () => {
     }
   };
 
+  useEffect(() => {
+    fetchUsers();
+  }, [currentPage, searchTerm, filterRole, filterStatus]);
 
-
- useEffect(() => {
-   fetchUsers();
- }, [currentPage, searchTerm, filterRole, filterStatus]);
-  
   const handleRoleUpdate = async () => {
     if (!editingUser || !selectedRole) return;
 
@@ -87,16 +85,16 @@ const ManageUsers = () => {
       setUpdating(true);
       const response = await axiosSecure.patch(
         `/users/role/${editingUser?._id}`,
-        { role: selectedRole }
+        { role: selectedRole },
       );
 
       if (response.data.modifiedCount > 0 || response.data.success) {
         setUsers(
           users.map((user) =>
-            user._id === editingUser._id
-              ? { ...user, role: selectedRole }
-              : user
-          )
+            user._id === editingUser._id ?
+              { ...user, role: selectedRole }
+            : user,
+          ),
         );
         toast.success(`User role updated to ${selectedRole}`, {
           position: "top-center",
@@ -121,7 +119,7 @@ const ManageUsers = () => {
   };
 
   const handlePageClick = (event) => {
-    setCurrentPage(event.selected); 
+    setCurrentPage(event.selected);
   };
 
   const handleApproveUser = async () => {
@@ -133,8 +131,8 @@ const ManageUsers = () => {
       if (res?.data?.success) {
         setUsers(
           users.map((u) =>
-            u._id === editingUser?._id ? { ...u, status: "active" } : u
-          )
+            u._id === editingUser?._id ? { ...u, status: "active" } : u,
+          ),
         );
         toast.success("User approved", {
           position: "top-center",
@@ -169,10 +167,10 @@ const ManageUsers = () => {
       if (res?.data.success) {
         setUsers(
           users.map((u) =>
-            u._id === editingUser?._id
-              ? { ...u, status: "suspended", suspendReason, suspendFeedback }
-              : u
-          )
+            u._id === editingUser?._id ?
+              { ...u, status: "suspended", suspendReason, suspendFeedback }
+            : u,
+          ),
         );
         toast.success("User suspended", {
           position: "top-center",
@@ -189,34 +187,31 @@ const ManageUsers = () => {
   };
 
   const handleActivateUser = async () => {
-      try {
-        const res = await axiosSecure.patch(
-          `/users/status/${editingUser?._id}`,
-          {
-            status: "active",
-            suspendReason: "",
-            suspendFeedback: "",
-          }
-        );
+    try {
+      const res = await axiosSecure.patch(`/users/status/${editingUser?._id}`, {
+        status: "active",
+        suspendReason: "",
+        suspendFeedback: "",
+      });
 
-        if (res?.data.success) {
-          setUsers(
-            users.map((u) =>
-              u._id === editingUser?._id ? { ...u, status: "active" } : u
-            )
-          );
-          toast.success("User activated", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-          closeUpdateModal();
-        }
-      } catch {
-        toast.error("Activation failed", {
+      if (res?.data.success) {
+        setUsers(
+          users.map((u) =>
+            u._id === editingUser?._id ? { ...u, status: "active" } : u,
+          ),
+        );
+        toast.success("User activated", {
           position: "top-center",
           autoClose: 2000,
         });
+        closeUpdateModal();
       }
+    } catch {
+      toast.error("Activation failed", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
   };
 
   const openUpdateModal = (user) => {
@@ -267,7 +262,7 @@ const ManageUsers = () => {
     setSearchTerm("");
     setFilterRole("all");
     setFilterStatus("all");
-    setCurrentPage(0); 
+    setCurrentPage(0);
   };
 
   return (
@@ -288,7 +283,7 @@ const ManageUsers = () => {
       </div>
 
       {/* Filters and Search */}
-      <div className="mt-4 bg-amber-100 rounded-4xl shadow p-4">
+      <div className="mt-4 custom-bg rounded-4xl shadow p-4">
         <div className="flex items-center justify-between mb-4">
           {(searchTerm || filterRole !== "all" || filterStatus !== "all") && (
             <button
@@ -309,7 +304,7 @@ const ManageUsers = () => {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="h-5 w-5 text-gray-400" />
+                <FaSearch className="h-5 w-5 " />
               </div>
               <input
                 type="text"
@@ -382,24 +377,24 @@ const ManageUsers = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Email
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Role
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider whitespace-nowrap">
                       User Status
                     </th>
-                    <th className="px-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                    <th className="px-9 py-3 text-left text-xs font-medium  uppercase tracking-wider whitespace-nowrap">
                       Manage Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-amber-100 divide-y divide-gray-200">
+                <tbody className="custom-bg divide-y divide-gray-200">
                   {users.map((user) => (
                     <tr
                       key={user?._id}
@@ -427,7 +422,7 @@ const ManageUsers = () => {
                       {/* Email */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <MdEmail className="h-4 w-4 text-gray-400 mr-2" />
+                          <MdEmail className="h-4 w-4  mr-2" />
                           <div className="text-sm text-gray-900">
                             {user?.email}
                           </div>
@@ -438,7 +433,7 @@ const ManageUsers = () => {
                       <td className="px-4 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${getRoleColor(
-                            user?.role
+                            user?.role,
                           )}`}
                         >
                           {user?.role || "buyer"}
@@ -450,14 +445,14 @@ const ManageUsers = () => {
                         <div className="flex flex-col">
                           <span
                             className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                              user?.status || "active"
+                              user?.status || "active",
                             )} mb-1 w-fit`}
                           >
                             {user?.status || "active"}
                           </span>
                           {user?.status === "suspended" &&
                             user?.suspendReason && (
-                              <span className="text-xs text-gray-500 flex items-center">
+                              <span className="text-xs  flex items-center">
                                 <MdInfo className="mr-1" />
                                 {user?.suspendReason}
                               </span>
@@ -474,7 +469,7 @@ const ManageUsers = () => {
                             disabled={user?.role === "admin"}
                             className={`flex items-center ${
                               user?.role === "admin" ?
-                                "text-gray-400 cursor-not-allowed"
+                                " cursor-not-allowed"
                               : "hover:bg-red-800 px-3 py-1 rounded-full text-white bg-indigo-600 "
                             }`}
                             title="Update Role"
@@ -488,7 +483,7 @@ const ManageUsers = () => {
                             onClick={() => openUpdateModal(user)}
                             className={`flex items-center ${
                               user?.role === "admin" ?
-                                "text-gray-400 cursor-not-allowed"
+                                " cursor-not-allowed"
                               : "hover:bg-red-800 px-3 py-1 rounded-full text-white bg-green-600"
                             }`}
                           >
@@ -505,16 +500,14 @@ const ManageUsers = () => {
 
             {/* Empty State */}
             {users.length === 0 && !loading && (
-              <div className="text-center bg-amber-100 py-12">
-                <div className="text-gray-400 mb-4">
+              <div className="text-center custom-bg py-12">
+                <div className=" mb-4">
                   <FaUser className="mx-auto h-12 w-12" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No users found here
                 </h3>
-                <p className="text-gray-500">
-                  Try to find your search or filter criteria
-                </p>
+                <p className="">Try to find your search or filter criteria</p>
               </div>
             )}
           </div>
@@ -554,7 +547,7 @@ const ManageUsers = () => {
                 breakClassName="hidden sm:block"
                 breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
                 disabledClassName="opacity-50 cursor-not-allowed"
-                disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
+                disabledLinkClassName=" hover: hover:bg-transparent"
               />
             </div>
           )}
@@ -564,7 +557,7 @@ const ManageUsers = () => {
       {/* Role Update Modal */}
       {roleModalOpen && editingUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-amber-100 rounded-4xl  shadow-xl max-w-md w-full">
+          <div className="custom-bg rounded-4xl  shadow-xl max-w-md w-full">
             <div className="p-6">
               <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
                 Update User Role
@@ -626,7 +619,7 @@ const ManageUsers = () => {
       {/* Suspend User Modal */}
       {updateModalOpen && editingUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-amber-100 rounded-4xl shadow-xl max-w-md w-full p-6">
+          <div className="custom-bg rounded-4xl shadow-xl max-w-md w-full p-6">
             <h3 className="text-lg text-center font-bold mb-4">
               Update Status
             </h3>

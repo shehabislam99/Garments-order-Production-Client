@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, } from "react-router-dom";
-import {
-  FaTasks,
-  FaMapMarkerAlt,
-  FaUser,
-} from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaTasks, FaMapMarkerAlt, FaUser } from "react-icons/fa";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
@@ -16,7 +12,7 @@ const DashboardOverview = ({ stats }) => (
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div className="bg-amber-100 rounded-4xl  shadow p-6">
+      <div className="custom-bg rounded-4xl  shadow p-6">
         <div className="ml-4 text-center">
           <p className="text-xl font-medium text-gray-600">Total Orders</p>
           <p className="text-2xl mt-1 font-semibold text-blue-500">
@@ -25,7 +21,7 @@ const DashboardOverview = ({ stats }) => (
         </div>
       </div>
 
-      <div className="bg-amber-100 rounded-4xl shadow p-6">
+      <div className="custom-bg rounded-4xl shadow p-6">
         <div className="ml-4 text-center">
           <p className="text-xl font-medium text-gray-600">Payment Pending</p>
           <p className="text-2xl mt-1 font-semibold text-purple-900">
@@ -34,7 +30,7 @@ const DashboardOverview = ({ stats }) => (
         </div>
       </div>
 
-      <div className="bg-amber-100 rounded-4xl shadow p-6">
+      <div className="custom-bg rounded-4xl shadow p-6">
         <div className="ml-4 text-center">
           <p className="text-xl font-medium text-gray-600">Total Spent</p>
           <p className="text-2xl mt-1 font-semibold text-green-600">
@@ -49,38 +45,36 @@ const DashboardOverview = ({ stats }) => (
       </h3>
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-3">
         <Link to="/dashboard/my-orders">
-          <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
             <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-lg p-3 mr-4">
               <FaTasks className="w-6 h-6" />
             </div>
             <div className="text-left">
               <p className="text-lg font-semibold text-gray-900">My Orders</p>
-              <p className="text-lg text-gray-500">View your order history</p>
+              <p className="text-lg ">View your order history</p>
             </div>
           </button>
         </Link>
 
         <Link to="/dashboard/track-order/:orderId">
-          <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
             <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
               <FaMapMarkerAlt className="w-6 h-6" />
             </div>
             <div className="text-left">
               <p className="text-lg font-semibold text-gray-900">Track Order</p>
-              <p className="text-lg text-gray-500">
-                Tracking your order status
-              </p>
+              <p className="text-lg ">Tracking your order status</p>
             </div>
           </button>
         </Link>
         <Link to="/dashboard/profile">
-          <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
-            <div className="flex-shrink-0 text-amber-500 bg-amber-100 rounded-lg p-3 mr-4">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
+            <div className="flex-shrink-0 text-amber-500 custom-bg rounded-lg p-3 mr-4">
               <FaUser className="w-6 h-6" />
             </div>
             <div className="text-left">
               <p className="text-lg font-semibold text-gray-900">My Profile</p>
-              <p className="text-lg text-gray-500">Manage account settings</p>
+              <p className="text-lg ">Manage account settings</p>
             </div>
           </button>
         </Link>
@@ -89,29 +83,26 @@ const DashboardOverview = ({ stats }) => (
   </div>
 );
 
-
 const BuyerDashboard = () => {
   const { user } = useAuth();
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const [stats, setStats] = useState({
     totalOrders: 0,
     pendingPayment: 0,
     totalSpent: 0,
   });
-  
 
   useEffect(() => {
-      const fetchDashboardStats = async () => {
-        try {
-          const response = await axiosSecure.get("/buyer/stats");
-          setStats(response.data.data);
-        } catch (error) {
-          console.error("Error fetching dashboard stats:", error);
-        }
-      };
+    const fetchDashboardStats = async () => {
+      try {
+        const response = await axiosSecure.get("/buyer/stats");
+        setStats(response.data.data);
+      } catch (error) {
+        console.error("Error fetching dashboard stats:", error);
+      }
+    };
     fetchDashboardStats();
   }, []);
-
 
   return (
     <div className="flex h-screen">

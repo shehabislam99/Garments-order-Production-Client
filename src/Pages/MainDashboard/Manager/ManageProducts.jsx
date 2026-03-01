@@ -39,7 +39,6 @@ const ManageProducts = () => {
       const res = await axiosSecure.get("/manage/products");
       const productsData = res?.data?.data || [];
       setProducts(productsData);
-    
     } catch {
       toast.error("Failed to load products", {
         position: "top-center",
@@ -50,26 +49,26 @@ const ManageProducts = () => {
     }
   };
 
-const filteredProducts = products.filter((product) => {
-  const search = searchTerm.toLowerCase().trim();
-    const paymentMethod = product?.payment_Options?.toString().toLowerCase() || "";
+  const filteredProducts = products.filter((product) => {
+    const search = searchTerm.toLowerCase().trim();
+    const paymentMethod =
+      product?.payment_Options?.toString().toLowerCase() || "";
 
-  const matchesSearch =
-    product?.product_name?.toLowerCase().includes(search) ||
-    product?.category?.toLowerCase().includes(search) ||
-    paymentMethod.includes(search);
+    const matchesSearch =
+      product?.product_name?.toLowerCase().includes(search) ||
+      product?.category?.toLowerCase().includes(search) ||
+      paymentMethod.includes(search);
 
-  const matchesPaymentMethod =
-    filterpaymentMethod === "all" ||
-    paymentMethod === filterpaymentMethod.toLowerCase();
+    const matchesPaymentMethod =
+      filterpaymentMethod === "all" ||
+      paymentMethod === filterpaymentMethod.toLowerCase();
 
-  return matchesSearch && matchesPaymentMethod;
-});
-
+    return matchesSearch && matchesPaymentMethod;
+  });
 
   const paginatedProducts = filteredProducts.slice(
     currentPage * productsPerPage,
-    (currentPage + 1) * productsPerPage
+    (currentPage + 1) * productsPerPage,
   );
 
   const openDeleteModal = (product) => {
@@ -114,19 +113,17 @@ const filteredProducts = products.filter((product) => {
     setCurrentPage(0);
   };
 
-
-
- const getPaymentColor = (payment_Options) => {
-  const paymentMethod = payment_Options?.toString?.().toLowerCase() || "";
-   switch (paymentMethod) {
-     case "stripe":
-       return "bg-green-100 text-green-800 border-green-200";
-     case "cash on delivery":
-       return "bg-violet-100 text-violet-800 border-violet-200";
-     default:
-       return "bg-gray-100 text-gray-800 border-gray-200";
-   }
- };
+  const getPaymentColor = (payment_Options) => {
+    const paymentMethod = payment_Options?.toString?.().toLowerCase() || "";
+    switch (paymentMethod) {
+      case "stripe":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "cash on delivery":
+        return "bg-violet-100 text-violet-800 border-violet-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
@@ -162,7 +159,7 @@ const filteredProducts = products.filter((product) => {
         </button>
       </div>
 
-      <div className="mt-4 bg-amber-100 rounded-4xl shadow p-4">
+      <div className="mt-4 custom-bg rounded-4xl shadow p-4">
         <div className="flex items-center justify-between mb-4">
           {(searchTerm || filterpaymentMethod !== "all") && (
             <button
@@ -183,7 +180,7 @@ const filteredProducts = products.filter((product) => {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="h-5 w-5 text-gray-400" />
+                <FaSearch className="h-5 w-5 " />
               </div>
               <input
                 type="text"
@@ -235,24 +232,24 @@ const filteredProducts = products.filter((product) => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Image
                     </th>
-                    <th className=" whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className=" whitespace-nowrap px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Product Name
                     </th>
-                    <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-8 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Price
                     </th>
-                    <th className=" whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className=" whitespace-nowrap px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Payment Method
                     </th>
-                    <th className="px-14 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-14 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-amber-100 divide-y divide-gray-200">
+                <tbody className="custom-bg divide-y divide-gray-200">
                   {paginatedProducts.map((product) => (
                     <tr
                       key={product?._id}
@@ -288,7 +285,7 @@ const filteredProducts = products.filter((product) => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getPaymentColor(
-                            product?.payment_Options
+                            product?.payment_Options,
                           )}`}
                         >
                           <FaCreditCard className="mr-1" />
@@ -302,7 +299,7 @@ const filteredProducts = products.filter((product) => {
                           <button
                             onClick={() =>
                               navigate(
-                                `/dashboard/update-product/${product?._id}`
+                                `/dashboard/update-product/${product?._id}`,
                               )
                             }
                             className="px-2 py-1 flex items-center rounded-full bg-green-600 text-white hover:bg-red-800"
@@ -329,14 +326,14 @@ const filteredProducts = products.filter((product) => {
             </div>
 
             {filteredProducts.length === 0 && (
-              <div className="text-center py-12 bg-amber-100">
-                <div className="text-gray-400 mb-4">
+              <div className="text-center py-12 bgcolor">
+                <div className=" mb-4">
                   <FaBox className="mx-auto h-12 w-12" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No products found
                 </h3>
-                <p className="text-gray-500">
+                <p className="">
                   {searchTerm || filterpaymentMethod !== "all" ?
                     "Try changing your search or filter criteria"
                   : "No products available"}
@@ -380,7 +377,7 @@ const filteredProducts = products.filter((product) => {
                 breakClassName="hidden sm:block"
                 breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
                 disabledClassName="opacity-50 cursor-not-allowed"
-                disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
+                disabledLinkClassName=" hover: hover:bg-transparent"
               />
             </div>
           )}
@@ -400,7 +397,7 @@ const filteredProducts = products.filter((product) => {
                 <p className="ml-3 text-gray-600 mb-2">
                   Are you sure you want to delete this product?
                 </p>
-                <div className="bg-amber-100 rounded-4xl p-5 space-y-2">
+                <div className="custom-bg rounded-4xl p-5 space-y-2">
                   <p className="font-semibold text-red-800">
                     Product: {selectedProduct?.product_name}
                   </p>

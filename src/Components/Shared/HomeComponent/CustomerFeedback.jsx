@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaStar,
@@ -11,42 +11,37 @@ import imgfed2 from "../../../assets/photo-1500648767791-00dcc994a43e.avif";
 import imgfed3 from "../../../assets/photo-1438761681033-6461ffad8d80.avif";
 
 const CustomerFeedback = () => {
- const [currentSlide, setCurrentSlide] = useState(0);
-const feedBack = [
-  {
-   
-    name: "David Park",
-    role: "Photographer",
-    image: imgfed1 ,
-    rating: 5,
-    comment:
-      "As a photographer, I appreciate quality fabrics. These products are perfect for my photoshoots. Great value for money!",
-    date: "2 weeks ago",
-  },
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const feedBack = [
+    {
+      name: "David Park",
+      role: "Photographer",
+      image: imgfed1,
+      rating: 5,
+      comment:
+        "As a photographer, I appreciate quality fabrics. These products are perfect for my photoshoots. Great value for money!",
+      date: "2 weeks ago",
+    },
 
-  {
- 
-    name: "Michael Chen",
-    role: "Business Owner",
-    image: imgfed2,
-    rating: 5,
-    comment:
-      "Outstanding customer service and premium quality products. The shipping was faster than expected. Highly recommended!",
-    date: "1 week ago",
-  },
-  {
-    
-    name: "Emily Rodriguez",
-    role: "Interior Designer",
-    image: imgfed3,
-    rating: 4,
-    comment:
-      "Love the attention to detail in every product. The materials feel luxurious and the designs are timeless.",
-    date: "3 days ago",
-  },
-];
-
-
+    {
+      name: "Michael Chen",
+      role: "Business Owner",
+      image: imgfed2,
+      rating: 5,
+      comment:
+        "Outstanding customer service and premium quality products. The shipping was faster than expected. Highly recommended!",
+      date: "1 week ago",
+    },
+    {
+      name: "Emily Rodriguez",
+      role: "Interior Designer",
+      image: imgfed3,
+      rating: 4,
+      comment:
+        "Love the attention to detail in every product. The materials feel luxurious and the designs are timeless.",
+      date: "3 days ago",
+    },
+  ];
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % feedBack.length);
@@ -72,22 +67,22 @@ const feedBack = [
   };
 
   return (
-    <section className="py-16 ">
+    <section className="mt-10 lg:mt-15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/20 text-blue-600 font-medium mb-6">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/20 text-blue-600 font-medium mb-4">
             Testimonial and Ratings
           </div>
           <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
             What Our Customers Say
           </h2>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="text-lg  max-w-2xl mx-auto">
             Don't just take our word for it. Hear from our satisfied customers
           </p>
         </motion.div>
@@ -161,13 +156,13 @@ const feedBack = [
 
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transform hover:scale-110 transition-all duration-300 z-20"
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md  hover:bg-white transform hover:scale-110 transition-all duration-300 z-20"
           >
             <FaChevronLeft className="w-5 h-5 text-gray-700" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transform hover:scale-110 transition-all duration-300 z-20"
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md  hover:bg-white transform hover:scale-110 transition-all duration-300 z-20"
           >
             <FaChevronRight className="w-5 h-5 text-gray-700" />
           </button>
@@ -192,7 +187,7 @@ const feedBack = [
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           {feedBack.map((testimonial, index) => (
             <motion.div
@@ -202,7 +197,7 @@ const feedBack = [
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
-              className="bg-amber-100 rounded-4xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300"
+              className="custom-bg rounded-4xl p-6 shadow-md  hover:shadow-2xl transition-all duration-300"
             >
               <div className="flex items-center mb-4">
                 <img

@@ -15,40 +15,37 @@ import { HiOutlineCurrencyDollar } from "react-icons/hi";
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user} = useAuth();
-  const { role } = useRole()
+  const { user } = useAuth();
+  const { role } = useRole();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [imageIndex, setImageIndex] = useState(0);
 
-  const paymentOptionsList = product?.payment_Options||[];
+  const paymentOptionsList = product?.payment_Options || [];
 
- useEffect(() => {
-   const fetchProductDetails = async () => {
-     try {
-       setLoading(true);
-       const res = await axiosInstance.get(`/products/${id}`);
-       setProduct(res.data.data);
-         
-     } catch {
-       toast.error("Failed to load product details", {
-         position: "top-center",
-         autoClose: 2000,
-       });
-     } finally {
-       setLoading(false);
-     }
-   };
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        setLoading(true);
+        const res = await axiosInstance.get(`/products/${id}`);
+        setProduct(res.data.data);
+      } catch {
+        toast.error("Failed to load product details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
-   if (id) {
-     fetchProductDetails();
-   }
- }, [id]);
-
+    if (id) {
+      fetchProductDetails();
+    }
+  }, [id]);
 
   const handleOrderNow = () => {
-
     if (role === "admin" || role === "manager") {
       toast.error("Admins and Managers cannot place orders", {
         position: "top-center",
@@ -56,13 +53,13 @@ const ProductDetailsPage = () => {
       });
       return;
     }
-  if (!selectedPayment) {
-    toast.error("Please select a payment method", {
-      position: "top-center",
-      autoClose: 2000,
-    });
-    return;
-  }
+    if (!selectedPayment) {
+      toast.error("Please select a payment method", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      return;
+    }
     // Redirect to booking page with product details
     navigate(`/order/${id}`, {
       state: {
@@ -77,7 +74,7 @@ const ProductDetailsPage = () => {
       user && // User is logged in
       role && // Role is defined
       role !== "admin" &&
-      role !== "manager" 
+      role !== "manager"
     );
   };
 
@@ -90,7 +87,7 @@ const ProductDetailsPage = () => {
     );
   }
 
-  if ( !product) {
+  if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -98,7 +95,7 @@ const ProductDetailsPage = () => {
             Product Not Found
           </h2>
           <p className="text-gray-600 mb-6">
-            { "The product you're looking for doesn't exist."}
+            {"The product you're looking for doesn't exist."}
           </p>
           <button
             onClick={() => navigate("/all-products")}
@@ -112,7 +109,7 @@ const ProductDetailsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen  py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="mb-8">
           <button
@@ -126,7 +123,7 @@ const ProductDetailsPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <div className="bg-white rounded-4xl shadow-lg overflow-hidden">
+            <div className="bg-white rounded-4xl shadow-md  overflow-hidden">
               <div className="relative w-full h-96 ">
                 <img
                   src={product.images[imageIndex]}
@@ -142,9 +139,9 @@ const ProductDetailsPage = () => {
                   key={idx}
                   onClick={() => setImageIndex(idx)}
                   className={`relative rounded-4xl overflow-hidden border-2 ${
-                    imageIndex === idx
-                      ? "border-blue-500"
-                      : "border-transparent"
+                    imageIndex === idx ? "border-blue-500" : (
+                      "border-transparent"
+                    )
                   }`}
                 >
                   <img
@@ -160,49 +157,49 @@ const ProductDetailsPage = () => {
           {/* Right Column - Product Info */}
           <div className="space-y-6">
             {/* Product Header */}
-            <div className="bg-white p-6 rounded-4xl shadow">
-              <h1 className="text-3xl font-bold text-gray-700">
+            <div className="card-bg p-6 rounded-4xl shadow">
+              <h1 className="text-3xl font-bold ">
                 {product.product_name}
               </h1>
               {/* Specifications Grid */}
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-center p-4 bg-amber-100 rounded-4xl">
+                <div className="flex items-center p-4 custom-bg rounded-4xl">
                   <MdCategory className="text-2xl text-blue-500 mr-4" />
                   <div>
-                    <p className="text-sm text-gray-500">Category</p>
+                    <p className="text-sm text-gray-600">Category</p>
                     <p className="font-medium">{product.category}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center p-4 bg-amber-100 rounded-4xl">
+                <div className="flex items-center p-4 custom-bg rounded-4xl">
                   <HiOutlineCurrencyDollar className="text-2xl text-purple-500 mr-4" />
                   <div>
-                    <p className="text-sm text-gray-500">Price</p>
+                    <p className="text-sm text-gray-600">Price</p>
                     <p className="font-medium">{product.price}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center p-4 bg-amber-100 rounded-4xl">
+                <div className="flex items-center p-4 custom-bg rounded-4xl">
                   <FaShoppingCart className="text-2xl text-indigo-800 mr-4" />
                   <div>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-600">
                       Minimum Order Quantity
                     </p>
                     <p className="font-medium">{product.moq}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center p-4 bg-amber-100 rounded-4xl">
+                <div className="flex items-center p-4 custom-bg rounded-4xl">
                   <MdInventory className="text-2xl text-green-500 mr-4" />
                   <div>
-                    <p className="text-sm text-gray-500">Avilable Quantity</p>
+                    <p className="text-sm text-gray-600 ">Avilable Quantity</p>
                     <p className="font-medium">{product.available_quantity}</p>
                   </div>
                 </div>
               </div>
               <div className="my-4">
-                <div className=" p-4 bg-amber-100 rounded-4xl max-w-none">
-                  <h3 className="text-sm text-gray-500">Description </h3>
+                <div className=" p-4 custom-bg rounded-4xl max-w-none">
+                  <h3 className="text-sm text-gray-600 ">Description </h3>
                   <p className="font-medium">
                     {product.description ||
                       "No detailed available for this product."}
@@ -211,10 +208,10 @@ const ProductDetailsPage = () => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-4xl shadow space-y-4">
-              <h2 className="text-3xl font-bold text-gray-700">Order Now</h2>
-              <div className="flex p-4  bg-amber-100 rounded-4xl gap-4">
-                <p className="text-sm flex mt-3 text-gray-500">
+            <div className="card-bg p-6 rounded-4xl shadow space-y-4">
+              <h2 className="text-3xl font-bold">Order Now</h2>
+              <div className="flex p-4  custom-bg rounded-4xl gap-4">
+                <p className="text-sm flex mt-3 text-gray-600">
                   <span>
                     <FaCreditCard className="text-2xl text-blue-500 mr-4" />
                   </span>
@@ -240,12 +237,12 @@ const ProductDetailsPage = () => {
                 onClick={handleOrderNow}
                 disabled={!canOrder()}
                 className={`w-full py-4 rounded-4xl text-lg font-semibold transition-all flex items-center justify-center ${
-                  canOrder()
-                    ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl"
-                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  canOrder() ?
+                    "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-md  hover:shadow-xl"
+                  : "bg-gray-400 text-gray-600  cursor-not-allowed"
                 }`}
               >
-                <MdAddShoppingCart className="mr-3 text-xl" />
+                <MdAddShoppingCart className="mr-3  text-xl" />
                 {canOrder() ? "Proceed to Order" : "Cannot Place Order"}
               </button>
             </div>

@@ -22,11 +22,11 @@ const PendingOrders = () => {
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
   const navigate = useNavigate();
-   const { user } = useAuth();
+  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-     fetchPendingOrders();
+    fetchPendingOrders();
   }, []);
 
   useEffect(() => {
@@ -43,7 +43,9 @@ const PendingOrders = () => {
         const isSuspended = suspended.find((u) => u.email === user.email);
 
         if (isSuspended) {
-          toast.error("Your account is suspended. You cannot approve or reject order");
+          toast.error(
+            "Your account is suspended. You cannot approve or reject order",
+          );
           navigate("/dashboard/profile");
           return;
         }
@@ -56,7 +58,6 @@ const PendingOrders = () => {
 
     UserSuspended();
   }, [user, navigate, axiosSecure]);
-
 
   const fetchPendingOrders = async () => {
     try {
@@ -79,7 +80,6 @@ const PendingOrders = () => {
   };
 
   const handleApprove = async (orderId) => {
- 
     try {
       setApproving(true);
       const res = await axiosSecure.put(`/orders/status/${orderId}`, {
@@ -110,7 +110,6 @@ const PendingOrders = () => {
   };
 
   const handleReject = async (orderId) => {
-
     const reason = window.prompt("Please provide a reason for rejection:");
     if (reason === null) return;
     if (!reason.trim()) {
@@ -162,11 +161,9 @@ const PendingOrders = () => {
     }
   };
 
-
-
   const paginatedOrders = orders.slice(
     currentPage * ordersPerPage,
-    (currentPage + 1) * ordersPerPage
+    (currentPage + 1) * ordersPerPage,
   );
 
   const handlePageClick = (event) => setCurrentPage(event.selected);
@@ -220,30 +217,30 @@ const PendingOrders = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase  whitespace-nowrap">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase  whitespace-nowrap">
                   Order ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase">
                   User
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase">
                   Product
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase">
                   Quantity
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase">
                   Payment
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase  whitespace-nowrap">
+                <th className="px-6 py-3 text-left text-xs font-medium  uppercase  whitespace-nowrap">
                   Order Date
                 </th>
-                <th className="px-13 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-13 py-3 text-left text-xs font-medium  uppercase">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-amber-100 divide-y divide-gray-200">
+            <tbody className="custom-bg divide-y divide-gray-200">
               {paginatedOrders.map((order) => (
                 <tr
                   key={order?._id}
@@ -277,7 +274,7 @@ const PendingOrders = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getPaymentColor(
-                        order?.paymentStatus
+                        order?.paymentStatus,
                       )}`}
                     >
                       {order?.paymentStatus || "N/A"}
@@ -323,8 +320,8 @@ const PendingOrders = () => {
         </div>
 
         {orders?.length === 0 && (
-          <div className="text-center py-12 bg-amber-100">
-            <FaBox className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <div className="text-center py-12 bgcolor">
+            <FaBox className="mx-auto h-12 w-12  mb-4" />
             <h3 className="text-lg font-medium text-gray-900">
               No pending orders
             </h3>
@@ -366,7 +363,7 @@ const PendingOrders = () => {
             breakClassName="hidden sm:block"
             breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100"
             disabledClassName="opacity-50 cursor-not-allowed"
-            disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
+            disabledLinkClassName=" hover: hover:bg-transparent"
           />
         </div>
       )}

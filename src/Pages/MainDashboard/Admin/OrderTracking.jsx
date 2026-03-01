@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaClock,
-  FaTruck,
-  FaArrowAltCircleLeft,
-} from "react-icons/fa";
-import {  MdLocationOn } from "react-icons/md";
+import { FaClock, FaTruck, FaArrowAltCircleLeft } from "react-icons/fa";
+import { MdLocationOn } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
@@ -19,7 +15,6 @@ const OrderTracking = () => {
   const [trackingHistory, setTrackingHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     if (user && orderId) {
       fetchOrderTimeline();
@@ -30,7 +25,7 @@ const OrderTracking = () => {
     try {
       setLoading(true);
       const timelineRes = await axiosSecure.get(
-        `/admin/orderTracking/${orderId}`
+        `/admin/orderTracking/${orderId}`,
       );
 
       if (timelineRes.data.success) {
@@ -40,13 +35,16 @@ const OrderTracking = () => {
 
         if (timelineRes.data.data.timeline) {
           const processedTimeline = processTimelineData(
-            timelineRes.data.data.timeline
+            timelineRes.data.data.timeline,
           );
           setTrackingHistory(processedTimeline);
-          toast.success("Order details and Traking history loaded successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
+          toast.success(
+            "Order details and Traking history loaded successfully",
+            {
+              position: "top-center",
+              autoClose: 2000,
+            },
+          );
         } else {
           setTrackingHistory([]);
         }
@@ -75,17 +73,15 @@ const OrderTracking = () => {
     if (trackingHistory.length === 0) return null;
 
     const currentStep = trackingHistory.find(
-      (item) => item.status === "current"
+      (item) => item.status === "current",
     );
     if (currentStep) return currentStep;
 
     const completedSteps = trackingHistory.filter(
-      (item) => item.status === "completed"
+      (item) => item.status === "completed",
     );
     return completedSteps.length > 0 ? completedSteps[0] : trackingHistory[0];
   };
-
-  
 
   if (loading) {
     return (
@@ -96,7 +92,6 @@ const OrderTracking = () => {
   }
 
   const currentStep = getCurrentStep();
- 
 
   return (
     <div className="p-4 max-w-6xl mx-auto min-h-screen">
@@ -120,7 +115,7 @@ const OrderTracking = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="col-span-1 lg:col-span-2 space-y-6">
-          <div className="bg-amber-100 rounded-4xl shadow-sm border border-gray-200">
+          <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">
                 Order Summary
@@ -160,7 +155,7 @@ const OrderTracking = () => {
               </div>
             </div>
           </div>
-          <div className="bg-amber-100 rounded-4xl shadow-sm border border-gray-200">
+          <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">
                 Product Summary
@@ -205,7 +200,7 @@ const OrderTracking = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-amber-100 rounded-4xl shadow-sm border border-gray-200">
+          <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center">
                 <h2 className="text-lg font-semibold text-gray-900">
@@ -252,7 +247,7 @@ const OrderTracking = () => {
             </div>
           </div>
 
-          <div className="bg-amber-100 rounded-4xl shadow-sm border border-gray-200 mb-3">
+          <div className="custom-bg rounded-4xl shadow-sm border border-gray-200 mb-3">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center">
                 <h2 className="text-lg font-semibold text-gray-900">
@@ -300,14 +295,14 @@ const OrderTracking = () => {
         </div>
       </div>
 
-      <div className="bg-amber-100 rounded-4xl shadow-lg p-6 mb-6">
+      <div className="custom-bg rounded-4xl shadow-md  p-6 mb-6">
         <div className="text-center mb-6">
           <h3 className="font-semibold text-xl text-gray-900 mb-1">
             Tracking History
           </h3>
         </div>
 
-        {trackingHistory.length > 0 ? (
+        {trackingHistory.length > 0 ?
           <div className="relative">
             <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 to-green-200" />
 
@@ -316,9 +311,9 @@ const OrderTracking = () => {
                 <div key={idx} className="relative flex group">
                   <div
                     className={`absolute left-8 -translate-x-1/2 h-5 w-5 rounded-full border-4 border-white z-10 flex items-center justify-center ${
-                      track?.status === "current"
-                        ? "bg-blue-600 animate-pulse ring-4 ring-blue-200"
-                        : "bg-green-600"
+                      track?.status === "current" ?
+                        "bg-blue-600 animate-pulse ring-4 ring-blue-200"
+                      : "bg-green-600"
                     }`}
                   >
                     {track?.status === "current" && (
@@ -334,7 +329,7 @@ const OrderTracking = () => {
                             <span className="font-bold text-gray-900 text-lg">
                               {track?.step}
                             </span>
-                            <span className="ml-auto text-sm font-semibold text-gray-500">
+                            <span className="ml-auto text-sm font-semibold ">
                               {formatDate(track?.date)}
                             </span>
                           </div>
@@ -363,8 +358,7 @@ const OrderTracking = () => {
               ))}
             </div>
           </div>
-        ) : (
-          <div className="text-center py-12">
+        : <div className="text-center py-12">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
               <FaClock className="h-8 w-8 text-blue-600" />
             </div>
@@ -372,7 +366,7 @@ const OrderTracking = () => {
               Tracking Updates Pending
             </h4>
           </div>
-        )}
+        }
       </div>
     </div>
   );

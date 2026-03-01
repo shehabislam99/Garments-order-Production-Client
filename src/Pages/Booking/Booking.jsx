@@ -5,13 +5,12 @@ import useAuth from "../../Hooks/useAuth";
 import useRole from "../../Hooks/useRole";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
-
 const Booking = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
   const { role } = useRole();
-const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const {
     product,
     quantity: initialQty = 0,
@@ -30,41 +29,39 @@ const axiosSecure = useAxiosSecure()
     notes: "",
   });
 
-useEffect(() => {
-  const AccessUserProduct = async () => {
-    if (!user) {
-      toast.error("Please login to place an order");
-      navigate("/login");
-      return;
-    }
+  useEffect(() => {
+    const AccessUserProduct = async () => {
+      if (!user) {
+        toast.error("Please login to place an order");
+        navigate("/login");
+        return;
+      }
 
-    const res = await axiosSecure.get("/users?status=suspended");
-const suspended = res.data?.data || [];
-const isSuspended = suspended.find(u => u.email === user.email);
+      const res = await axiosSecure.get("/users?status=suspended");
+      const suspended = res.data?.data || [];
+      const isSuspended = suspended.find((u) => u.email === user.email);
 
-if (isSuspended) {
-  toast.error("Your account is suspended. You cannot place orders");
-  navigate("/dashboard/profile");
-  return;
-}
+      if (isSuspended) {
+        toast.error("Your account is suspended. You cannot place orders");
+        navigate("/dashboard/profile");
+        return;
+      }
 
-   
-    if (role === "admin" || role === "manager") {
-      toast.error("Admins / Managers cannot place orders");
-      navigate(-1);
-      return;
-    }
+      if (role === "admin" || role === "manager") {
+        toast.error("Admins / Managers cannot place orders");
+        navigate(-1);
+        return;
+      }
 
-    if (!product) {
-      toast.error("Invalid product selection");
-      navigate("/all-products");
-      return;
-    }
-  };
+      if (!product) {
+        toast.error("Invalid product selection");
+        navigate("/all-products");
+        return;
+      }
+    };
 
-  AccessUserProduct();
-}, [user, role, product, navigate, axiosSecure]);
-
+    AccessUserProduct();
+  }, [user, role, product, navigate, axiosSecure]);
 
   useEffect(() => {
     if (product?.moq) {
@@ -102,87 +99,82 @@ if (isSuspended) {
     setQuantity(val);
   };
 
-   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setSubmitting(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
 
-  const orderData = {
-    CustomerEmail: user.email,
-    orderId: product._id,
-    product_name: product.product_name,
-    payment_method: selectedPayment,
-    price: product.price,
-    quantity,
-    totalPrice,
-    customer: formData,
-    createdAt: new Date(),
-  };
+    const orderData = {
+      CustomerEmail: user.email,
+      orderId: product._id,
+      product_name: product.product_name,
+      payment_method: selectedPayment,
+      price: product.price,
+      quantity,
+      totalPrice,
+      customer: formData,
+      createdAt: new Date(),
+    };
 
-  let trackingId = null;
-  try {
-    const res = await axiosSecure.post("/orders", orderData);
-
-    if (!res.data.success) {
-      throw new Error("Order creation failed");
-    }
-
-    trackingId = res.data.order.trackingId;
-    toast.success("Order created successfully", {
-      position: "top-center",
-      autoClose: 2000,
-    });
-  } catch (error) {
-    toast.error(error?.response?.data?.message || "Failed to create order", {
-      position: "top-center",
-      autoClose: 2000,
-    });
-    setSubmitting(false);
-    return;
-  }
-  if (selectedPayment === "Stripe") {
+    let trackingId = null;
     try {
-      const paymentRes = await axiosSecure.post(
-        "/payment-checkout-session",
-        {
+      const res = await axiosSecure.post("/orders", orderData);
+
+      if (!res.data.success) {
+        throw new Error("Order creation failed");
+      }
+
+      trackingId = res.data.order.trackingId;
+      toast.success("Order created successfully", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to create order", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      setSubmitting(false);
+      return;
+    }
+    if (selectedPayment === "Stripe") {
+      try {
+        const paymentRes = await axiosSecure.post("/payment-checkout-session", {
           orderamount: totalPrice,
           product_name: product.product_name,
           orderId: product._id,
           CustomerEmail: user.email,
           trackingId,
+        });
+
+        if (!paymentRes.data?.url) {
+          throw new Error("Stripe session creation failed");
         }
-      );
 
-      if (!paymentRes.data?.url) {
-        throw new Error("Stripe session creation failed");
+        toast.success("Redirecting to payment...", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        window.location.href = paymentRes.data.url;
+      } catch (error) {
+        toast.error(
+          error?.response?.data?.message || "Payment initiation failed",
+          {
+            position: "top-center",
+            autoClose: 2000,
+          },
+        );
+      } finally {
+        setSubmitting(false);
       }
-
-      toast.success("Redirecting to payment...", {
+    } else {
+      toast.success("Order confirmed (Cash on Delivery)", {
         position: "top-center",
         autoClose: 2000,
       });
-      window.location.href = paymentRes.data.url;
-    } catch (error) {
-      toast.error(
-        error?.response?.data?.message || "Payment initiation failed",
-        {
-          position: "top-center",
-          autoClose: 2000,
-        }
-      );
-    } finally {
+      navigate("/dashboard/my-orders");
       setSubmitting(false);
     }
-  } else {
-    toast.success("Order confirmed (Cash on Delivery)", {
-      position: "top-center",
-      autoClose: 2000,
-    });
-    navigate("/dashboard/my-orders");
-    setSubmitting(false);
-  }
-};
-
-
+  };
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
@@ -192,7 +184,7 @@ if (isSuspended) {
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 p-6 rounded-4xl bg-amber-100 shadow"
+        className="space-y-6 p-6 rounded-4xl custom-bg shadow"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -323,9 +315,9 @@ if (isSuspended) {
           disabled={submitting}
           className="w-full py-3 bg-indigo-600 text-white rounded-full font-semibold hover:bg-red-800 disabled:opacity-50"
         >
-          {selectedPayment === "Stripe"
-            ? "Proceed to Payment"
-            : "Confirm Order"}
+          {selectedPayment === "Stripe" ?
+            "Proceed to Payment"
+          : "Confirm Order"}
         </button>
       </form>
     </div>

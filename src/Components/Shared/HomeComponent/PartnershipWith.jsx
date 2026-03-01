@@ -84,7 +84,7 @@ const PartnershipWith = () => {
   ];
 
   return (
-    <section className="py-16 ">
+    <section className="mt-10 lg:mt-15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -92,7 +92,7 @@ const PartnershipWith = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
             Partnership With
@@ -100,7 +100,7 @@ const PartnershipWith = () => {
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
             Partner with Leading Brands
           </h2>
-          <p className="text-lg text-gray-500 max-w-3xl mx-auto">
+          <p className="text-lg  max-w-3xl mx-auto">
             Join our network of premium brands and grow together in the fashion
             industry
           </p>
@@ -110,7 +110,7 @@ const PartnershipWith = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-16"
+          className="mb-10"
         >
           <h3 className="text-2xl font-bold text-center mb-8">
             Our Trusted Partners
@@ -124,7 +124,7 @@ const PartnershipWith = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="bg-amber-100 rounded-4xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col items-center"
+                className="custom-bg rounded-4xl p-6 shadow-md  hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col items-center"
               >
                 <div
                   className={`${brand.color} w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl mb-4`}
@@ -148,7 +148,7 @@ const PartnershipWith = () => {
               whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
               className="relative group"
             >
-              <div className="relative bg-amber-100 rounded-4xl flex flex-col items-center p-8 shadow-xl group-hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-transparent">
+              <div className="relative custom-bg rounded-4xl flex flex-col items-center p-8 shadow-xl group-hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-transparent">
                 <div
                   className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${benefit.color} text-white mb-6`}
                 >

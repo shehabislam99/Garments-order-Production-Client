@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import { FaUpload, FaTimes, FaSpinner} from "react-icons/fa";
+import { FaUpload, FaTimes, FaSpinner } from "react-icons/fa";
 import Loading from "../../../Components/Common/Loding/Loding";
 
 const UpdateProduct = () => {
@@ -78,7 +78,7 @@ const UpdateProduct = () => {
     if (files.length === 0) return;
     const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
     const invalidFiles = files.filter(
-      (file) => !validTypes.includes(file.type)
+      (file) => !validTypes.includes(file.type),
     );
 
     if (invalidFiles.length > 0) {
@@ -137,7 +137,7 @@ const UpdateProduct = () => {
               "Content-Type": "multipart/form-data",
             },
             timeout: 30000,
-          }
+          },
         );
         return response.data.data.url;
       });
@@ -176,9 +176,9 @@ const UpdateProduct = () => {
       images: imageFiles,
       show_on_homepage: Boolean(product?.show_on_homepage),
       payment_Options:
-        product?.payment_Options === ""
-          ? paymentOptionsList
-          : product?.payment_Options,
+        product?.payment_Options === "" ?
+          paymentOptionsList
+        : product?.payment_Options,
     };
 
     try {
@@ -196,7 +196,7 @@ const UpdateProduct = () => {
           position: "top-center",
           autoClose: 2000,
         },
-        error
+        error,
       );
     } finally {
       setLoading(false);
@@ -219,7 +219,7 @@ const UpdateProduct = () => {
   if (loading && !product.product_name) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-       <Loading/>
+        <Loading />
       </div>
     );
   }
@@ -232,7 +232,7 @@ const UpdateProduct = () => {
           <p className="mt-2">Modify the form below to update your product</p>
         </div>
 
-        <div className="p-6 rounded-4xl bg-amber-100 md:p-8">
+        <div className="p-6 rounded-4xl custom-bg md:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -440,14 +440,12 @@ const UpdateProduct = () => {
                 disabled={loading || uploading}
                 className="flex-1 py-3 bg-indigo-600 text-white rounded-full font-semibold hover:bg-indigo-700 disabled:opacity-50"
               >
-                {loading || uploading ? (
+                {loading || uploading ?
                   <>
                     <FaSpinner className="w-5 h-5 mr-2 animate-spin inline" />
                     {uploading ? "Uploading Images..." : "Updating Product..."}
                   </>
-                ) : (
-                  <>Update Product</>
-                )}
+                : <>Update Product</>}
               </button>
 
               <button

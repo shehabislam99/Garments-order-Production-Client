@@ -25,16 +25,16 @@ const Register = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
-   const [showPassword, setShowPassword] = useState(false);
-   const [loading, setLoading] = useState(false);
-    const [registerData, setRegisterData] = useState({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      photoURL: "",
-      role: "",
-    });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [registerData, setRegisterData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    photoURL: "",
+    role: "",
+  });
 
   useEffect(() => {
     if (user) {
@@ -67,7 +67,7 @@ const Register = () => {
         {
           position: "top-center",
           autoClose: 2000,
-        }
+        },
       );
       e.target.value = "";
       return;
@@ -111,7 +111,7 @@ const Register = () => {
             "Content-Type": "multipart/form-data",
           },
           timeout: 30000,
-        }
+        },
       );
 
       if (response.data?.data?.url) {
@@ -157,9 +157,9 @@ const Register = () => {
     if (!validation.isValid) {
       validation.errors.forEach((error) =>
         toast.error(error, {
-        position: "top-center",
-        autoClose: 2000,
-      })
+          position: "top-center",
+          autoClose: 2000,
+        }),
       );
       setLoading(false);
       return;
@@ -171,12 +171,11 @@ const Register = () => {
       return;
     }
 
-    
     const fullName = `${registerData.firstName} ${registerData.lastName}`;
     try {
       const userCredential = await createUser(
         registerData.email,
-        registerData.password
+        registerData.password,
       );
       await updateUserProfile(userCredential.user, {
         displayName: fullName,
@@ -185,7 +184,6 @@ const Register = () => {
       const userInfo = {
         name: fullName,
         email: registerData.email,
-        password: registerData.password,
         photoURL: imageUrl,
         role: registerData.role,
       };
@@ -210,11 +208,9 @@ const Register = () => {
 
   const PasswordRequirement = ({ requirement, text }) => (
     <div className="flex items-center">
-      {requirement ? (
+      {requirement ?
         <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-      ) : (
-        <FaTimes className="h-4 w-4 text-red-500 mr-2" />
-      )}
+      : <FaTimes className="h-4 w-4 text-red-500 mr-2" />}
       <span
         className={`text-sm font-medium ${
           requirement ? "text-green-600" : "text-red-600"
@@ -229,7 +225,7 @@ const Register = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-       <Loading></Loading>
+          <Loading></Loading>
           <p className="mt-4 text-gray-600">
             {uploading ? "Uploading your photo..." : "Creating your account..."}
           </p>
@@ -241,23 +237,18 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center py-8 px-4 ">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8">
-        <div className="w-1/2 bg-amber-100 p-8 rounded-4xl shadow-xl border border-gray-200">
+        <div className="w-1/2 custom-bg p-8 rounded-4xl shadow-xl border border-gray-200">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="text-center  mb-8">
               <p className="flex justify-center">
-                <Link
-                  className="hover:underline"
-                  to="/"
-                >
+                <Link className="hover:underline" to="/">
                   <Logo></Logo>
                 </Link>
               </p>
               <p className="text-xl text-gray-700 font-bold mt-2">
                 Create Your Account
               </p>
-              <p className="text-gray-500 text-sm mt-1">
-                Join our community today
-              </p>
+              <p className=" text-sm mt-1">Join our community today</p>
             </div>
 
             <div className="space-y-4">
@@ -359,11 +350,9 @@ const Register = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-800 transition-colors duration-300"
                   >
-                    {showPassword ? (
+                    {showPassword ?
                       <FaEyeSlash size={18} />
-                    ) : (
-                      <FaEye size={18} />
-                    )}
+                    : <FaEye size={18} />}
                   </button>
                 </div>
               </div>
@@ -388,16 +377,14 @@ const Register = () => {
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div
                         className={`h-full transition-all duration-500 ${
-                          registerData.password.length >= 8
-                            ? "bg-green-500"
-                            : registerData.password.length >= 6
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
+                          registerData.password.length >= 8 ? "bg-green-500"
+                          : registerData.password.length >= 6 ? "bg-yellow-500"
+                          : "bg-red-500"
                         }`}
                         style={{
                           width: `${Math.min(
                             100,
-                            (registerData.password.length / 12) * 100
+                            (registerData.password.length / 12) * 100,
                           )}%`,
                         }}
                       ></div>
@@ -430,9 +417,9 @@ const Register = () => {
                         <MdAddAPhoto className="h-4 w-4 text-gray-600" />
                       </div>
                       <span className="ml-2">
-                        {selectedFile
-                          ? selectedFile.name
-                          : "Choose a profile photo..."}
+                        {selectedFile ?
+                          selectedFile.name
+                        : "Choose a profile photo..."}
                       </span>
                       <FaUpload className="ml-auto h-4 w-4 text-gray-600" />
                     </label>
@@ -442,7 +429,7 @@ const Register = () => {
                       <p className="text-sm font-medium text-gray-700 mb-2">
                         Preview:
                       </p>
-                      <div className="w-32 h-32 mx-auto border-4 border-blue-200 rounded-full overflow-hidden shadow-lg">
+                      <div className="w-32 h-32 mx-auto border-4 border-blue-200 rounded-full overflow-hidden shadow-md ">
                         <img
                           src={imagePreview}
                           alt="Profile preview"
@@ -482,7 +469,7 @@ const Register = () => {
               className="w-full bg-indigo-600
                 hover:bg-red-800   text-white font-semibold
                  py-3 px-4 rounded-full disabled:opacity-50 
-                  disabled:cursor-not-allowed shadow-lg"
+                  disabled:cursor-not-allowed shadow-md "
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
@@ -491,7 +478,7 @@ const Register = () => {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500 font-medium">
+                <span className="px-4  font-medium">
                   Or continue with
                 </span>
               </div>

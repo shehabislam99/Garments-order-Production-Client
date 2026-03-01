@@ -1,8 +1,4 @@
-const Card = ({
-  children,
-  className = "",
-  padding = "medium",
-}) => {
+const Card = ({ children, className = "", padding = "medium" }) => {
   const paddingClasses = {
     none: "p-0",
     small: "p-4",
@@ -13,11 +9,10 @@ const Card = ({
   return (
     <div
       className={`
-        bg-amber-100 rounded-4xl shadow-md border border-gray-200
+        custom-bg  rounded-4xl shadow-md border border-gray-200
         ${paddingClasses[padding]}
         ${className}
       `}
-      
     >
       {children}
     </div>

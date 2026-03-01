@@ -1,2 +1,29 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+:root {
+  --bg-primary: #D2C1B6;
+  --bg-secondary: #2F5755;
+  --bg-custom: #6AECE1;
+  --text-primary: #1f2937;
+}
+
+
+[data-theme="dark"] {
+  --bg-primary: #000000;
+  --bg-custom: #26CCC2;
+  --text-primary: #ffffff;
+}
+.card-bg {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+.body-bg {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.custom-bg {
+  background-color: var(--bg-custom);
+  color: var(--text-primary);
+}

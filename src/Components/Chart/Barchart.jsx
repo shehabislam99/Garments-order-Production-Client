@@ -7,10 +7,9 @@ import {
   Title,
   Tooltip,
   Legend,
-  ArcElement, 
+  ArcElement,
 } from "chart.js";
 import { Bar, Doughnut } from "react-chartjs-2";
-
 
 ChartJS.register(
   CategoryScale,
@@ -19,7 +18,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
 
 const BarChart = ({
@@ -134,7 +133,7 @@ const BarChart = ({
             0,
             chartArea.bottom,
             0,
-            chartArea.top
+            chartArea.top,
           );
 
           if (context.dataIndex % 3 === 0) {
@@ -214,7 +213,7 @@ const BarChart = ({
         style={{ height, width }}
       >
         <div className="text-center">
-          <div className="text-gray-400 mb-2">
+          <div className=" mb-2">
             <svg
               className="w-12 h-12 mx-auto"
               fill="none"
@@ -229,10 +228,8 @@ const BarChart = ({
               />
             </svg>
           </div>
-          <p className="text-gray-500 font-medium">No data available</p>
-          <p className="text-gray-400 text-sm mt-1">
-            Add data to display chart
-          </p>
+          <p className=" font-medium">No data available</p>
+          <p className=" text-sm mt-1">Add data to display chart</p>
         </div>
       </div>
     );
@@ -240,7 +237,7 @@ const BarChart = ({
 
   return (
     <div className={`relative ${className}`} style={{ height, width }}>
-      {type === "doughnut" || type === "pie" ? (
+      {type === "doughnut" || type === "pie" ?
         <Doughnut
           data={chartData}
           options={{
@@ -254,15 +251,9 @@ const BarChart = ({
             },
           }}
         />
-      ) : (
-        <Bar data={chartData} options={defaultOptions} />
-      )}
+      : <Bar data={chartData} options={defaultOptions} />}
     </div>
   );
 };
 
-
 export default BarChart;
-
-
- 

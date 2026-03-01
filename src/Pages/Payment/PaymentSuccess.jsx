@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { FaCheckCircle, FaReceipt, FaShippingFast, FaHome } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaReceipt,
+  FaShippingFast,
+  FaHome,
+} from "react-icons/fa";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const PaymentSuccess = () => {
@@ -15,66 +20,62 @@ const PaymentSuccess = () => {
   const sessionId = searchParams.get("session_id");
   const axiosSecure = useAxiosSecure();
 
-useEffect(() => {
-  if (!sessionId) return;
+  useEffect(() => {
+    if (!sessionId) return;
 
-  let interval;
+    let interval;
 
-  const verifyPayment = async () => {
-    try {
-      const res = await axiosSecure.patch(
-        `/payment-success?session_id=${sessionId}`
-      );
-
-     
-
-      setPaymentInfo({
-        transactionId: res.data.transactionId,
-        trackingId: res.data.trackingId,
-        amount: res.data.amount,
-      });
-
-      toast.success("Payment Successful" , {
-        position: "top-center",
-        autoClose: 2000,
-      });
-
-      setTimeout(() => {
-        toast.info(
-          <div>
-            <p className="font-bold">Transaction Details:</p>
-            <p>Amount: ${res.data.amount || "N/A"}</p>
-            <p>Tracking ID: {res.data.trackingId}</p>
-          </div>,
-          { autoClose: 8000 }
+    const verifyPayment = async () => {
+      try {
+        const res = await axiosSecure.patch(
+          `/payment-success?session_id=${sessionId}`,
         );
-      }, 1000);
 
-      interval = setInterval(() => {
-        setStep((prev) => (prev < 4 ? prev + 1 : prev));
-      }, 1500);
-    } catch (error) {
-      console.error("Payment verification failed:", error);
+        setPaymentInfo({
+          transactionId: res.data.transactionId,
+          trackingId: res.data.trackingId,
+          amount: res.data.amount,
+        });
 
-      toast.error(
-        error?.response?.data?.message ||
-          "Payment verification failed. Please contact support.",
-        {
+        toast.success("Payment Successful", {
           position: "top-center",
           autoClose: 2000,
-        }
-      );
-    }
-  };
+        });
 
-  verifyPayment();
+        setTimeout(() => {
+          toast.info(
+            <div>
+              <p className="font-bold">Transaction Details:</p>
+              <p>Amount: ${res.data.amount || "N/A"}</p>
+              <p>Tracking ID: {res.data.trackingId}</p>
+            </div>,
+            { autoClose: 8000 },
+          );
+        }, 1000);
 
-  return () => {
-    if (interval) clearInterval(interval);
-  };
-}, [sessionId, axiosSecure]);
+        interval = setInterval(() => {
+          setStep((prev) => (prev < 4 ? prev + 1 : prev));
+        }, 1500);
+      } catch (error) {
+        console.error("Payment verification failed:", error);
 
+        toast.error(
+          error?.response?.data?.message ||
+            "Payment verification failed. Please contact support.",
+          {
+            position: "top-center",
+            autoClose: 2000,
+          },
+        );
+      }
+    };
 
+    verifyPayment();
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [sessionId, axiosSecure]);
 
   return (
     <div className="min-h-screen py-12 p-10">
@@ -116,7 +117,7 @@ useEffect(() => {
                   className={`w-12 h-12 rounded-full flex items-center justify-center ${
                     step >= num ?
                       "bg-indigo-600 text-white"
-                    : "bg-white text-gray-400 border-2 border-gray-200"
+                    : "bg-white  border-2 border-gray-200"
                   }`}
                 >
                   {num === 1 && <FaReceipt />}
@@ -141,7 +142,7 @@ useEffect(() => {
             <h2 className="flex justify-center text-2xl font-bold text-gray-800">
               Payment Summary
             </h2>
-            <div className="flex bg-amber-100 px-3 rounded-lg  justify-between py-3 border-b border-gray-100">
+            <div className="flex custom-bg px-3 rounded-lg  justify-between py-3 border-b border-gray-100">
               <span className="text-gray-600">Transaction ID</span>
               <div className="flex items-center">
                 <code className="bg-gray-50 px-3 py-1 rounded-lg text-sm font-mono">
@@ -150,14 +151,14 @@ useEffect(() => {
               </div>
             </div>
 
-            <div className="flex bg-amber-100 px-3 rounded-lg justify-between py-3 border-b border-gray-100">
+            <div className="flex custom-bg px-3 rounded-lg justify-between py-3 border-b border-gray-100">
               <span className="text-gray-600">Amount Paid</span>
               <span className="text-2xl font-bold text-green-600">
                 ${paymentInfo.amount.toFixed(2)}
               </span>
             </div>
 
-            <div className="flex bg-amber-100 px-3 rounded-lg justify-between py-3 border-b border-gray-100">
+            <div className="flex custom-bg px-3 rounded-lg justify-between py-3 border-b border-gray-100">
               <span className="text-gray-600">Tracking Number</span>
               <div className="flex items-center">
                 <code className="bg-gray-50 px-3 py-1 rounded-lg text-sm font-mono">
@@ -168,7 +169,9 @@ useEffect(() => {
           </div>
         </div>
         <Link to="/dashboard/my-orders">
-          <button className="w-full font-medium px-3 py-3 rounded-full bg-indigo-600 hover:bg-red-800 text-white">Go to Order</button>
+          <button className="w-full font-medium px-3 py-3 rounded-full bg-indigo-600 hover:bg-red-800 text-white">
+            Go to Order
+          </button>
         </Link>
       </div>
     </div>

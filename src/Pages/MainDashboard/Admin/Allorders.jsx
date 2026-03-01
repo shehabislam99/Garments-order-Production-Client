@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {  FaChevronLeft, FaChevronRight, FaEye, FaSearch,  FaTimes,  } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaEye,
+  FaSearch,
+  FaTimes,
+} from "react-icons/fa";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
@@ -24,21 +30,21 @@ const AllOrders = () => {
       const res = await axiosSecure.get(
         `/orders?searchText=${searchTerm}&page=${
           currentPage + 1
-        }&limit=${ordersPerPage}&status=${filterStatus}`
+        }&limit=${ordersPerPage}&status=${filterStatus}`,
       );
 
       if (res.data && res.data?.success) {
         setOrders(res.data?.data || []);
         setTotalPages(
           res?.data?.totalPages ||
-            Math.ceil((res.data?.total || 0) / ordersPerPage)
+            Math.ceil((res.data?.total || 0) / ordersPerPage),
         );
       } else {
         setOrders([]);
         setTotalPages(0);
       }
     } catch (error) {
-      toast.error("Failed to fetch orders",error, {
+      toast.error("Failed to fetch orders", error, {
         position: "top-center",
         autoClose: 2000,
       });
@@ -49,11 +55,9 @@ const AllOrders = () => {
     }
   };
 
-
   useEffect(() => {
     fetchOrders();
   }, [currentPage, searchTerm, filterStatus]);
-
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
@@ -64,8 +68,6 @@ const AllOrders = () => {
     setFilterStatus("all");
     setCurrentPage(0);
   };
-
-  
 
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
@@ -105,7 +107,7 @@ const AllOrders = () => {
       </div>
 
       {/* Filters and Search */}
-      <div className="mt-4 bg-amber-100 rounded-4xl shadow p-4">
+      <div className="mt-4 custom-bg rounded-4xl shadow p-4">
         <div className="flex items-center justify-between mb-4">
           {(searchTerm || filterStatus !== "all") && (
             <button
@@ -126,7 +128,7 @@ const AllOrders = () => {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="h-5 w-5 text-gray-400" />
+                <FaSearch className="h-5 w-5 " />
               </div>
               <input
                 type="text"
@@ -181,27 +183,27 @@ const AllOrders = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Order ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-3 whitespace-nowrap text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 whitespace-nowrap text-left text-xs font-medium  uppercase tracking-wider">
                       Product name
                     </th>
-                    <th className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3  text-xs font-medium  uppercase tracking-wider">
                       Quantity
                     </th>
-                    <th className="px-13 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-13 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-amber-100 divide-y divide-gray-200">
+                <tbody className="custom-bg divide-y divide-gray-200">
                   {orders.map((order) => (
                     <tr
                       key={order?._id}
@@ -255,7 +257,7 @@ const AllOrders = () => {
                         <div className="flex flex-col space-y-2">
                           <span
                             className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getStatusColor(
-                              order?.status
+                              order?.status,
                             )}`}
                           >
                             {order?.status || "Unknown"}
@@ -284,16 +286,14 @@ const AllOrders = () => {
 
             {/* Empty State */}
             {orders.length === 0 && !loading && (
-              <div className="text-center bg-amber-100  py-12">
-                <div className="text-gray-400 mb-4">
+              <div className="text-center custom-bg  py-12">
+                <div className=" mb-4">
                   <HiOutlineClipboardList className="mx-auto h-12 w-12" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No orders found
                 </h3>
-                <p className="text-gray-500">
-                  Try adjusting your search or filter criteria
-                </p>
+                <p className="">Try adjusting your search or filter criteria</p>
               </div>
             )}
           </div>
@@ -333,7 +333,7 @@ const AllOrders = () => {
                 breakClassName="hidden sm:block"
                 breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
                 disabledClassName="opacity-50 cursor-not-allowed"
-                disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
+                disabledLinkClassName=" hover: hover:bg-transparent"
               />
             </div>
           )}

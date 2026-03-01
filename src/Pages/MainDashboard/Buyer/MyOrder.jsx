@@ -36,26 +36,26 @@ const MyOrders = () => {
       const res = await axiosSecure.get(
         `/my-orders?searchText=${searchTerm}&page=${
           currentPage + 1
-        }&limit=${ordersPerPage}&status=${filterStatus}`
+        }&limit=${ordersPerPage}&status=${filterStatus}`,
       );
 
       if (res.data && res.data?.success) {
         setOrders(res.data?.data || []);
-       
+
         setTotalPages(
           res?.data?.totalPages ||
-            Math.ceil((res.data?.total || 0) / ordersPerPage)
+            Math.ceil((res.data?.total || 0) / ordersPerPage),
         );
       } else {
         setOrders([]);
-      
+
         setTotalPages(0);
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
 
       setOrders([]);
-      
+
       setTotalPages(0);
     } finally {
       setLoading(false);
@@ -67,14 +67,14 @@ const MyOrders = () => {
     try {
       setCancelling(true);
       const response = await axiosSecure.patch(
-        `/my-orders/cancel/${selectedOrder._id}`
+        `/my-orders/cancel/${selectedOrder._id}`,
       );
 
       if (response.data.success) {
         setOrders((prev) =>
           prev.map((order) =>
-            order._id === selectedOrder._id ? { ...order } : order
-          )
+            order._id === selectedOrder._id ? { ...order } : order,
+          ),
         );
 
         toast.success("Order cancelled successfully", {
@@ -146,8 +146,6 @@ const MyOrders = () => {
     }
   };
 
-
-
   const getPaymentColor = (paymentStatus) => {
     switch (paymentStatus?.toLowerCase()) {
       case "paid":
@@ -196,7 +194,7 @@ const MyOrders = () => {
           {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
-      <div className="mt-4 bg-amber-100 rounded-4xl shadow p-4">
+      <div className="mt-4 custom-bg rounded-4xl shadow p-4">
         <div className="flex items-center justify-between mb-4">
           {(searchTerm || filterStatus !== "all") && (
             <button
@@ -216,7 +214,7 @@ const MyOrders = () => {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="h-5 w-5 text-gray-400" />
+                <FaSearch className="h-5 w-5 " />
               </div>
               <input
                 type="text"
@@ -267,30 +265,30 @@ const MyOrders = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase">
                       Order ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase whitespace-nowrap">
                       Product name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase">
                       Price
                     </th>
-                    <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                    <th className="px-7 py-3 text-left text-xs font-medium  uppercase ">
                       Quantity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase whitespace-nowrap">
                       Order Status
                     </th>
-                    <th className="px-7 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
+                    <th className="px-7 py-3 text-left text-xs font-medium  uppercase whitespace-nowrap">
                       Payment Status
                     </th>
-                    <th className="px-11 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-11 py-3 text-left text-xs font-medium  uppercase">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-amber-100 divide-y divide-gray-200">
+                <tbody className="custom-bg divide-y divide-gray-200">
                   {orders.map((order) => (
                     <tr
                       key={order?._id}
@@ -302,7 +300,7 @@ const MyOrders = () => {
                             <div className="text-sm font-semibold text-gray-900">
                               #{order?._id?.substring(0, 12) || "N/A"}
                             </div>
-                            <div className="text-sm font-medium  text-gray-500">
+                            <div className="text-sm font-medium  ">
                               {formatDate(order?.createdAt)}
                             </div>
                           </div>
@@ -335,7 +333,7 @@ const MyOrders = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${getStatusColor(
-                            order?.status
+                            order?.status,
                           )}`}
                         >
                           {order?.status || "Pending"}
@@ -345,7 +343,7 @@ const MyOrders = () => {
                         <div className="flex flex-col space-y-1">
                           <span
                             className={`px-3 py-1 inline-flex text-center text-xs  leading-5 font-semibold rounded-full border ${getPaymentColor(
-                              order?.paymentStatus
+                              order?.paymentStatus,
                             )}`}
                           >
                             {order?.paymentStatus || "Pending"}
@@ -382,15 +380,15 @@ const MyOrders = () => {
             </div>
 
             {orders?.length === 0 && !loading && (
-              <div className="text-center bg-amber-100 py-12">
-                <div className="text-gray-400 mb-4">
+              <div className="text-center custom-bg py-12">
+                <div className=" mb-4">
                   <FaShoppingCart className="mx-auto h-12 w-12" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No orders found
                 </h3>
 
-                <p className="text-gray-500">
+                <p className="">
                   {user ?
                     "You haven't placed any orders yet."
                   : "Please login to view your orders."}
@@ -439,7 +437,7 @@ const MyOrders = () => {
                 breakClassName="hidden sm:block"
                 breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
                 disabledClassName="opacity-50 cursor-not-allowed"
-                disabledLinkClassName="text-gray-400 hover:text-gray-400 hover:bg-transparent"
+                disabledLinkClassName=" hover: hover:bg-transparent"
               />
             </div>
           )}
@@ -458,7 +456,7 @@ const MyOrders = () => {
                 <p className="ml-3  text-gray-600 mb-2">
                   Are you sure you want to cancel this order?
                 </p>
-                <div className="bg-amber-100 rounded-4xl p-5">
+                <div className="custom-bg rounded-4xl p-5">
                   <p className="font-medium text-red-800">
                     Order: #{selectedOrder?._id?.substring(18) || "N/A"}
                   </p>
@@ -469,7 +467,7 @@ const MyOrders = () => {
                     Amount: {formatCurrency(selectedOrder?.totalPrice)}
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 ml-3 mt-2">
+                <p className="text-xs  ml-3 mt-2">
                   This action cannot be undone. Payment will be refunded
                   according to our policy.
                 </p>

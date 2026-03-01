@@ -15,7 +15,7 @@ const PaymentCancelled = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <ToastContainer />
 
-      <div className=" p-8 rounded-4xl bg-amber-100 shadow-md text-center max-w-md w-full">
+      <div className=" p-8 rounded-4xl custom-bg shadow-md text-center max-w-md w-full">
         <FaTimesCircle className="text-red-500 text-6xl mx-auto mb-4" />
 
         <h2 className="text-2xl font-bold text-gray-800 mb-2">

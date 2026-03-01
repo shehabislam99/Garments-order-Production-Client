@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaClock,
-  FaTruck,
-  FaArrowAltCircleLeft,
-} from "react-icons/fa";
-import {  MdLocationOn } from "react-icons/md";
+import { FaClock, FaTruck, FaArrowAltCircleLeft } from "react-icons/fa";
+import { MdLocationOn } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
@@ -15,11 +11,10 @@ const TrackOrder = () => {
   const { orderId } = useParams();
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-    const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState(null);
   const [trackingHistory, setTrackingHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
   const standardSteps = [
     "Cutting Completed",
     "Sewing Started",
@@ -40,29 +35,29 @@ const TrackOrder = () => {
     try {
       setLoading(true);
       const timelineRes = await axiosSecure.get(
-        `/track-order/timeline/${orderId}`
+        `/track-order/timeline/${orderId}`,
       );
 
-       if (timelineRes.data.success) {
-         if (timelineRes.data.data.order) {
-           setOrder(timelineRes.data.data.order);
-         }
+      if (timelineRes.data.success) {
+        if (timelineRes.data.data.order) {
+          setOrder(timelineRes.data.data.order);
+        }
 
-         if (timelineRes.data.data.timeline) {
-           const processedTimeline = processTimelineData(
-             timelineRes.data.data.timeline
-           );
-           setTrackingHistory(processedTimeline);
-           toast.success("tracking and Order details loaded successfully", {
-             position: "top-center",
-             autoClose: 2000,
-           });
-         } else {
-           setTrackingHistory([]);
-         }
-       } else {
-         toast.error("No tracking history found");
-       }
+        if (timelineRes.data.data.timeline) {
+          const processedTimeline = processTimelineData(
+            timelineRes.data.data.timeline,
+          );
+          setTrackingHistory(processedTimeline);
+          toast.success("tracking and Order details loaded successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          setTrackingHistory([]);
+        }
+      } else {
+        toast.error("No tracking history found");
+      }
     } catch (err) {
       console.error("Error:", err);
       toast.error("Failed to load order information");
@@ -71,8 +66,7 @@ const TrackOrder = () => {
     }
   };
 
- const processTimelineData = (rawData) => rawData;
-
+  const processTimelineData = (rawData) => rawData;
 
   const formatDate = (date) => {
     if (!date) return "Date not available";
@@ -82,17 +76,16 @@ const TrackOrder = () => {
     });
   };
 
-
   const getCurrentStep = () => {
     if (trackingHistory.length === 0) return null;
 
     const currentStep = trackingHistory.find(
-      (item) => item.status === "current"
+      (item) => item.status === "current",
     );
     if (currentStep) return currentStep;
 
     const completedSteps = trackingHistory.filter(
-      (item) => item.status === "completed"
+      (item) => item.status === "completed",
     );
     return completedSteps.length > 0 ? completedSteps[0] : trackingHistory[0];
   };
@@ -106,15 +99,14 @@ const TrackOrder = () => {
     if (!currentStep) return 0;
 
     const currentStepIndex = standardSteps.findIndex((step) =>
-      currentStep.step.toLowerCase().includes(step.toLowerCase().split(" ")[0])
+      currentStep.step.toLowerCase().includes(step.toLowerCase().split(" ")[0]),
     );
 
     return Math.max(
       10,
-      Math.min(100, ((currentStepIndex + 1) / totalSteps) * 100)
+      Math.min(100, ((currentStepIndex + 1) / totalSteps) * 100),
     );
   };
-
 
   if (loading) {
     return (
@@ -145,7 +137,7 @@ const TrackOrder = () => {
         </div>
       </div>
 
-      <div className="bg-amber-100 rounded-4xl shadow-lg p-6 mb-8">
+      <div className="custom-bg rounded-4xl shadow-md  p-6 mb-8">
         <h3 className="font-semibold text-center text-xl mb-4 text-gray-900">
           Order Summary
         </h3>
@@ -189,7 +181,7 @@ const TrackOrder = () => {
               style={{ width: `${progressPercentage}%` }}
             ></div>
           </div>
-          <div className="flex justify-between text-xs text-gray-500 mt-2">
+          <div className="flex justify-between text-xs  mt-2">
             <span>Order Placed</span>
             <span>Cutting & Sewing</span>
             <span>Packing</span>
@@ -200,14 +192,14 @@ const TrackOrder = () => {
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <div className="bg-amber-100 rounded-4xl shadow-lg p-6 mb-6">
+          <div className="custom-bg rounded-4xl shadow-md  p-6 mb-6">
             <div className="text-center mb-6">
               <h3 className="font-semibold text-xl text-gray-900 mb-1">
                 Production Tracking Timeline
               </h3>
             </div>
 
-            {trackingHistory.length > 0 ? (
+            {trackingHistory.length > 0 ?
               <div className="relative">
                 <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 to-green-200" />
 
@@ -216,9 +208,9 @@ const TrackOrder = () => {
                     <div key={idx} className="relative flex group">
                       <div
                         className={`absolute left-8 -translate-x-1/2 h-5 w-5 rounded-full border-4 border-white z-10 flex items-center justify-center ${
-                          track?.status === "current"
-                            ? "bg-blue-600 animate-pulse ring-4 ring-blue-200"
-                            : "bg-green-600"
+                          track?.status === "current" ?
+                            "bg-blue-600 animate-pulse ring-4 ring-blue-200"
+                          : "bg-green-600"
                         }`}
                       >
                         {track?.status === "current" && (
@@ -234,7 +226,7 @@ const TrackOrder = () => {
                                 <span className="font-bold text-gray-900 text-lg">
                                   {track?.step}
                                 </span>
-                                <span className="ml-auto text-sm font-semibold text-gray-500">
+                                <span className="ml-auto text-sm font-semibold ">
                                   {formatDate(track?.date)}
                                 </span>
                               </div>
@@ -263,8 +255,7 @@ const TrackOrder = () => {
                   ))}
                 </div>
               </div>
-            ) : (
-              <div className="text-center py-12">
+            : <div className="text-center py-12">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
                   <FaClock className="h-8 w-8 text-blue-600" />
                 </div>
@@ -272,18 +263,18 @@ const TrackOrder = () => {
                   Tracking Updates Pending
                 </h4>
               </div>
-            )}
+            }
           </div>
         </div>
 
         <div className="space-y-6">
-          <div className="bg-amber-100 rounded-4xl shadow-lg p-6">
+          <div className="custom-bg rounded-4xl shadow-md  p-6">
             <div className="flex justify-center items-center gap-3 mb-4">
               <h3 className="font-semibold  text-lg text-gray-900">
                 Current Step
               </h3>
             </div>
-            {currentStep ? (
+            {currentStep ?
               <div className="p-6">
                 <div className=" p-4 bg-gray-50 rounded-4xl">
                   <div className="flex justify-between">
@@ -310,14 +301,13 @@ const TrackOrder = () => {
                   </div>
                 </div>
               </div>
-            ) : (
-              <div className="text-center py-4">
-                <p className="text-gray-500">Awaiting first update...</p>
+            : <div className="text-center py-4">
+                <p className="">Awaiting first update...</p>
               </div>
-            )}
+            }
           </div>
 
-          <div className="bg-amber-100 rounded-4xl shadow-lg p-6">
+          <div className="custom-bg rounded-4xl shadow-md  p-6">
             <h3 className="font-semibold text-center text-xl text-gray-900 mb-4">
               Next Steps
             </h3>
@@ -329,7 +319,7 @@ const TrackOrder = () => {
                   const currentStepIndex = standardSteps.findIndex((s) =>
                     currentStep?.step
                       ?.toLowerCase()
-                      .includes(s.toLowerCase().split(" ")[0])
+                      .includes(s.toLowerCase().split(" ")[0]),
                   );
                   return stepIndex > currentStepIndex;
                 })

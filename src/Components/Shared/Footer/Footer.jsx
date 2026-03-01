@@ -6,7 +6,7 @@ import Logo from "../../Common/Logo/Logo";
 const Footer = () => {
   return (
     <>
-      <footer className="text-indigo-500 bg-amber-100 footers text-center py-4">
+      <footer className="text-indigo-500 custom-bg  footers text-center py-4">
         <div className="mx-auto ">
           <h1 className="text-center flex justify-center">
             <Logo></Logo>
@@ -78,7 +78,7 @@ const Footer = () => {
                     className="hover:text-red-800 hover:underline
                       "
                   >
-                    <Link to="/terms-service">Terms of Service</Link>
+                    <Link to="/terms-condition">Terms & Conditions</Link>
                   </button>
                 </li>
               </ul>

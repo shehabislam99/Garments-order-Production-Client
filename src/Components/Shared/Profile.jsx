@@ -71,7 +71,7 @@ const Profile = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="col-span-1">
-            <div className="bg-amber-100 rounded-4xl shadow-lg p-6 sticky top-8">
+            <div className="custom-bg rounded-4xl shadow-md  p-6 sticky top-8">
               <div className="text-center mb-6">
                 <div className="relative inline-block">
                   <img
@@ -96,9 +96,9 @@ const Profile = () => {
                   <span className="font-semibold text-gray-900">Status:</span>
                   <span
                     className={`ml-2 px-2 py-1 rounded-full text-sm font-medium ${
-                      user?.status === "active" || user?.status === "pending"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
+                      user?.status === "active" || user?.status === "pending" ?
+                        "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
                     }`}
                   >
                     {user?.status?.toUpperCase() || "ACTIVE"}
@@ -106,9 +106,9 @@ const Profile = () => {
                 </div>
                 <div
                   className={`${
-                    user?.status === "active" || user?.status === "pending"
-                      ? "hidden"
-                      : "flex"
+                    user?.status === "active" || user?.status === "pending" ?
+                      "hidden"
+                    : "flex"
                   } items-center justify-center`}
                 >
                   <span className="font-semibold text-gray-900">
@@ -123,7 +123,7 @@ const Profile = () => {
           </div>
 
           <div className="col-span-1">
-            <div className="bg-amber-100 p-6 md:p-8 rounded-4xl shadow-lg">
+            <div className="custom-bg p-6 md:p-8 rounded-4xl shadow-md ">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">
                 Personal Information
               </h2>
@@ -135,9 +135,9 @@ const Profile = () => {
                 <Rowinformation
                   label="Member Since"
                   value={
-                    user?.createdAt
-                      ? new Date(user.createdAt).toLocaleDateString()
-                      : "N/A"
+                    user?.createdAt ?
+                      new Date(user.createdAt).toLocaleDateString()
+                    : "N/A"
                   }
                 />
               </div>

@@ -5,21 +5,18 @@ import HowWorks from "../../Components/Shared/HomeComponent/HowWorks";
 import CustomerFeedback from "../../Components/Shared/HomeComponent/CustomerFeedback";
 import PartnershipWith from "../../Components/Shared/HomeComponent/PartnershipWith";
 import STAsection from "../../Components/Shared/HomeComponent/STAsection";
-
+import WhatWeOffer from "../../Components/Shared/HomeComponent/WhatWeOffer";
 
 const Home = () => {
-  
-
   return (
-    <div className="bg-base-200">
+    <div >
       <Banner></Banner>
-       <HomeProduct></HomeProduct>
+      <HomeProduct></HomeProduct>
       <HowWorks></HowWorks>
+      <WhatWeOffer></WhatWeOffer>
       <CustomerFeedback></CustomerFeedback>
       <PartnershipWith></PartnershipWith>
       <STAsection></STAsection>
-
-
     </div>
   );
 };

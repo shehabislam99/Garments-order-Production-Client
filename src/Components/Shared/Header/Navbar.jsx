@@ -9,38 +9,32 @@ import useRole from "../../../Hooks/useRole";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const{role} = useRole()
+  const { role } = useRole();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
 
   const handleLogout = () => {
     logout();
-      toast.success("Logged out successfully!", {
-        position: "top-center",
-        autoClose: 2000,
-      });
+    toast.success("Logged out successfully!", {
+      position: "top-center",
+      autoClose: 2000,
+    });
     navigate("/");
   };
 
   const handleToggleTheme = () => {
+    const newTheme = isDarkTheme ? "dark" : "light";
     setIsDarkTheme(!isDarkTheme);
-    document
-      .querySelector("html")
-      .setAttribute("data-theme", isDarkTheme ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", newTheme);
   };
 
- const navLinks = user
-   ? [
-       { to: "/", label: "Home" },
-       { to: "/all-products", label: "All Products" },
-     ]
-   : [
-       { to: "/", label: "Home" },
-       { to: "/all-products", label: "All Products" },
-       { to: "/about", label: "About Us" },
-       { to: "/contact", label: "Contact Us" },
-     ];
+  const navLinks = [
+        { to: "/", label: "Home" },
+        { to: "/all-products", label: "All Products" },
+        { to: "/about", label: "About Us" },
+        { to: "/contact", label: "Contact Us" },
+      ];
   const links = (
     <>
       {navLinks.map((link, index) => (
@@ -62,7 +56,12 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="text-indigo-500 navbar bg-amber-100 py-4">
+      <nav
+        className="text-indigo-500  sticky top-0 navbar custom-bg py-4
+      
+      z-50  shadow-md
+      "
+      >
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-20">
             {/* Mobile menu button */}
@@ -103,15 +102,28 @@ const Navbar = () => {
             {user ?
               <div className="flex relative gap-4">
                 <button className="font-medium hover:text-red-800 hover:underline">
-                  <Link to={`/dashboard/${role}`}>
-                    Dashboard
-                  </Link>
+                  <Link to={`/dashboard/${role}`}>Dashboard</Link>
                 </button>
-                <img
-                  src={user?.photoURL || "https://via.placeholder.com/40"}
-                  alt="user"
-                  className="w-10 h-10 rounded-full border-2 border-indigo-500"
-                />
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} role="button" className="cursor-pointer">
+                    <img
+                      src={user?.photoURL || "https://via.placeholder.com/40"}
+                      alt="user"
+                      className="w-18 h-8 rounded-full border-2 border-indigo-500 hover:scale-105 transition duration-200"
+                    />
+                  </div>
+
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-100 rounded-box  w-30"
+                  >
+                   
+                      <button className="hover:text-red-800 font-bold hover:underline" onClick={() => navigate(`/dashboard/profile`)}>
+                        My Profile
+                      </button>
+                    
+                  </ul>
+                </div>
 
                 <button
                   onClick={handleLogout}

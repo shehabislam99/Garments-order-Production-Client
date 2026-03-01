@@ -32,7 +32,7 @@ const HowWorks = () => {
       icon: <FaTruck />,
       title: "Fast Delivery",
       description: "Receive your order with our express shipping service",
-      color: "bg-amber-100 text-amber-600",
+      color: "custom-bg text-amber-600",
     },
     {
       icon: <FaCheckCircle />,
@@ -64,20 +64,20 @@ const HowWorks = () => {
   };
 
   return (
-    <section className="py-16 ">
+    <section className="mt-10 lg:mt-15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
             Easy Process
           </div>
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">How It Works</h2>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="text-lg  max-w-2xl mx-auto">
             Simple steps to get your favorite garment items delivered to your
             doorstep?
           </p>
@@ -100,7 +100,7 @@ const HowWorks = () => {
                 <div className="absolute -top-4 -left-4 w-8 h-8 bg-white border-4 border-gray-100 rounded-full flex items-center justify-center text-sm font-bold text-gray-700 z-10">
                   {index + 1}
                 </div>
-                <div className="bg-amber-100 rounded-4xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                <div className="custom-bg rounded-4xl p-6 shadow-md  hover:shadow-2xl transition-all duration-300 h-full">
                   <div className="flex flex-col items-center">
                     {" "}
                     <div

@@ -2,119 +2,107 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { Link } from "react-router";
-import {
-  FaTasks,
-  FaUsers,
-  FaBox,
-} from "react-icons/fa";
+import { FaTasks, FaUsers, FaBox } from "react-icons/fa";
 import Loading from "../../../Components/Common/Loding/Loding";
 
+const DashboardOverview = ({ stats }) => (
+  <div className="p-6">
+    <div className="mb-8 text-center">
+      <h2 className="text-3xl flex justify-center font-bold">Welcome back</h2>
+      <p className="text-gray-600 mt-2">Here's your Dashboard.</p>
+    </div>
 
-  const DashboardOverview = ({ stats }) => (
-    <div className="p-6">
-      <div className="mb-8 text-center">
-        <h2 className="text-3xl flex justify-center font-bold">Welcome back</h2>
-        <p className="text-gray-600 mt-2">Here's your Dashboard.</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-amber-100 rounded-4xl  shadow p-6">
-          <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">Total Products</p>
-            <p className="text-2xl mt-1 font-semibold text-blue-900">
-              {stats.allProducts || 0}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-amber-100 rounded-4xl shadow p-6">
-          <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">Total Users</p>
-            <p className="text-2xl mt-1 font-semibold text-violet-900">
-              {stats.allUsers || 0}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-amber-100 rounded-4xl shadow p-6">
-          <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">Total Revenue</p>
-            <p className="text-2xl mt-1 font-semibold text-green-900">
-              ${stats.totalRevenue?.toFixed(2) || "0.00"}
-            </p>
-          </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="custom-bg rounded-4xl  shadow p-6">
+        <div className="ml-4 text-center">
+          <p className="text-xl font-medium text-gray-600">Total Products</p>
+          <p className="text-2xl mt-1 font-semibold text-blue-900">
+            {stats.allProducts || 0}
+          </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-4xl shadow p-6 mb-8">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">
-          Quick Actions
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link to="/dashboard/admin/manage-users">
-            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-200">
-              <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-lg p-3 mr-4">
-                <FaUsers />
-              </div>
-              <div className="text-left">
-                <p className="text-lg font-semibold text-gray-700">
-                  Manage Users
-                </p>
-                <p className="text-lg text-gray-500 font-medium">
-                  View and manage all users
-                </p>
-              </div>
-            </button>
-          </Link>
+      <div className="custom-bg rounded-4xl shadow p-6">
+        <div className="ml-4 text-center">
+          <p className="text-xl font-medium text-gray-600">Total Users</p>
+          <p className="text-2xl mt-1 font-semibold text-violet-900">
+            {stats.allUsers || 0}
+          </p>
+        </div>
+      </div>
 
-          <Link to="/dashboard/admin/manage-products">
-            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-200">
-              <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
-                <FaBox />
-              </div>
-              <div className="text-left">
-                <p className="text-lg font-semibold text-gray-700">
-                  All Products
-                </p>
-                <p className="text-lg text-gray-500 font-medium">
-                  Edit, delete or update products
-                </p>
-              </div>
-            </button>
-          </Link>
-
-          <Link to="/dashboard/admin/all-orders">
-            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-200">
-              <div className="flex-shrink-0 text-purple-500 bg-purple-100 rounded-lg p-3 mr-4">
-                <FaTasks />
-              </div>
-              <div className="text-left">
-                <p className="text-lg font-semibold text-gray-700">
-                  All Orders
-                </p>
-                <p className="text-lg text-gray-500 font-medium">
-                  Review, delete and approve orders
-                </p>
-              </div>
-            </button>
-          </Link>
+      <div className="custom-bg rounded-4xl shadow p-6">
+        <div className="ml-4 text-center">
+          <p className="text-xl font-medium text-gray-600">Total Revenue</p>
+          <p className="text-2xl mt-1 font-semibold text-green-900">
+            ${stats.totalRevenue?.toFixed(2) || "0.00"}
+          </p>
         </div>
       </div>
     </div>
-  );
+
+    <div className="bg-white rounded-4xl shadow p-6 mb-8">
+      <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Link to="/dashboard/admin/manage-users">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-200">
+            <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-lg p-3 mr-4">
+              <FaUsers />
+            </div>
+            <div className="text-left">
+              <p className="text-lg font-semibold text-gray-700">
+                Manage Users
+              </p>
+              <p className="text-lg  font-medium">View and manage all users</p>
+            </div>
+          </button>
+        </Link>
+
+        <Link to="/dashboard/admin/manage-products">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-200">
+            <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
+              <FaBox />
+            </div>
+            <div className="text-left">
+              <p className="text-lg font-semibold text-gray-700">
+                All Products
+              </p>
+              <p className="text-lg  font-medium">
+                Edit, delete or update products
+              </p>
+            </div>
+          </button>
+        </Link>
+
+        <Link to="/dashboard/admin/all-orders">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-200">
+            <div className="flex-shrink-0 text-purple-500 bg-purple-100 rounded-lg p-3 mr-4">
+              <FaTasks />
+            </div>
+            <div className="text-left">
+              <p className="text-lg font-semibold text-gray-700">All Orders</p>
+              <p className="text-lg  font-medium">
+                Review, delete and approve orders
+              </p>
+            </div>
+          </button>
+        </Link>
+      </div>
+    </div>
+  </div>
+);
 
 const AdminDashBoard = () => {
-  const { user } = useAuth()
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
- const [stats, setStats] = useState({
-   allProducts: 0,
-   allUsers: 0,
-   totalRevenue: 0, 
- });
-  const axiosSecure = useAxiosSecure()
+  const [stats, setStats] = useState({
+    allProducts: 0,
+    allUsers: 0,
+    totalRevenue: 0,
+  });
+  const axiosSecure = useAxiosSecure();
 
-useEffect(() => {
-
+  useEffect(() => {
     const fetchDashboardStats = async () => {
       try {
         const response = await axiosSecure.get("/admin/stats");
@@ -125,11 +113,9 @@ useEffect(() => {
         setLoading(false);
       }
     };
-  fetchDashboardStats();
-}, []);
+    fetchDashboardStats();
+  }, []);
 
- 
-  
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">

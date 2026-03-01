@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import { FaUpload, FaTimes, FaSpinner} from "react-icons/fa";
+import { FaUpload, FaTimes, FaSpinner } from "react-icons/fa";
 import useAuth from "../../../Hooks/useAuth";
 
 const AddProduct = () => {
@@ -13,7 +13,7 @@ const AddProduct = () => {
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const{user} = useAuth();
+  const { user } = useAuth();
 
   const [product, setProduct] = useState({
     product_name: "",
@@ -46,20 +46,14 @@ const AddProduct = () => {
           return;
         }
       } catch (err) {
-        toast.error("Failed to verify user status",err);
+        toast.error("Failed to verify user status", err);
         navigate("/dashboard/profile");
         return;
       }
-
-      
-     
     };
 
     UserSuspended();
   }, [user, navigate, AxiosSecure]);
-
-
-
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -77,7 +71,7 @@ const AddProduct = () => {
 
     const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
     const invalidFiles = files.filter(
-      (file) => !validTypes.includes(file.type)
+      (file) => !validTypes.includes(file.type),
     );
 
     if (invalidFiles.length > 0) {
@@ -131,7 +125,7 @@ const AddProduct = () => {
               "Content-Type": "multipart/form-data",
             },
             timeout: 30000,
-          }
+          },
         );
 
         return response.data.data.url;
@@ -168,7 +162,10 @@ const AddProduct = () => {
       images: imageFiles,
       status: "pending",
       show_on_homepage: Boolean(product?.show_on_homepage),
-      payment_Options: product?.payment_Options === "" ? paymentOptionsList : product?.payment_Options,
+      payment_Options:
+        product?.payment_Options === "" ?
+          paymentOptionsList
+        : product?.payment_Options,
     };
 
     try {
@@ -188,7 +185,6 @@ const AddProduct = () => {
     }
   };
 
-
   const categories = [
     "Shirt",
     "Pant",
@@ -203,7 +199,7 @@ const AddProduct = () => {
   const paymentOptionsList = ["Cash on Delivery", "Stripe"];
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-10 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold ">Add New Product</h1>
@@ -212,7 +208,7 @@ const AddProduct = () => {
           </p>
         </div>
 
-        <div className="p-6 rounded-4xl bg-amber-100 md:p-8">
+        <div className="p-6 rounded-4xl custom-bg md:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -422,14 +418,12 @@ const AddProduct = () => {
                 disabled={loading || uploading}
                 className="flex-1 py-3 bg-indigo-600 text-white rounded-full font-semibold hover:bg-red-800 disabled:opacity-50"
               >
-                {loading || uploading ? (
+                {loading || uploading ?
                   <>
                     <FaSpinner className="w-5 h-5 mr-2 animate-spin inline" />
                     {uploading ? "Uploading Images..." : "Adding Product..."}
                   </>
-                ) : (
-                  <>Add Product</>
-                )}
+                : <>Add Product</>}
               </button>
 
               <button

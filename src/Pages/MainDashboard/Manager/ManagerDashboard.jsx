@@ -7,112 +7,106 @@ import { BsClockHistory } from "react-icons/bs";
 import { SiGoogletasks } from "react-icons/si";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
-  const DashboardOverview = ({ stats }) => (
-    <div className="p-6">
-      <div className="mb-8 text-center item-center">
-        <h2 className="text-3xl flex justify-center font-bold">
-          Welcome back to Your Dashboard
-        </h2>
-        <p className="mt-2">Here's Your Account Management</p>
-      </div>
+const DashboardOverview = ({ stats }) => (
+  <div className="p-6">
+    <div className="mb-8 text-center item-center">
+      <h2 className="text-3xl flex justify-center font-bold">
+        Welcome back to Your Dashboard
+      </h2>
+      <p className="mt-2">Here's Your Account Management</p>
+    </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-amber-100 rounded-4xl shadow p-6">
-          <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">My Products</p>
-            <p className="text-2xl mt-1 font-semibold text-blue-600">
-              {stats?.allProducts || 0}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-amber-100 rounded-4xl shadow p-6">
-          <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">Pending Orders</p>
-            <p className="text-2xl mt-1 font-semibold text-red-600">
-              {stats?.pendingOrders || 0}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-amber-100 rounded-4xl shadow p-6">
-          <div className="ml-4 text-center">
-            <p className="text-xl font-medium text-gray-600">Approved Orders</p>
-            <p className="text-2xl mt-1 font-semibold text-purple-600">
-              {stats?.approvedOrders || 0}
-            </p>
-          </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="custom-bg rounded-4xl shadow p-6">
+        <div className="ml-4 text-center">
+          <p className="text-xl font-medium text-gray-600">My Products</p>
+          <p className="text-2xl mt-1 font-semibold text-blue-600">
+            {stats?.allProducts || 0}
+          </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-4xl shadow p-6 mb-8">
-        <h3 className="text-lg font-bold text-gray-900 text-center">
-          Quick Actions
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 p-6">
-          <Link to="/dashboard/manage-products">
-            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
-              <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-lg p-3 mr-4">
-                <FaTasks className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="text-lg text-gray-700 font-semibold">
-                  Manage Products
-                </p>
-                <p className="text-lg text-gray-500">Edit your products</p>
-              </div>
-            </button>
-          </Link>
+      <div className="custom-bg rounded-4xl shadow p-6">
+        <div className="ml-4 text-center">
+          <p className="text-xl font-medium text-gray-600">Pending Orders</p>
+          <p className="text-2xl mt-1 font-semibold text-red-600">
+            {stats?.pendingOrders || 0}
+          </p>
+        </div>
+      </div>
 
-          <Link to="/dashboard/pending-orders">
-            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
-              <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
-                <BsClockHistory className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="text-lg text-gray-700 font-semibold">
-                  Pending Orders
-                </p>
-                <p className="text-lg text-gray-500">
-                  Review and approve orders
-                </p>
-              </div>
-            </button>
-          </Link>
-
-          <Link to="/dashboard/approved-orders">
-            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
-              <div className="flex-shrink-0 text-purple-500 bg-purple-100 rounded-lg p-3 mr-4">
-                <SiGoogletasks className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="text-lg text-gray-700 font-semibold">
-                  Approved Orders
-                </p>
-                <p className="text-lg text-gray-500">View completed orders</p>
-              </div>
-            </button>
-          </Link>
-
-          <Link to="/dashboard/add-product">
-            <button className="flex items-center bg-amber-100 p-3 rounded-4xl hover:bg-red-400">
-              <div className="flex-shrink-0 text-amber-500 bg-violet-100 rounded-lg p-3 mr-4">
-                <MdAddShoppingCart className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="text-lg text-gray-700 font-semibold">
-                  Add Product
-                </p>
-                <p className="text-lg text-gray-500">
-                  Add Your Exciting Product
-                </p>
-              </div>
-            </button>
-          </Link>
+      <div className="custom-bg rounded-4xl shadow p-6">
+        <div className="ml-4 text-center">
+          <p className="text-xl font-medium text-gray-600">Approved Orders</p>
+          <p className="text-2xl mt-1 font-semibold text-purple-600">
+            {stats?.approvedOrders || 0}
+          </p>
         </div>
       </div>
     </div>
-  );
+
+    <div className="bg-white rounded-4xl shadow p-6 mb-8">
+      <h3 className="text-lg font-bold text-gray-900 text-center">
+        Quick Actions
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 p-6">
+        <Link to="/dashboard/manage-products">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
+            <div className="flex-shrink-0 text-blue-500 bg-blue-100 rounded-lg p-3 mr-4">
+              <FaTasks className="w-5 h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-lg text-gray-700 font-semibold">
+                Manage Products
+              </p>
+              <p className="text-lg ">Edit your products</p>
+            </div>
+          </button>
+        </Link>
+
+        <Link to="/dashboard/pending-orders">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
+            <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
+              <BsClockHistory className="w-5 h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-lg text-gray-700 font-semibold">
+                Pending Orders
+              </p>
+              <p className="text-lg ">Review and approve orders</p>
+            </div>
+          </button>
+        </Link>
+
+        <Link to="/dashboard/approved-orders">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
+            <div className="flex-shrink-0 text-purple-500 bg-purple-100 rounded-lg p-3 mr-4">
+              <SiGoogletasks className="w-5 h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-lg text-gray-700 font-semibold">
+                Approved Orders
+              </p>
+              <p className="text-lg ">View completed orders</p>
+            </div>
+          </button>
+        </Link>
+
+        <Link to="/dashboard/add-product">
+          <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
+            <div className="flex-shrink-0 text-amber-500 bg-violet-100 rounded-lg p-3 mr-4">
+              <MdAddShoppingCart className="w-5 h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-lg text-gray-700 font-semibold">Add Product</p>
+              <p className="text-lg ">Add Your Exciting Product</p>
+            </div>
+          </button>
+        </Link>
+      </div>
+    </div>
+  </div>
+);
 
 const ManagerDashboard = () => {
   const { user } = useAuth();
@@ -121,7 +115,7 @@ const ManagerDashboard = () => {
     pendingOrders: 0,
     approvedOrders: 0,
   });
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     const fetchDashboardStats = async () => {
@@ -133,10 +127,8 @@ const ManagerDashboard = () => {
       }
     };
 
-
     fetchDashboardStats();
   }, []);
-
 
   return (
     <div className="flex h-screen ">
