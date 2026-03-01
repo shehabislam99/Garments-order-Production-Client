@@ -28,7 +28,7 @@ const AllOrders = () => {
     try {
       setLoading(true);
       const res = await axiosSecure.get(
-        `/orders?searchText=${searchTerm}&page=${
+        `/orders?search=${searchTerm}&page=${
           currentPage + 1
         }&limit=${ordersPerPage}&status=${filterStatus}`,
       );
