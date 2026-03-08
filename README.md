@@ -1,54 +1,131 @@
-# About Textile Flow Garments Production
+# Garments Order Production Client
+Role-based garment order management platform for buyers, managers, and admins with tracking and payment support.
 
-Textile Flow Garments ,where passion meets precision. We transform fabric into fashion, delivering premium apparel manufacturing with unmatched quality and ethical standards.
+---
 
-# How work this website
+## About the Project
+Garments Order Production Client is a frontend application for managing garment production workflows. It supports product browsing, order placement, approval pipelines, order tracking, and role-based dashboard operations for buyer, manager, and admin users.
 
-- Everyone Browse Product.
-- Loggedin user called buyer order product and if manager not approve then buyer able to cancel it.
-- Manager add product in database manage his product edit update and delete his product from database.
-- Manager manage order approve or reject. If approve then add tracking timeline with location of his product.
-- buyer see his order tracking timeline with location.
-- Admin Manage all user role like buyer to manager, all product edit update and delete product from database.
-- Admin see all order details, tracking timeline with location.
+---
 
-## Features
+## Project Overview
+- Built to digitize garment order and production flow in a single dashboard ecosystem.
+- Supports three user roles with dedicated routes and features.
+- Includes secure authentication, protected APIs, and payment workflow integration.
+- Live deployment available for portfolio and demonstration use.
 
-- Side menubar for Navlink as a responsive design
-- Dark/Light theme toggle
-- Toggle button Aside bar For Dashboard.
-- Dashboard Profile and logout interfage
-- Use framer-motion for user better experience in home-page and product-page.
-- Buyer pay in online via stripe and also cash.
-- Advanced filtering role based, product base etc in product and dashboard section.
-- Custom banner, feedback with Carousel, product just show home limit 6, partner section statistic section in home.
-- JWT token based operation and secure.
-- Secure authentication with Firebase.
-- Real-time CRUD operations and incude every operation toast and alert.
-- User have beautifull and better experience.
+Optional visual assets you can add here:
+- System flow diagram
+- Dashboard screenshots (Buyer / Manager / Admin)
 
-## Technology Stack
+---
 
-- **Frontend**: React, Tailwind CSS, Firebase Auth.
-- **Backend**: Node.js, Express, MongoDB, JWT, Cors, helmet, mongoose, nodemailer,nodemon. -**Json data**:fetch as AxiosSecure With JWT use MongoDB & Crud Operation role based.
-- **Frontend FrameWork**: React, React-Dom,React-hook-form.
-- **UI & Styling**: Html_JSX, Custom-CSS, Tailwind-CSS and daisyui
-- **Notifications alert**: React-hot-toast,alert
-- **UX React**: React icons,lucide-react,react-social-icons.
-- **Slider**: React swiper, react slick-carousel.
-- **Animate:**: React aos, framer-motion.
-- **Build Tools**: Vite,npm
-- **Authentication**: Firebase
-- **Toast**:React hot toast,react-toastify.
-- **Paginate**:react-paginate
-- **Payment**:Stripe
-- **Deployment**: Firebase (Client), Vercel (Server)
+## Key Features
+- Buyer flow: browse products, place/cancel orders, view order history, and track production progress.
+- Manager flow: add/update/manage products and process pending/approved orders.
+- Admin flow: manage users/roles, manage all products, and monitor all orders.
+- Secure authentication with Firebase and protected route guards.
+- Stripe payment status flow (`success` / `canceled`) with booking integration.
+- Order tracking with timeline/location support and dashboard analytics charts.
 
-# Link
-- **Live Link**:https://garments-production-tracker.web.app
+---
 
-# Email password
-Admin Email: admin@gmail.com 
- Admin Password: s@14567eR 
- Manager Email: shihabkhan@gmail.com 
-  Manager Password: ssssAAAA$$$ 
+## Tech Stack
+**Frontend:** React 19, Vite, React Router, Tailwind CSS 4, DaisyUI  
+**Authentication:** Firebase Auth  
+**State/Data:** Axios, TanStack React Query, React Hook Form  
+**UI/UX:** Framer Motion, AOS, Swiper, Slick Carousel, Chart.js, Recharts  
+**Payment:** Stripe  
+**Tools:** ESLint, Git, VS Code, Firebase Hosting
+
+---
+
+## Dependencies
+Major libraries used in this client:
+
+```json
+{
+  "react": "^19.2.3",
+  "react-dom": "^19.2.3",
+  "react-router-dom": "^7.10.1",
+  "@tanstack/react-query": "^5.90.12",
+  "axios": "^1.13.2",
+  "firebase": "^12.7.0",
+  "tailwindcss": "^4.1.17",
+  "daisyui": "^5.5.11",
+  "stripe": "^20.1.0"
+}
+```
+
+---
+
+## Installation & Setup
+1. Clone the repo and install dependencies:
+
+```bash
+git clone https://github.com/<your-username>/Garments-order-Production-Client.git
+cd Garments-order-Production-Client
+npm install
+```
+
+2. Create a `.env` file in the project root with the following variables:
+
+```env
+VITE_API_URL=your_server_base_url
+VITE_apiKey=your_firebase_api_key
+VITE_authDomain=your_firebase_auth_domain
+VITE_projectId=your_firebase_project_id
+VITE_storageBucket=your_firebase_storage_bucket
+VITE_messagingSenderId=your_firebase_messaging_sender_id
+VITE_appId=your_firebase_app_id
+VITE_IMGBB_API_KEY=your_imgbb_api_key
+```
+
+3. Run the application:
+
+```bash
+npm run dev
+```
+
+4. Build for production:
+
+```bash
+npm run build
+```
+
+---
+
+## Folder Structure
+
+```plaintext
+Garments-order-Production-Client/
+|-- public/
+|-- src/
+|   |-- Components/
+|   |-- Firebase/
+|   |-- Hooks/
+|   |-- Layout/
+|   |-- Pages/
+|   |-- Provider/
+|   |-- Route/
+|   |-- assets/
+|   |-- index.css
+|   `-- main.jsx
+|-- .env
+|-- package.json
+`-- vite.config.js
+```
+
+---
+
+
+## License
+This project currently does not include a license file.  
+If you want open-source usage, add an MIT `LICENSE` file and update this section.
+
+---
+
+## Contact
+**Live URL:** https://garments-production-tracker.web.app  
+**Email:** shihabkhanahab@gmail.com  
+**Portfolio:** https://shehabislam99.netlify.app/
