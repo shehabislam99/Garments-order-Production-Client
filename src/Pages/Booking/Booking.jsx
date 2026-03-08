@@ -178,7 +178,7 @@ const Booking = () => {
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
-      <h2 className="flex justify-center text-3xl font-bold mb-6 text-gray-800">
+      <h2 className="flex justify-center text-3xl font-bold mb-6  text-gray-500">
         Booking Form
       </h2>
 
@@ -188,7 +188,7 @@ const Booking = () => {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="ml-3 text-sm text-gray-700 font-medium block">
+            <label className="ml-3 text-sm  text-gray-500 font-medium block">
               First Name
             </label>
             <input
@@ -196,11 +196,11 @@ const Booking = () => {
               onChange={handleChange}
               required
               placeholder="First Name"
-              className="w-full pl-10 pr-4 py-3 text-gray-800  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              className="w-full pl-10 pr-4 py-3  text-gray-500  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             />
           </div>
           <div>
-            <label className="ml-3 text-sm text-gray-700 font-medium block">
+            <label className="ml-3 text-sm  text-gray-500 font-medium block">
               Last Name
             </label>
             <input
@@ -208,57 +208,57 @@ const Booking = () => {
               onChange={handleChange}
               required
               placeholder="Last Name"
-              className="w-full pl-10 pr-4 py-3 text-gray-800  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              className="w-full pl-10 pr-4 py-3  text-gray-500  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             />
           </div>
           <div>
-            <label className="block ml-3 text-sm font-medium text-gray-800">
+            <label className="block ml-3 text-sm font-medium  text-gray-500">
               Email
             </label>
             <input
               value={user?.email}
               readOnly
-              className="w-full pl-10 pr-4 py-3 text-gray-800 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              className="w-full pl-10 pr-4 py-3  text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             />
           </div>
 
           <div>
-            <label className="ml-3 text-sm text-gray-700 font-medium block">
+            <label className="ml-3 text-sm  text-gray-500 font-medium block">
               Contact Number
             </label>
             <input
               name="contactNumber"
               onChange={handleChange}
               placeholder="Contact Number"
-              className="w-full pl-10 pr-4 py-3 text-gray-800  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              className="w-full pl-10 pr-4 py-3  text-gray-500  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             />
           </div>
           <div>
-            <label className="ml-3 text-sm text-gray-700 font-medium block">
+            <label className="ml-3 text-sm  text-gray-500 font-medium block">
               Product
             </label>
             <input
               value={product?.product_name}
               readOnly
-              className="w-full pl-10 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              className="w-full pl-10 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             />
           </div>
 
           {/* PRICE */}
           <div>
-            <label className="ml-3 text-sm text-gray-700 font-medium block">
+            <label className="ml-3 text-sm  text-gray-500 font-medium block">
               Price per Unit
             </label>
             <input
               value={`$${product?.price}`}
               readOnly
-              className="w-full pl-10 pr-4 py-3 text-gray-800  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              className="w-full pl-10 pr-4 py-3  text-gray-500  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             />
           </div>
 
           {/* QUANTITY */}
           <div>
-            <label className="ml-3 text-sm text-gray-700 font-medium block">
+            <label className="ml-3 text-sm  text-gray-500 font-medium block">
               Order Quantity
             </label>
             <input
@@ -267,28 +267,28 @@ const Booking = () => {
               max={product?.available_quantity}
               value={quantity}
               onChange={handleQuantityChange}
-              className="w-full pl-10 pr-4 py-3 bg-white text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 bg-white  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-            <p className="text-xs text-gray-700 ml-4 font-medium block mt-1">
+            <p className="text-xs  text-gray-500 ml-4 font-medium block mt-1">
               Min: {product?.moq} | Available: {product?.available_quantity}
             </p>
           </div>
 
           {/* TOTAL */}
           <div>
-            <label className="ml-3 text-sm text-gray-700 font-medium block">
+            <label className="ml-3 text-sm  text-gray-500 font-medium block">
               Total Price
             </label>
             <input
               value={`$${totalPrice.toFixed(2)}`}
               readOnly
-              className="w-full pl-10 pr-4 py-3 text-gray-800 bg-white  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
+              className="w-full pl-10 pr-4 py-3  text-gray-500 bg-white  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
             />
           </div>
         </div>
 
         <div>
-          <label className="ml-3 text-sm text-gray-700 font-medium block">
+          <label className="ml-3 text-sm  text-gray-500 font-medium block">
             Delivery Address
           </label>
           <textarea
@@ -296,18 +296,18 @@ const Booking = () => {
             onChange={handleChange}
             required
             placeholder="Delivery Address"
-            className="w-full pl-10 pr-4 py-3 text-gray-800 bg-white  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
+            className="w-full pl-10 pr-4 py-3  text-gray-500 bg-white  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
           />
         </div>
         <div>
-          <label className="ml-3 text-sm text-gray-700 font-medium block">
+          <label className="ml-3 text-sm  text-gray-500 font-medium block">
             Additional Instructions
           </label>
           <textarea
             name="notes"
             onChange={handleChange}
             placeholder="Additional Instructions"
-            className="w-full pl-10 pr-4 py-3 text-gray-800 bg-white  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
+            className="w-full pl-10 pr-4 py-3  text-gray-500 bg-white  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
           />
         </div>
         <button

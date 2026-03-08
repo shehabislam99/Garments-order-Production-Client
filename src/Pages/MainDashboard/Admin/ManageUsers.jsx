@@ -235,7 +235,7 @@ const ManageUsers = () => {
       case "buyer":
         return "bg-green-100 text-green-800 border-green-200";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-100  text-gray-500 border-gray-200";
     }
   };
 
@@ -248,7 +248,7 @@ const ManageUsers = () => {
       case "pending":
         return "bg-gray-100 text-yellow-800";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100  text-gray-500";
     }
   };
 
@@ -269,7 +269,7 @@ const ManageUsers = () => {
     <div className="p-3 min-h-screen">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Manage Users</h2>
+          <h2 className="text-2xl font-bold  text-gray-500">Manage Users</h2>
         </div>
         <button
           onClick={() => {
@@ -299,7 +299,7 @@ const ManageUsers = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Search Users
             </label>
             <div className="relative">
@@ -314,14 +314,14 @@ const ManageUsers = () => {
                   setCurrentPage(0);
                 }}
                 placeholder="Search by name or email..."
-                className="pl-10 w-full px-3 py-2 placeholder-green-500 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                className="pl-10 w-full px-3 py-2 placeholder-green-500 border border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>
 
           {/* Role Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Filter by Role
             </label>
             <select
@@ -330,7 +330,7 @@ const ManageUsers = () => {
                 setFilterRole(e.target.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">All Roles</option>
               <option value="admin">Admin</option>
@@ -341,7 +341,7 @@ const ManageUsers = () => {
 
           {/* Status Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Filter by Status
             </label>
             <select
@@ -350,7 +350,7 @@ const ManageUsers = () => {
                 setFilterStatus(e.target.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">User all Status</option>
               <option value="active">Active</option>
@@ -412,7 +412,7 @@ const ManageUsers = () => {
                           />
 
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium  ">
                               {user?.name || "No Name"}
                             </div>
                           </div>
@@ -423,9 +423,7 @@ const ManageUsers = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <MdEmail className="h-4 w-4  mr-2" />
-                          <div className="text-sm text-gray-900">
-                            {user?.email}
-                          </div>
+                          <div className="text-sm  ">{user?.email}</div>
                         </div>
                       </td>
 
@@ -504,7 +502,7 @@ const ManageUsers = () => {
                 <div className=" mb-4">
                   <FaUser className="mx-auto h-12 w-12" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <h3 className="text-lg font-medium   mb-2">
                   No users found here
                 </h3>
                 <p className="">Try to find your search or filter criteria</p>
@@ -537,7 +535,7 @@ const ManageUsers = () => {
                 renderOnZeroPageCount={null}
                 containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
                 pageClassName="hidden sm:block"
-                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
+                pageLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500  rounded-full transition-colors"
                 activeClassName="hidden sm:block"
                 activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
                 previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
@@ -545,7 +543,7 @@ const ManageUsers = () => {
                 nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
                 nextLinkClassName="flex items-center px-2 py-1"
                 breakClassName="hidden sm:block"
-                breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
+                breakLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 disabledLinkClassName=" hover: hover:bg-transparent"
               />
@@ -559,7 +557,7 @@ const ManageUsers = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="custom-bg rounded-4xl  shadow-xl max-w-md w-full">
             <div className="p-6">
-              <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
+              <h3 className="text-lg font-bold text-center   mb-4">
                 Update User Role
               </h3>
 
@@ -579,7 +577,7 @@ const ManageUsers = () => {
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium  text-gray-500 mb-2">
                   Select New Role
                 </label>
                 <select
@@ -638,7 +636,7 @@ const ManageUsers = () => {
                 <select
                   value={suspendReason}
                   onChange={(e) => setSuspendReason(e.target.value)}
-                  className="w-full border border-gray-400 rounded-xl px-3 py-2 mb-2"
+                  className="w-full border border-gray-400 rounded-4xl px-3 py-2 mb-2"
                 >
                   <option value="">Select suspend reason</option>
                   <option value="Violation of terms">Violation of terms</option>
@@ -654,7 +652,7 @@ const ManageUsers = () => {
                   value={suspendFeedback}
                   onChange={(e) => setSuspendFeedback(e.target.value)}
                   placeholder="Suspend feedback"
-                  className="w-full border border-gray-400 rounded-xl px-3 py-2 mb-2"
+                  className="w-full border border-gray-400 rounded-4xl px-3 py-2 mb-2"
                 />
 
                 <button

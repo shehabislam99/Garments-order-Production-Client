@@ -91,7 +91,7 @@ const ProductDetailsPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <h2 className="text-2xl font-bold  text-gray-500 mb-2">
             Product Not Found
           </h2>
           <p className="text-gray-600 mb-6">
@@ -158,9 +158,7 @@ const ProductDetailsPage = () => {
           <div className="space-y-6">
             {/* Product Header */}
             <div className="card-bg p-6 rounded-4xl shadow">
-              <h1 className="text-3xl font-bold ">
-                {product.product_name}
-              </h1>
+              <h1 className="text-3xl font-bold ">{product.product_name}</h1>
               {/* Specifications Grid */}
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex items-center p-4 custom-bg rounded-4xl">

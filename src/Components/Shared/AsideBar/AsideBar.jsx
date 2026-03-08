@@ -25,6 +25,8 @@ const roleConfig = {
       { path: "/dashboard/all-product", title: "All Products", icon: FaBox },
       { path: "/dashboard/all-orders", title: "All Orders", icon: FaTasks },
       { path: "/dashboard/manage-users", title: "Manage Users", icon: FaUsers },
+      { path: "/dashboard/profile", title: "Profile", icon: FaUser },
+      { path: "/dashboard/settings", title: "Settings", icon: TbSquareToggle },
     ],
   },
   manager: {
@@ -65,7 +67,13 @@ const roleConfig = {
         title: "My Orders",
         icon: FaShoppingCart,
       },
+      {
+        path: "/all-products",
+        title: "Explore Products",
+        icon: FaBox,
+      },
       { path: "/dashboard/profile", title: "My Profile", icon: FaUser },
+      { path: "/dashboard/settings", title: "Settings", icon: TbSquareToggle },
     ],
   },
 };
@@ -133,7 +141,7 @@ const Asidebar = () => {
               return (
                 <li
                   key={link.path}
-                  className="hover:bg-red-800 hover:rounded-2xl hover:px-2 hover:py-2"
+                  className="hover:bg-red-800 hover:rounded-4xl hover:px-2 hover:py-2"
                 >
                   <NavLink
                     to={link.path}

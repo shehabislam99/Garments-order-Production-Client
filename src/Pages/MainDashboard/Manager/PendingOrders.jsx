@@ -185,7 +185,7 @@ const PendingOrders = () => {
       case "cod":
         return "bg-violet-100 text-purple-800 border-violet-200";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-100  text-gray-500 border-gray-200";
     }
   };
 
@@ -248,7 +248,7 @@ const PendingOrders = () => {
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="items-center">
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-sm font-semibold  ">
                         #{order?._id?.substring(0, 12) || "N/A"}
                       </div>
                     </div>
@@ -262,7 +262,7 @@ const PendingOrders = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
+                    <div className="text-sm font-medium   truncate max-w-[150px]">
                       {order?.product_name || "Unnamed Product"}
                     </div>
                   </td>
@@ -322,9 +322,7 @@ const PendingOrders = () => {
         {orders?.length === 0 && (
           <div className="text-center py-12 bgcolor">
             <FaBox className="mx-auto h-12 w-12  mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">
-              No pending orders
-            </h3>
+            <h3 className="text-lg font-medium  ">No pending orders</h3>
           </div>
         )}
       </div>
@@ -353,7 +351,7 @@ const PendingOrders = () => {
             renderOnZeroPageCount={null}
             containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
             pageClassName="hidden sm:block"
-            pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 rounded-full transition-colors hover:bg-gray-100"
+            pageLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500 rounded-full transition-colors hover:bg-gray-100"
             activeClassName="hidden sm:block"
             activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700"
             previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300 transition-colors"
@@ -361,7 +359,7 @@ const PendingOrders = () => {
             nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300 transition-colors"
             nextLinkClassName="flex items-center px-2 py-1"
             breakClassName="hidden sm:block"
-            breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100"
+            breakLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500 rounded-full hover:bg-gray-100"
             disabledClassName="opacity-50 cursor-not-allowed"
             disabledLinkClassName=" hover: hover:bg-transparent"
           />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import { HiOutlineMenuAlt1, HiMoon, HiSun } from "react-icons/hi";
 import MenuSideBar from "./MenuSideBar";
@@ -12,7 +12,16 @@ const Navbar = () => {
   const { role } = useRole();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [isDarkTheme, setIsDarkTheme] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
+
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDarkTheme ? "dark" : "light",
+    );
+  }, [isDarkTheme]);
 
   const handleLogout = () => {
     logout();
@@ -24,8 +33,9 @@ const Navbar = () => {
   };
 
   const handleToggleTheme = () => {
-    const newTheme = isDarkTheme ? "dark" : "light";
+    const newTheme = isDarkTheme ? "light" : "dark";
     setIsDarkTheme(!isDarkTheme);
+    localStorage.setItem("theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
@@ -56,12 +66,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav
-        className="text-indigo-500  sticky top-0 navbar custom-bg py-4
-      
-      z-50  shadow-md
-      "
-      >
+      <nav className="sticky top-0 navbar custom-bg py-4 z-50 shadow-md border-b app-border">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-20">
             {/* Mobile menu button */}
@@ -89,10 +94,11 @@ const Navbar = () => {
             {/* Theme toggle */}
             <button
               onClick={handleToggleTheme}
-              className=" hover:text-red-800"
+              className="hover:text-red-800"
               title={
                 isDarkTheme ? "Switch to light theme" : "Switch to dark theme"
               }
+              aria-label="Toggle color theme"
             >
               {isDarkTheme ?
                 <HiSun className="w-6 h-6" />
@@ -113,15 +119,23 @@ const Navbar = () => {
                     />
                   </div>
 
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box  w-30"
-                  >
-                   
-                      <button className="hover:text-red-800 font-bold hover:underline" onClick={() => navigate(`/dashboard/profile`)}>
+                  <ul tabIndex={0} className="dropdown-content menu app-surface rounded-box w-40 p-2 shadow">
+                    <li>
+                      <button
+                        className="hover:text-red-800 font-semibold"
+                        onClick={() => navigate(`/dashboard/profile`)}
+                      >
                         My Profile
                       </button>
-                    
+                    </li>
+                    <li>
+                      <button
+                        className="hover:text-red-800 font-semibold"
+                        onClick={() => navigate(`/dashboard/settings`)}
+                      >
+                        Settings
+                      </button>
+                    </li>
                   </ul>
                 </div>
 
@@ -160,6 +174,7 @@ const Navbar = () => {
 
       <MenuSideBar
         links={navLinks}
+        user={user}
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
       />

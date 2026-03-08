@@ -1,148 +1,184 @@
-import React from "react";
-import {
-  FaMapMarkerAlt,
-  FaPhoneAlt,
-  FaEnvelope,
-  FaClock,
-  FaUserTie,
-} from "react-icons/fa";
-import { MdOutlineMapsHomeWork, MdElectricBolt } from "react-icons/md";
+import { useState } from "react";
+import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { axiosInstance } from "../../Hooks/useAxios";
 
 const Contact = () => {
-  const contactInfo = [
-    {
-      icon: <FaMapMarkerAlt className="text-2xl" />,
-      title: "Our Location",
-      details: [
-        "Textile Flow Garments Pvt. Ltd.",
-        "Industrial Zone, Chittagong, Bangladesh",
-      ],
-      color: "bg-violet-100 text-violet-600",
-    },
-    {
-      icon: <FaPhoneAlt className="text-2xl" />,
-      title: "Phone Number",
-      details: ["+880 1700 000000", "+880 9876 543210"],
+  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+  const [errors, setErrors] = useState({});
 
-      color: "bg-green-100 text-green-600",
-    },
-    {
-      icon: <FaEnvelope className="text-2xl" />,
-      title: "Email Address",
-      details: ["support@textileflow.com", "sales@textileflow.com"],
-      color: "bg-blue-100 text-blue-600",
-    },
-    {
-      icon: <FaClock className="text-2xl" />,
-      title: "Working Hours",
-      details: ["Sunday – Friday", "9:00 AM – 6:00 PM"],
-      color: "bg-red-100 text-red-600",
-    },
-  ];
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
-  const chooseUs = [
-    {
-      icon: <MdElectricBolt className="text-2xl" />,
-      title: "Fast Response",
-      des: " We respond within 24 hours to all inquiries",
+  const validate = () => {
+    const nextErrors = {};
+    if (!formData.name.trim()) nextErrors.name = "Name is required.";
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      nextErrors.email = "Enter a valid email.";
+    }
+    if (!formData.subject.trim()) nextErrors.subject = "Subject is required.";
+    if (!formData.message.trim() || formData.message.trim().length < 10) {
+      nextErrors.message = "Message must be at least 10 characters.";
+    }
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
 
-      color: "bg-green-100 text-green-600",
-    },
-    {
-      icon: <FaUserTie className="text-2xl" />,
-      title: "Expert Consultation",
-      des: "Free consultation with our production experts",
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    if (!validate()) return;
 
-      color: "bg-blue-100 text-blue-600",
-    },
-    {
-      icon: <MdOutlineMapsHomeWork className="text-2xl" />,
-      title: "Modern Facility",
-      des: "State-of-the-art garment production facility",
-      color: "bg-violet-100 text-violet-600",
-    },
-  ];
+    setSubmitting(true);
+    try {
+      await axiosInstance.post("/contact-messages", formData);
+      toast.success("Message submitted successfully.");
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to submit message. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold  mb-4">
-            Get in{" "}
-            <span className="text-transparent bg-clip-text bg-indigo-600">
-              Touch
-            </span>
-          </h1>
-          <p className="text-xl  max-w-3xl mx-auto">
-            Have a project in mind or want to know more about our premium
-            textile flow garments production services? We're here to help you
-            bring your vision to life!
+    <section className="min-h-screen py-10 px-4">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8">
+        <div className="custom-bg p-6 rounded-4xl shadow-md border app-border">
+          <h1 className="text-3xl font-bold mb-4">Contact Textile Flow</h1>
+          <p className="app-muted mb-6">
+            Reach out for bulk orders, custom production support, or timeline
+            planning. Our operations team responds within one business day.
           </p>
-        </div>
-
-        <div>
-          <h2 className="flex justify-center text-3xl font-bold text-center mb-8 items-center">
-            Contact Information
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {contactInfo.map((item, index) => (
-              <div
-                key={index}
-                className="custom-bg p-8 rounded-4xl  flex flex-col items-center shadow-md  hover:shadow-xl transition-shadow duration-300 border border-gray-100"
-              >
-                <div
-                  className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${item?.color} mb-6`}
-                >
-                  <div className="text-2xl">{item?.icon}</div>
-                </div>
-                <div>
-                  <h3 className="text-center text-xl font-semibold mb-2">
-                    {item.title}
-                  </h3>
-                  {item.details.map((detail, idx) => (
-                    <p
-                      key={idx}
-                      className="text-center text-gray-700 font-medium opacity-90"
-                    >
-                      {detail}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="space-y-4">
+            <div className="flex gap-3 items-start">
+              <FaMapMarkerAlt className="mt-1 text-blue-600" />
+              <p>Industrial Zone, Chittagong, Bangladesh</p>
+            </div>
+            <div className="flex gap-3 items-start">
+              <FaPhoneAlt className="mt-1 text-blue-600" />
+              <p>+880 1700 000000</p>
+            </div>
+            <div className="flex gap-3 items-start">
+              <FaEnvelope className="mt-1 text-blue-600" />
+              <p>support@textileflow.com</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-16  max-w-7xl mx-auto">
-        <h3 className="flex justify-center text-3xl font-bold mb-8">
-          Why Choose Textile Flow?
-        </h3>
+        <form
+          onSubmit={onSubmit}
+          className="custom-bg p-6 rounded-4xl shadow-md border app-border space-y-4"
+        >
+          <h2 className="text-2xl font-bold">Send a Message</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {chooseUs.map((details, index) => (
-            <div
-              key={index}
-              className="custom-bg p-8 rounded-4xl  flex flex-col items-center shadow-md  hover:shadow-xl transition-shadow duration-300 border border-gray-100"
-            >
-              <div
-                className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${details?.color} mb-6`}
-              >
-                <div className="text-2xl">{details?.icon}</div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">{details.title}</h3>
-              </div>
-              <div>
-                <p className="text-gray-700 text-center font-medium opacity-90">
-                  {details.des}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium mb-1">
+              Full Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={onChange}
+              className="w-full px-3 py-2 rounded-4xl border app-border app-surface"
+              aria-invalid={!!errors.name}
+            />
+            {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium mb-1">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={onChange}
+              className="w-full px-3 py-2 rounded-4xl border app-border app-surface"
+              aria-invalid={!!errors.email}
+            />
+            {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium mb-1">
+              Phone Number
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={onChange}
+              className="w-full px-3 py-2 rounded-4xl border app-border app-surface"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="subject" className="block text-sm font-medium mb-1">
+              Subject
+            </label>
+            <input
+              id="subject"
+              name="subject"
+              value={formData.subject}
+              onChange={onChange}
+              className="w-full px-3 py-2 rounded-4xl border app-border app-surface"
+              aria-invalid={!!errors.subject}
+            />
+            {errors.subject && (
+              <p className="text-red-600 text-sm">{errors.subject}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="message" className="block text-sm font-medium mb-1">
+              Message
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows={5}
+              value={formData.message}
+              onChange={onChange}
+              className="w-full px-3 py-2 rounded-4xl border app-border app-surface"
+              aria-invalid={!!errors.message}
+            />
+            {errors.message && (
+              <p className="text-red-600 text-sm">{errors.message}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full py-2 rounded-4xl bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-60"
+          >
+            {submitting ? "Sending..." : "Send Message"}
+          </button>
+        </form>
       </div>
-    </div>
+    </section>
   );
 };
 

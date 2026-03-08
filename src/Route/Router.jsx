@@ -30,12 +30,12 @@ import Booking from "../Pages/Booking/Booking";
 import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payment/PaymentCanceled";
 import UpdateProduct from "../Pages/MainDashboard/Manager/UpdateProduct";
-import BuyerProfile from "../Pages/MainDashboard/Buyer/BuyerProfile";
 import OrderDetails from "../Pages/MainDashboard/Manager/OrderDetails";
 import AdminManagerRout from "./AdminManagerRout";
 import OrderTracking from "../Pages/MainDashboard/Admin/OrderTracking";
 import TermCondition from "../Pages/Additional Page/TermCondition";
 import PrivacyPolicy from "../Pages/Additional Page/PrivacyPolicy";
+import Settings from "../Pages/MainDashboard/Shared/Settings";
 
 const router = createBrowserRouter([
   {
@@ -223,8 +223,8 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/dashboard/profile",
-        element: <BuyerProfile />,
+        path: "/dashboard/settings",
+        element: <Settings />,
       },
 
       {

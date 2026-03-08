@@ -212,7 +212,7 @@ const AddProduct = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="ml-3 text-sm text-gray-700 font-medium block">
+                <label className="ml-3 text-sm  text-gray-500 font-medium block">
                   Product Name
                 </label>
                 <input
@@ -222,12 +222,12 @@ const AddProduct = () => {
                   onChange={handleChange}
                   placeholder="Enter product name"
                   required
-                  className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>
 
               <div>
-                <label className="ml-3 text-sm text-gray-700 font-medium block">
+                <label className="ml-3 text-sm  text-gray-500 font-medium block">
                   Category
                 </label>
                 <select
@@ -235,7 +235,7 @@ const AddProduct = () => {
                   value={product.category}
                   onChange={handleChange}
                   required
-                  className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 >
                   <option value="" disabled>
                     Select Category
@@ -249,7 +249,7 @@ const AddProduct = () => {
               </div>
 
               <div>
-                <label className="ml-3 text-sm text-gray-700 font-medium block">
+                <label className="ml-3 text-sm  text-gray-500 font-medium block">
                   Price ($)
                 </label>
                 <input
@@ -261,12 +261,12 @@ const AddProduct = () => {
                   min="0"
                   step="0.01"
                   required
-                  className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>
 
               <div>
-                <label className="ml-3 text-sm text-gray-700 font-medium block">
+                <label className="ml-3 text-sm  text-gray-500 font-medium block">
                   Available Quantity
                 </label>
                 <input
@@ -277,12 +277,12 @@ const AddProduct = () => {
                   placeholder="Enter available quantity"
                   min="0"
                   required
-                  className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>
 
               <div>
-                <label className="ml-3 text-sm text-gray-700 font-medium block">
+                <label className="ml-3 text-sm  text-gray-500 font-medium block">
                   Minimum Order Quantity (MOQ)
                 </label>
                 <input
@@ -293,19 +293,19 @@ const AddProduct = () => {
                   placeholder="Minimum 100"
                   min="100"
                   required
-                  className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>
 
               <div>
-                <label className="ml-3 text-sm text-gray-700 font-medium block">
+                <label className="ml-3 text-sm  text-gray-500 font-medium block">
                   Payment Options
                 </label>
                 <select
                   name="payment_Options"
                   value={product?.payment_Options}
                   onChange={handleChange}
-                  className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 >
                   <option value="" disabled>
                     Select Payment Method
@@ -319,7 +319,7 @@ const AddProduct = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="ml-3 text-sm text-gray-700 font-medium block">
+                <label className="ml-3 text-sm  text-gray-500 font-medium block">
                   Product Demo Video Link (Optional)
                 </label>
                 <input
@@ -328,13 +328,13 @@ const AddProduct = () => {
                   value={product?.demo_video_link}
                   onChange={handleChange}
                   placeholder="https://example.com/video"
-                  className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 />
               </div>
             </div>
 
             <div>
-              <label className="ml-3 text-sm text-gray-700 font-medium block">
+              <label className="ml-3 text-sm  text-gray-500 font-medium block">
                 Product Images
               </label>
               <div className="border border-gray-300 rounded-full bg-white text-center hover:border-blue-400 transition-colors">
@@ -357,7 +357,7 @@ const AddProduct = () => {
 
               {imagePreviews.length > 0 && (
                 <div className="mt-4">
-                  <h3 className="ml-3 text-sm font-medium text-gray-700 mb-2">
+                  <h3 className="ml-3 text-sm font-medium  text-gray-500 mb-2">
                     Image Previews
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -385,7 +385,7 @@ const AddProduct = () => {
             </div>
 
             <div>
-              <label className="ml-3 text-sm text-gray-700 font-medium block">
+              <label className="ml-3 text-sm  text-gray-500 font-medium block">
                 Product Description
               </label>
               <textarea
@@ -395,7 +395,7 @@ const AddProduct = () => {
                 placeholder="Describe your product in detail..."
                 rows="6"
                 required
-                className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white resize-none"
+                className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-4xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white resize-none"
               />
             </div>
             <div className="flex items-center">
@@ -407,7 +407,7 @@ const AddProduct = () => {
                 onChange={handleChange}
                 className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
               />
-              <label htmlFor="show_on_homepage" className="ml-3 text-gray-700">
+              <label htmlFor="show_on_homepage" className="ml-3  text-gray-500">
                 Show on Home Page
               </label>
             </div>

@@ -1,8 +1,8 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { RiDeleteBinLine } from "react-icons/ri";
 
-const MenuSideBar = ({ links, isOpen, onClose }) => {
+const MenuSideBar = ({ links, user, isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
@@ -40,6 +40,27 @@ const MenuSideBar = ({ links, isOpen, onClose }) => {
                 </NavLink>
               </li>
             ))}
+            {user ? (
+              <li>
+                <Link
+                  to="/dashboard/profile"
+                  onClick={onClose}
+                  className="block py-3 px-4 rounded-lg hover:text-red-800"
+                >
+                  Dashboard
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <Link
+                  to="/login"
+                  onClick={onClose}
+                  className="block py-3 px-4 rounded-lg hover:text-red-800"
+                >
+                  Login
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

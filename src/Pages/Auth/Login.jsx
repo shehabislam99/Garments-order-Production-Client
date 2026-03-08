@@ -13,6 +13,7 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState("");
   const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
@@ -38,6 +39,12 @@ const Login = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError("");
+
+    if (!loginData.email || !loginData.password) {
+      setFormError("Email and password are required.");
+      return;
+    }
     setLoading(true);
 
     try {
@@ -50,13 +57,23 @@ const Login = () => {
 
       navigate(from, { replace: true });
     } catch (err) {
-      toast.error("Login failed. Try again!", err.message, {
+      setFormError(err?.message || "Login failed. Please try again.");
+      toast.error("Login failed. Try again!", {
         position: "top-center",
         autoClose: 2000,
       });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDemoLogin = () => {
+    setLoginData({
+      email: "admin@gmail.com",
+      password: "s@14567eR",
+    });
+    setFormError("");
+    toast.success("Demo credentials filled for Admin");
   };
 
   if (loading) {
@@ -76,7 +93,9 @@ const Login = () => {
             <Link className="flex justify-center hover:underline " to="/">
               <Logo></Logo>
             </Link>
-            <h2 className=" text-2xl font-bold text-gray-800">Welcome Back!</h2>
+            <h2 className=" text-2xl font-bold  text-gray-500">
+              Welcome Back!
+            </h2>
             <p className="text-gray-600 text-base mt-2">
               Please log in to your account.
             </p>
@@ -96,7 +115,7 @@ const Login = () => {
                   className="absolute inset-y-0  pl-3 
                               flex items-center "
                 >
-                  <FaEnvelope className="h-4 text-gray-700 w-4" />
+                  <FaEnvelope className="h-4  text-gray-500 w-4" />
                 </div>
                 <input
                   id="email"
@@ -106,10 +125,11 @@ const Login = () => {
                   required
                   value={loginData.email}
                   onChange={handleChange}
-                  className="w-full px-9 py-2 text-gray-800 bg-gray-200 border border-gray-400 rounded-full 
+                  className="w-full px-9 py-2  text-gray-500 bg-gray-200 border border-gray-400 rounded-full 
                     focus:outline-none focus:ring-2 focus:ring-green-500
                      focus:border-transparent"
                   placeholder="Enter your email"
+                  aria-invalid={!!formError}
                 />
               </div>
             </div>
@@ -126,7 +146,7 @@ const Login = () => {
                   className="absolute inset-y-0  pl-3 
                               flex items-center "
                 >
-                  <RiLockPasswordFill className="h-4 text-gray-700 w-4" />
+                  <RiLockPasswordFill className="h-4  text-gray-500 w-4" />
                 </div>
                 <input
                   id="password"
@@ -136,10 +156,11 @@ const Login = () => {
                   value={loginData.password}
                   onChange={handleChange}
                   required
-                  className="w-full px-9 py-2 text-gray-800 bg-gray-200 border border-gray-400 rounded-full 
+                  className="w-full px-9 py-2  text-gray-500 bg-gray-200 border border-gray-400 rounded-full 
                     focus:outline-none focus:ring-2 focus:ring-green-500
                      focus:border-transparent"
                   placeholder="Enter your password"
+                  aria-invalid={!!formError}
                 />
                 <button
                   type="button"
@@ -152,6 +173,9 @@ const Login = () => {
                 </button>
               </div>
             </div>
+            {formError && (
+              <p className="text-sm text-red-600 font-medium">{formError}</p>
+            )}
 
             <div className="flex items-center md:flex-row flex-col justify-between">
               <label className="flex items-center space-x-2 text-sm text-gray-600">
@@ -162,25 +186,26 @@ const Login = () => {
                 <span>Remember me</span>
               </label>
 
-              <Link
-                to="/forgot-password"
-                className="text-sm text-red-500
-                 hover:text-red-800 "
+              <button
+                type="button"
+                className="text-sm text-red-500 hover:text-red-800"
+                onClick={handleDemoLogin}
               >
-                Forgot password?
-              </Link>
+                Use Demo Login
+              </button>
             </div>
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full  bg-indigo-600 text-white py-3 
-              rounded-full font-semibold hover:bg-red-800"
+              rounded-full font-semibold hover:bg-red-800 disabled:opacity-60"
             >
-              Login
+              {loading ? "Signing in..." : "Login"}
             </button>
 
             <div className="flex  justify-center">
-              <span className="mx-2 text-gray-700 text-sm">
+              <span className="mx-2  text-gray-500 text-sm">
                 Or continue with
               </span>
             </div>

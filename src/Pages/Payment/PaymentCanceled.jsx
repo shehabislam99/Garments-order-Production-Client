@@ -18,7 +18,7 @@ const PaymentCancelled = () => {
       <div className=" p-8 rounded-4xl custom-bg shadow-md text-center max-w-md w-full">
         <FaTimesCircle className="text-red-500 text-6xl mx-auto mb-4" />
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold  text-gray-500 mb-2">
           Payment Cancelled
         </h2>
 

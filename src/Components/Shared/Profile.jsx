@@ -8,7 +8,7 @@ import useProfile from "../../Hooks/useProfile";
 
 const Rowinformation = ({ label, value }) => (
   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 py-3 border-b border-gray-100">
-    <span className="font-medium text-gray-900 min-w-[140px]">{label}:</span>
+    <span className="font-medium   min-w-[140px]">{label}:</span>
     <span className="text-blue-700 font-medium break-all">
       {value || "Not set"}
     </span>
@@ -61,9 +61,7 @@ const Profile = () => {
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Your Profile
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-bold  ">Your Profile</h2>
           <p className="text-lg text-gray-600 mt-3">
             Here's Your account information
           </p>
@@ -83,7 +81,7 @@ const Profile = () => {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mt-4">
+                <h2 className="text-2xl font-bold   mt-4">
                   {user?.name || "User"}
                 </h2>
                 <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800 mt-2">
@@ -93,7 +91,7 @@ const Profile = () => {
 
               <div className="text-center space-y-3">
                 <div>
-                  <span className="font-semibold text-gray-900">Status:</span>
+                  <span className="font-semibold  ">Status:</span>
                   <span
                     className={`ml-2 px-2 py-1 rounded-full text-sm font-medium ${
                       user?.status === "active" || user?.status === "pending" ?
@@ -111,9 +109,7 @@ const Profile = () => {
                     : "flex"
                   } items-center justify-center`}
                 >
-                  <span className="font-semibold text-gray-900">
-                    Suspend Reason:
-                  </span>
+                  <span className="font-semibold  ">Suspend Reason:</span>
                   <span className="ml-2 font-medium text-red-600">
                     {user?.suspendReason || "N/A"}
                   </span>
@@ -124,7 +120,7 @@ const Profile = () => {
 
           <div className="col-span-1">
             <div className="custom-bg p-6 md:p-8 rounded-4xl shadow-md ">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">
+              <h2 className="text-xl md:text-2xl font-bold   mb-6 text-center">
                 Personal Information
               </h2>
 

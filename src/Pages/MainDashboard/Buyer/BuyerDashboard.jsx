@@ -40,9 +40,7 @@ const DashboardOverview = ({ stats }) => (
       </div>
     </div>
     <div className="bg-white rounded-4xl shadow p-6 mb-8">
-      <h3 className="text-lg font-bold text-gray-900  text-center">
-        Quick Actions
-      </h3>
+      <h3 className="text-lg font-bold    text-center">Quick Actions</h3>
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-3">
         <Link to="/dashboard/my-orders">
           <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
@@ -50,7 +48,7 @@ const DashboardOverview = ({ stats }) => (
               <FaTasks className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-lg font-semibold text-gray-900">My Orders</p>
+              <p className="text-lg font-semibold  ">My Orders</p>
               <p className="text-lg ">View your order history</p>
             </div>
           </button>
@@ -62,7 +60,7 @@ const DashboardOverview = ({ stats }) => (
               <FaMapMarkerAlt className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-lg font-semibold text-gray-900">Track Order</p>
+              <p className="text-lg font-semibold  ">Track Order</p>
               <p className="text-lg ">Tracking your order status</p>
             </div>
           </button>
@@ -73,7 +71,7 @@ const DashboardOverview = ({ stats }) => (
               <FaUser className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-lg font-semibold text-gray-900">My Profile</p>
+              <p className="text-lg font-semibold  ">My Profile</p>
               <p className="text-lg ">Manage account settings</p>
             </div>
           </button>
@@ -110,7 +108,7 @@ const BuyerDashboard = () => {
         <header className="bg-white rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl  font-bold text-gray-800">Dashboard</h1>
+              <h1 className="text-xl  font-bold  text-gray-500">Dashboard</h1>
               <div className="items-center ">
                 <p className="text-sm text-gray-600">
                   Welcome, <span className="font-medium">{user?.email}</span>

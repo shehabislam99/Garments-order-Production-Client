@@ -131,7 +131,7 @@ const PartnershipWith = () => {
                 >
                   {brand.logo}
                 </div>
-                <h4 className="font-semibold text-gray-800">{brand.name}</h4>
+                <h4 className="font-semibold ">{brand.name}</h4>
               </motion.div>
             ))}
           </div>
@@ -150,15 +150,15 @@ const PartnershipWith = () => {
             >
               <div className="relative custom-bg rounded-4xl flex flex-col items-center p-8 shadow-xl group-hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-transparent">
                 <div
-                  className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${benefit.color} text-white mb-6`}
+                  className={`inline-flex items-center justify-center w-16 h-16 rounded-4xl bg-gradient-to-br ${benefit.color} text-white mb-6`}
                 >
                   <div className="text-2xl">{benefit.icon}</div>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
+                <h3 className="text-xl font-bold mb-3">
                   {benefit.title}
                 </h3>
-                <p className="text-center font-medium text-gray-700">
+                <p className="text-center font-medium  text-gray-500">
                   {benefit.description}
                 </p>
               </div>

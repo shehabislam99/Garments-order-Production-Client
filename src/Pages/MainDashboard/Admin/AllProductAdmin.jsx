@@ -184,7 +184,7 @@ const AllProductAdmin = () => {
   return (
     <div className="p-3 min-h-screen">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800">All Products</h2>
+        <h2 className="text-2xl font-bold  text-gray-500">All Products</h2>
         <button
           onClick={() => {
             fetchProducts();
@@ -214,7 +214,7 @@ const AllProductAdmin = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Search Products
             </label>
             <div className="relative">
@@ -229,14 +229,14 @@ const AllProductAdmin = () => {
                   setCurrentPage(0);
                 }}
                 placeholder="Search by product name..."
-                className="pl-10 w-full px-3 py-2 placeholder-green-500 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 w-full px-3 py-2 placeholder-green-500 border border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
 
           {/* Category Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Filter by Category
             </label>
             <select
@@ -245,7 +245,7 @@ const AllProductAdmin = () => {
                 setFilterCategory(e.target.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Categories</option>
               {categories.map((category, index) => (
@@ -258,7 +258,7 @@ const AllProductAdmin = () => {
 
           {/* Show on Home Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Show on Home
             </label>
             <select
@@ -267,7 +267,7 @@ const AllProductAdmin = () => {
                 setFilterStatus(e.target.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-xl text-green-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-4xl text-green-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Status</option>
               <option value="show">Show on Home</option>
@@ -329,7 +329,7 @@ const AllProductAdmin = () => {
                             />
 
                             <div className="whitespace-nowrap ml-4">
-                              <div className="text-sm inline-flex leading-5 font-medium text-gray-900">
+                              <div className="text-sm inline-flex leading-5 font-medium  ">
                                 {product?.product_name || "Unnamed Product"}
                               </div>
                             </div>
@@ -364,7 +364,7 @@ const AllProductAdmin = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <MdEmail className="h-4 w-4  mr-2" />
-                            <span className="text-sm text-gray-700">
+                            <span className="text-sm  text-gray-500">
                               {product.createdBy || "Unknown"}
                             </span>
                           </div>
@@ -436,7 +436,7 @@ const AllProductAdmin = () => {
                 <div className=" mb-4">
                   <FaBox className="mx-auto h-12 w-12" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <h3 className="text-lg font-medium   mb-2">
                   No products found
                 </h3>
                 <p className="">Try adjusting your search or filter criteria</p>
@@ -469,7 +469,7 @@ const AllProductAdmin = () => {
                 renderOnZeroPageCount={null}
                 containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
                 pageClassName="hidden sm:block"
-                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
+                pageLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500  rounded-full transition-colors"
                 activeClassName="hidden sm:block"
                 activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
                 previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
@@ -477,7 +477,7 @@ const AllProductAdmin = () => {
                 nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
                 nextLinkClassName="flex items-center px-2 py-1"
                 breakClassName="hidden sm:block"
-                breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
+                breakLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 disabledLinkClassName=" hover: hover:bg-transparent"
               />
@@ -491,7 +491,7 @@ const AllProductAdmin = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-base-200 rounded-4xl  max-w-md w-full">
             <div className="p-6">
-              <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
+              <h3 className="text-lg font-bold text-center   mb-4">
                 Delete Product
               </h3>
 

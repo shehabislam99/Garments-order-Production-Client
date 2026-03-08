@@ -157,10 +157,11 @@ const Footer = () => {
         </div>
       </footer>
       <div className="flex justify-center bg-indigo-500 items-center p-2 font-semibold ">
-        Â© {new Date().getFullYear()} TexFlow. All rights reserved.
+        © {new Date().getFullYear()} Textile Flow. All rights reserved.
       </div>
     </>
   );
 };
 
 export default Footer;
+

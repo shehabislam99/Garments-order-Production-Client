@@ -97,21 +97,19 @@ const HowWorks = () => {
                 whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
                 className="relative "
               >
-                <div className="absolute -top-4 -left-4 w-8 h-8 bg-white border-4 border-gray-100 rounded-full flex items-center justify-center text-sm font-bold text-gray-700 z-10">
+                <div className="absolute -top-4 -left-4 w-8 h-8 bg-white border-4 border-gray-100 rounded-full flex items-center justify-center text-sm font-bold  text-gray-500 z-10">
                   {index + 1}
                 </div>
                 <div className="custom-bg rounded-4xl p-6 shadow-md  hover:shadow-2xl transition-all duration-300 h-full">
                   <div className="flex flex-col items-center">
                     {" "}
                     <div
-                      className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${step?.color} mb-6`}
+                      className={`inline-flex items-center justify-center w-16 h-16 rounded-4xl ${step?.color} mb-6`}
                     >
                       <div className="text-2xl">{step?.icon}</div>
                     </div>
-                    <h3 className="text-xl font-bold text-black mb-3">
-                      {step?.title}
-                    </h3>
-                    <p className="text-center font-medium text-gray-700">
+                    <h3 className="text-xl font-bold  mb-3">{step?.title}</h3>
+                    <p className="text-center font-medium  text-gray-500">
                       {step?.description}
                     </p>
                     {index < steps.length - 1 && (

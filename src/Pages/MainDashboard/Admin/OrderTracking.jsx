@@ -104,10 +104,10 @@ const OrderTracking = () => {
 
       <div className="flex justify-center items-center mb-8">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="text-3xl font-bold  ">
             Order Details & Tracking History
           </h2>
-          <p className="text-gray-700 font-medium mt-2 text-center">
+          <p className=" text-gray-500 font-medium mt-2 text-center">
             Here is order details summary and Traking history
           </p>
         </div>
@@ -117,9 +117,7 @@ const OrderTracking = () => {
         <div className="col-span-1 lg:col-span-2 space-y-6">
           <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
             <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Order Summary
-              </h2>
+              <h2 className="text-lg font-semibold  ">Order Summary</h2>
             </div>
             <div className="p-6">
               <div className=" p-4 bg-gray-50 rounded-4xl">
@@ -157,9 +155,7 @@ const OrderTracking = () => {
           </div>
           <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
             <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Product Summary
-              </h2>
+              <h2 className="text-lg font-semibold  ">Product Summary</h2>
             </div>
             <div className="p-6">
               <div className="p-4 bg-gray-50 rounded-4xl">
@@ -187,9 +183,7 @@ const OrderTracking = () => {
               <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
                 {" "}
                 <div className="flex justify-between">
-                  <span className="text-lg font-semibold text-gray-900">
-                    Total
-                  </span>
+                  <span className="text-lg font-semibold  ">Total</span>
                   <span className="inline-flex text-lg font-bold text-purple-600">
                     {order?.totalPrice || 0}
                   </span>
@@ -203,7 +197,7 @@ const OrderTracking = () => {
           <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center">
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold  ">
                   Customer Information
                 </h2>
               </div>
@@ -250,9 +244,7 @@ const OrderTracking = () => {
           <div className="custom-bg rounded-4xl shadow-sm border border-gray-200 mb-3">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Payment Information
-                </h2>
+                <h2 className="text-lg font-semibold  ">Payment Information</h2>
               </div>
             </div>
             <div className="p-6">
@@ -297,9 +289,7 @@ const OrderTracking = () => {
 
       <div className="custom-bg rounded-4xl shadow-md  p-6 mb-6">
         <div className="text-center mb-6">
-          <h3 className="font-semibold text-xl text-gray-900 mb-1">
-            Tracking History
-          </h3>
+          <h3 className="font-semibold text-xl   mb-1">Tracking History</h3>
         </div>
 
         {trackingHistory.length > 0 ?
@@ -326,21 +316,21 @@ const OrderTracking = () => {
                       <div className="flex-1 pb-6">
                         <div className="bg-gray-50 rounded-4xl p-5 border border-gray-200 hover:border-blue-200 transition-colors">
                           <div className="flex items-center mb-3">
-                            <span className="font-bold text-gray-900 text-lg">
+                            <span className="font-bold   text-lg">
                               {track?.step}
                             </span>
                             <span className="ml-auto text-sm font-semibold ">
                               {formatDate(track?.date)}
                             </span>
                           </div>
-                          <div className="flex items-center text-sm text-gray-700 mb-2">
+                          <div className="flex items-center text-sm  text-gray-500 mb-2">
                             <MdLocationOn className="mr-1 w-5 h-5 text-violet-500" />
                             <span className="font-medium">
                               {track?.location || "Location not specified"}
                             </span>
                           </div>
-                          <div className="mt-3 p-3 bg-white rounded-xl border-b-4 border-amber-400">
-                            <p className="text-gray-900">
+                          <div className="mt-3 p-3 bg-white rounded-4xl border-b-4 border-amber-400">
+                            <p className=" ">
                               "{track?.Note || "No additional details"}"
                             </p>
                           </div>
@@ -362,7 +352,7 @@ const OrderTracking = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
               <FaClock className="h-8 w-8 text-blue-600" />
             </div>
-            <h4 className="text-lg font-semibold text-gray-800 mb-2">
+            <h4 className="text-lg font-semibold  text-gray-500 mb-2">
               Tracking Updates Pending
             </h4>
           </div>

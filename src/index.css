@@ -2,22 +2,50 @@
 @plugin "daisyui";
 
 :root {
-  --bg-primary: #D2C1B6;
-  --bg-secondary: #2F5755;
-  --bg-custom: #6AECE1;
-  --text-primary: #1f2937;
+  --color-primary: #2563eb;
+  --color-secondary: #0d9488;
+  --color-accent: #ea580c;
+  --color-neutral: #f8fafc;
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-custom: #eef2ff;
+  --text-primary: #0f172a;
+  --text-muted: #334155;
+  --border-color: #cbd5e1;
+  --radius-base: 1rem;
+  --space-unit: 8px;
 }
-
 
 [data-theme="dark"] {
-  --bg-primary: #000000;
-  --bg-custom: #26CCC2;
-  --text-primary: #ffffff;
+  --color-primary: #60a5fa;
+  --color-secondary: #14b8a6;
+  --color-accent: #fb923c;
+  --color-neutral: #0b1120;
+  --bg-primary: #0b1120;
+  --bg-secondary: #111827;
+  --bg-custom: #1e293b;
+  --text-primary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
 }
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
 .card-bg {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
+
 .body-bg {
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -26,4 +54,46 @@
 .custom-bg {
   background-color: var(--bg-custom);
   color: var(--text-primary);
+}
+
+.app-muted {
+  color: var(--text-muted);
+}
+
+.app-border {
+  border-color: var(--border-color);
+}
+
+.app-surface {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.app-radius {
+  border-radius: var(--radius-base);
+}
+
+.app-radius-lg {
+  border-radius: calc(var(--radius-base) + 0.5rem);
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(148, 163, 184, 0.18);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: skeleton-loading 1.3s infinite;
+}
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
 }

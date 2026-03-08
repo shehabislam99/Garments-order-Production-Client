@@ -121,7 +121,7 @@ const ManageProducts = () => {
       case "cash on delivery":
         return "bg-violet-100 text-violet-800 border-violet-200";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-100  text-gray-500 border-gray-200";
     }
   };
 
@@ -175,7 +175,7 @@ const ManageProducts = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Search Products
             </label>
             <div className="relative">
@@ -190,13 +190,13 @@ const ManageProducts = () => {
                   setCurrentPage(0);
                 }}
                 placeholder="Search by name, category or payment..."
-                className="pl-10 w-full px-3 py-2 border placeholder-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 w-full px-3 py-2 border placeholder-green-500 border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Filter by paymentMethod
             </label>
             <select
@@ -205,7 +205,7 @@ const ManageProducts = () => {
                 setpaymentMethod(e.target?.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border border-gray-300 text-green-500 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 text-green-500 rounded-4xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {paymentStatus.map((option) => (
                 <option key={option?.value} value={option?.value}>
@@ -269,7 +269,7 @@ const ManageProducts = () => {
                       {/* Details */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium ">
-                          <h2 className="text-gray-900">
+                          <h2 className=" ">
                             {product?.product_name || "Unknown Product"}
                           </h2>
                         </div>
@@ -330,7 +330,7 @@ const ManageProducts = () => {
                 <div className=" mb-4">
                   <FaBox className="mx-auto h-12 w-12" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <h3 className="text-lg font-medium   mb-2">
                   No products found
                 </h3>
                 <p className="">
@@ -367,7 +367,7 @@ const ManageProducts = () => {
                 renderOnZeroPageCount={null}
                 containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
                 pageClassName="hidden sm:block"
-                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
+                pageLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500  rounded-full transition-colors"
                 activeClassName="hidden sm:block"
                 activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
                 previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
@@ -375,7 +375,7 @@ const ManageProducts = () => {
                 nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
                 nextLinkClassName="flex items-center px-2 py-1"
                 breakClassName="hidden sm:block"
-                breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
+                breakLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 disabledLinkClassName=" hover: hover:bg-transparent"
               />
@@ -389,7 +389,7 @@ const ManageProducts = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-base-200 rounded-4xl  max-w-md w-full">
             <div className="p-6">
-              <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
+              <h3 className="text-lg font-bold text-center   mb-4">
                 Delete Product
               </h3>
 

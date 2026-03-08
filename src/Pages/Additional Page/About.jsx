@@ -24,7 +24,7 @@ const About = () => {
     "Competitive pricing without compromising quality",
     "Personalized customer service",
   ];
- 
+
   return (
     <div className=" min-h-screen ">
       <div className="relative overflow-hidden">
@@ -49,7 +49,7 @@ const About = () => {
               </p>
             </div>
             <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
+              <div className="relative rounded-4xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
                 <img
                   src={imgabout}
                   alt="Garment Production"
@@ -63,7 +63,7 @@ const About = () => {
                     <FaCheckCircle className="h-8 w-8 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-gray-900">10,000+</p>
+                    <p className="text-2xl font-bold  ">10,000+</p>
                     <p className="">Orders Delivered</p>
                   </div>
                 </div>
@@ -84,47 +84,39 @@ const About = () => {
 
         <div className="grid md:grid-cols-3 gap-8">
           <div className="custom-bg p-8 rounded-4xl shadow-md  flex flex-col items-center hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
+            <div className="bg-blue-100 w-16 h-16 rounded-4xl flex items-center justify-center mb-6">
               <FaAward className="h-8 w-8 text-blue-600" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Quality First
-            </h3>
-            <p className="text-center font-medium text-gray-700">
+            <h3 className="text-2xl font-bold   mb-4">Quality First</h3>
+            <p className="text-center font-medium  text-gray-500">
               Every garment undergoes rigorous quality checks to ensure
               international standards and customer satisfaction.
             </p>
           </div>
 
           <div className="custom-bg p-8 rounded-4xl shadow-md  flex flex-col items-center hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="bg-green-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
+            <div className="bg-green-100 w-16 h-16 rounded-4xl flex items-center justify-center mb-6">
               <FaUsers className="h-8 w-8 text-green-600" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ethical Production
-            </h3>
-            <p className="text-center font-medium text-gray-700">
+            <h3 className="text-2xl font-bold   mb-4">Ethical Production</h3>
+            <p className="text-center font-medium  text-gray-500">
               We maintain fair working conditions and sustainable practices
               throughout our manufacturing process.
             </p>
           </div>
 
           <div className="custom-bg p-8 rounded-4xl shadow-md  hover:shadow-xl flex flex-col items-center transition-shadow duration-300 border border-gray-100">
-            <div className="bg-purple-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
+            <div className="bg-purple-100 w-16 h-16 rounded-4xl flex items-center justify-center mb-6">
               <FaGlobeAmericas className="h-8 w-8 text-purple-600" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Global Reach
-            </h3>
-            <p className="text-center font-medium text-gray-700">
+            <h3 className="text-2xl font-bold   mb-4">Global Reach</h3>
+            <p className="text-center font-medium  text-gray-500">
               Serving clients worldwide with reliable logistics and efficient
               supply chain management.
             </p>
           </div>
         </div>
       </div>
-
-    
 
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -145,20 +137,20 @@ const About = () => {
             <img
               src={imgwork1}
               alt="Manufacturing Facility"
-              className="rounded-2xl shadow-md  h-64 w-full object-cover"
+              className="rounded-4xl shadow-md  h-64 w-full object-cover"
             />
             <img
               src={imgwork2}
               alt="Quality Control"
-              className="rounded-2xl shadow-md  h-64 w-full object-cover mt-8"
+              className="rounded-4xl shadow-md  h-64 w-full object-cover mt-8"
             />
             <img
               src={imgwork3}
-              className="rounded-2xl shadow-md  h-64 w-full object-cover"
+              className="rounded-4xl shadow-md  h-64 w-full object-cover"
             />
             <img
               src={imgwork4}
-              className="rounded-2xl shadow-md  h-64 w-full object-cover mt-8"
+              className="rounded-4xl shadow-md  h-64 w-full object-cover mt-8"
             />
           </div>
         </div>

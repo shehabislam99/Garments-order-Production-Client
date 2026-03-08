@@ -142,7 +142,7 @@ const MyOrders = () => {
       case "cancelled":
         return "bg-gray-800 text-white border-gray-200";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-100  text-gray-500 border-gray-200";
     }
   };
 
@@ -153,7 +153,7 @@ const MyOrders = () => {
       case "cod":
         return "bg-violet-100 text-violet-800 border-violet-200";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-100  text-gray-500 border-gray-200";
     }
   };
 
@@ -209,7 +209,7 @@ const MyOrders = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Search Orders
             </label>
             <div className="relative">
@@ -224,13 +224,13 @@ const MyOrders = () => {
                   setCurrentPage(0);
                 }}
                 placeholder="Search by order ID or product name..."
-                className="pl-10 w-full px-3 py-2 border placeholder-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 w-full px-3 py-2 border placeholder-green-500 border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Filter by Status
             </label>
             <select
@@ -239,7 +239,7 @@ const MyOrders = () => {
                 setFilterStatus(e.target?.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border border-gray-300 text-green-500 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 text-green-500 rounded-4xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {statusOptions.map((status) => (
                 <option key={status?.value} value={status?.value}>
@@ -297,7 +297,7 @@ const MyOrders = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div>
-                            <div className="text-sm font-semibold text-gray-900">
+                            <div className="text-sm font-semibold  ">
                               #{order?._id?.substring(0, 12) || "N/A"}
                             </div>
                             <div className="text-sm font-medium  ">
@@ -309,7 +309,7 @@ const MyOrders = () => {
 
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="items-center">
-                          <div className="font-semibold text-gray-900">
+                          <div className="font-semibold  ">
                             {order?.product_name || "Unknown Product"}
                           </div>
                         </div>
@@ -384,9 +384,7 @@ const MyOrders = () => {
                 <div className=" mb-4">
                   <FaShoppingCart className="mx-auto h-12 w-12" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  No orders found
-                </h3>
+                <h3 className="text-lg font-medium   mb-2">No orders found</h3>
 
                 <p className="">
                   {user ?
@@ -427,7 +425,7 @@ const MyOrders = () => {
                 renderOnZeroPageCount={null}
                 containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
                 pageClassName="hidden sm:block"
-                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
+                pageLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500  rounded-full transition-colors"
                 activeClassName="hidden sm:block"
                 activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
                 previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
@@ -435,7 +433,7 @@ const MyOrders = () => {
                 nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
                 nextLinkClassName="flex items-center px-2 py-1"
                 breakClassName="hidden sm:block"
-                breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
+                breakLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 disabledLinkClassName=" hover: hover:bg-transparent"
               />
@@ -448,7 +446,7 @@ const MyOrders = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="p-6">
-              <h3 className="text-lg font-bold text-center text-gray-900 mb-4">
+              <h3 className="text-lg font-bold text-center   mb-4">
                 Cancel Order
               </h3>
 

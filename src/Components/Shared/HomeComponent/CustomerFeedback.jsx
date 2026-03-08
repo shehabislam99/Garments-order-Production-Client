@@ -76,7 +76,7 @@ const CustomerFeedback = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-10"
         >
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/20 text-blue-600 font-medium mb-4">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
             Testimonial and Ratings
           </div>
           <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
@@ -87,7 +87,7 @@ const CustomerFeedback = () => {
           </p>
         </motion.div>
         <div className="relative">
-          <div className="relative h-[400px] lg:h-[350px] overflow-hidden rounded-3xl">
+          <div className="relative h-[400px] lg:h-[350px] overflow-hidden rounded-4xl">
             <AnimatePresence initial={false} custom={1}>
               <motion.div
                 key={currentSlide}
@@ -102,10 +102,10 @@ const CustomerFeedback = () => {
                 }}
                 className="absolute inset-0"
               >
-                <div className="h-full bg-gradient-to-br from-indigo-600 to-blue-800 rounded-3xl overflow-hidden">
+                <div className="h-full bg-gradient-to-br from-indigo-600 to-blue-800 rounded-4xl overflow-hidden">
                   <div className="h-full flex flex-col lg:flex-row">
                     <div className="flex-1 p-8 lg:p-12 text-white">
-                      <FaQuoteLeft className="w-12 h-12 text-white/30 mb-3" />
+                      <FaQuoteLeft className="w-12 h-12  mb-3" />
 
                       <p className="text-xl lg:text-2xl font-light mb-8 leading-relaxed">
                         "{feedBack[currentSlide].comment}"
@@ -143,7 +143,7 @@ const CustomerFeedback = () => {
                         alt={feedBack[currentSlide].name}
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute bottom-8 right-8 bg-white/10 backdrop-blur-sm rounded-2xl p-4">
+                      <div className="absolute bottom-8 right-8 bg-white/10 backdrop-blur-sm rounded-4xl p-4">
                         <div className="text-3xl font-bold">4.8/5</div>
                         <div className="text-sm">Average Rating</div>
                       </div>
@@ -158,13 +158,13 @@ const CustomerFeedback = () => {
             onClick={prevSlide}
             className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md  hover:bg-white transform hover:scale-110 transition-all duration-300 z-20"
           >
-            <FaChevronLeft className="w-5 h-5 text-gray-700" />
+            <FaChevronLeft className="w-5 h-5  text-gray-500" />
           </button>
           <button
             onClick={nextSlide}
             className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md  hover:bg-white transform hover:scale-110 transition-all duration-300 z-20"
           >
-            <FaChevronRight className="w-5 h-5 text-gray-700" />
+            <FaChevronRight className="w-5 h-5  text-gray-500" />
           </button>
 
           <div className="flex justify-center mt-6 space-x-2">
@@ -206,10 +206,8 @@ const CustomerFeedback = () => {
                   className="w-12 h-12 rounded-full object-cover mr-4"
                 />
                 <div>
-                  <h4 className="font-bold text-gray-900">
-                    {testimonial.name}
-                  </h4>
-                  <p className="text-sm text-gray-600">{testimonial.role}</p>
+                  <h4 className="font-bold  ">{testimonial.name}</h4>
+                  <p className="text-sm text-gray-500">{testimonial.role}</p>
                 </div>
               </div>
 
@@ -226,7 +224,7 @@ const CustomerFeedback = () => {
                 ))}
               </div>
 
-              <p className="text-gray-600 font-medium italic">
+              <p className="font-medium italic">
                 "{testimonial.comment.substring(0, 100)}..."
               </p>
             </motion.div>

@@ -59,15 +59,17 @@ const WhatWeOffer = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center mb-10"
-        >  <motion.div
-                          initial={{ opacity: 0, y: -20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6 }}
-                          className="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/20 text-blue-600 font-medium mb-4"
-                        >
-                          Our Promise
-                        </motion.div>
+        >
+          {" "}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4"
+          >
+            Our Promise
+          </motion.div>
           <h2 className="text-4xl font-bold mb-4">What We Offer</h2>
           <p className="text-xl opacity-90 max-w-3xl mx-auto">
             Comprehensive garment manufacturing solutions for brands of all
@@ -91,16 +93,14 @@ const WhatWeOffer = () => {
               className="custom-bg p-8 rounded-4xl flex flex-col items-center shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100"
             >
               <div
-                className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${service.color} mb-6`}
+                className={`inline-flex items-center justify-center w-16 h-16 rounded-4xl ${service.color} mb-6`}
               >
                 <div className="text-2xl">{service.icon}</div>
               </div>
 
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                {service.title}
-              </h3>
+              <h3 className="text-2xl font-bold   mb-4">{service.title}</h3>
 
-              <p className="text-center font-medium text-gray-700">
+              <p className="text-center font-medium  text-gray-500">
                 {service.desc}
               </p>
             </motion.div>

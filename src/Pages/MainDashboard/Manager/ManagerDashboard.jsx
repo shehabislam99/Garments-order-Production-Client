@@ -46,9 +46,7 @@ const DashboardOverview = ({ stats }) => (
     </div>
 
     <div className="bg-white rounded-4xl shadow p-6 mb-8">
-      <h3 className="text-lg font-bold text-gray-900 text-center">
-        Quick Actions
-      </h3>
+      <h3 className="text-lg font-bold   text-center">Quick Actions</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 p-6">
         <Link to="/dashboard/manage-products">
           <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
@@ -56,7 +54,7 @@ const DashboardOverview = ({ stats }) => (
               <FaTasks className="w-5 h-5" />
             </div>
             <div className="text-left">
-              <p className="text-lg text-gray-700 font-semibold">
+              <p className="text-lg  text-gray-500 font-semibold">
                 Manage Products
               </p>
               <p className="text-lg ">Edit your products</p>
@@ -70,7 +68,7 @@ const DashboardOverview = ({ stats }) => (
               <BsClockHistory className="w-5 h-5" />
             </div>
             <div className="text-left">
-              <p className="text-lg text-gray-700 font-semibold">
+              <p className="text-lg  text-gray-500 font-semibold">
                 Pending Orders
               </p>
               <p className="text-lg ">Review and approve orders</p>
@@ -84,7 +82,7 @@ const DashboardOverview = ({ stats }) => (
               <SiGoogletasks className="w-5 h-5" />
             </div>
             <div className="text-left">
-              <p className="text-lg text-gray-700 font-semibold">
+              <p className="text-lg  text-gray-500 font-semibold">
                 Approved Orders
               </p>
               <p className="text-lg ">View completed orders</p>
@@ -98,7 +96,9 @@ const DashboardOverview = ({ stats }) => (
               <MdAddShoppingCart className="w-5 h-5" />
             </div>
             <div className="text-left">
-              <p className="text-lg text-gray-700 font-semibold">Add Product</p>
+              <p className="text-lg  text-gray-500 font-semibold">
+                Add Product
+              </p>
               <p className="text-lg ">Add Your Exciting Product</p>
             </div>
           </button>
@@ -136,7 +136,7 @@ const ManagerDashboard = () => {
         <header className="bg-white rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl  font-bold text-gray-800">Dashboard</h1>
+              <h1 className="text-xl  font-bold  text-gray-500">Dashboard</h1>
               <div className="items-center ">
                 <p className="text-sm text-gray-600">
                   Welcome, <span className="font-medium">{user?.email}</span>

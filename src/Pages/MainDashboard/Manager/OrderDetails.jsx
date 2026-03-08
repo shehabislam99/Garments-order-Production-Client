@@ -70,7 +70,7 @@ const OrderDetails = () => {
           <div className="text-center">
             {" "}
             <h1 className="text-3xl font-bold"> Order Details</h1>
-            <p className="text-gray-700 font-medium my-2">
+            <p className=" text-gray-500 font-medium my-2">
               Order Summary with product details
             </p>{" "}
           </div>
@@ -80,9 +80,7 @@ const OrderDetails = () => {
           <div className="col-span-1 lg:col-span-2 space-y-6">
             <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Order Summary
-                </h2>
+                <h2 className="text-lg font-semibold  ">Order Summary</h2>
               </div>
               <div className="p-6">
                 <div className=" p-4 bg-gray-50 rounded-4xl">
@@ -122,9 +120,7 @@ const OrderDetails = () => {
             </div>
             <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Product Summary
-                </h2>
+                <h2 className="text-lg font-semibold  ">Product Summary</h2>
               </div>
               <div className="p-6">
                 <div className="p-4 bg-gray-50 rounded-4xl">
@@ -152,9 +148,7 @@ const OrderDetails = () => {
                 <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
                   {" "}
                   <div className="flex justify-between">
-                    <span className="text-lg font-semibold text-gray-900">
-                      Total
-                    </span>
+                    <span className="text-lg font-semibold  ">Total</span>
                     <span className="inline-flex text-lg font-bold text-purple-600">
                       {order?.totalPrice || 0}
                     </span>
@@ -168,7 +162,7 @@ const OrderDetails = () => {
             <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center">
-                  <h2 className="text-lg font-semibold text-gray-900">
+                  <h2 className="text-lg font-semibold  ">
                     Customer Information
                   </h2>
                 </div>
@@ -215,7 +209,7 @@ const OrderDetails = () => {
             <div className="custom-bg rounded-4xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center">
-                  <h2 className="text-lg font-semibold text-gray-900">
+                  <h2 className="text-lg font-semibold  ">
                     Payment Information
                   </h2>
                 </div>

@@ -197,7 +197,7 @@ const ApprovedOrders = () => {
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className=" items-center">
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-sm font-semibold  ">
                         #{order?._id?.substring(0, 12) || "N/A"}
                       </div>
                     </div>
@@ -215,7 +215,7 @@ const ApprovedOrders = () => {
 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="items-center">
-                      <div className="font-semibold text-gray-900">
+                      <div className="font-semibold  ">
                         {order?.product_name || "Unknown Product"}
                       </div>
                     </div>
@@ -269,9 +269,7 @@ const ApprovedOrders = () => {
         {orders?.length === 0 && (
           <div className="text-center py-12 bgcolor">
             <FaBox className="mx-auto h-12 w-12  mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">
-              No Approved orders
-            </h3>
+            <h3 className="text-lg font-medium  ">No Approved orders</h3>
           </div>
         )}
       </div>
@@ -300,7 +298,7 @@ const ApprovedOrders = () => {
             renderOnZeroPageCount={null}
             containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
             pageClassName="hidden sm:block"
-            pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
+            pageLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500  rounded-full transition-colors"
             activeClassName="hidden sm:block"
             activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
             previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
@@ -308,7 +306,7 @@ const ApprovedOrders = () => {
             nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
             nextLinkClassName="flex items-center px-2 py-1"
             breakClassName="hidden sm:block"
-            breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
+            breakLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500"
             disabledClassName="opacity-50 cursor-not-allowed"
             disabledLinkClassName=" hover: hover:bg-transparent"
           />
@@ -320,7 +318,7 @@ const ApprovedOrders = () => {
           <div className="custom-bg rounded-4xl shadow-xl max-w-md w-full">
             <div className="p-6">
               <div className="flex justify-between mb-4">
-                <h3 className="text-lg ml-25 font-bold text-gray-900">
+                <h3 className="text-lg ml-25 font-bold  ">
                   Add Tracking Update
                 </h3>
                 <button
@@ -342,7 +340,7 @@ const ApprovedOrders = () => {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium  text-gray-500 mb-1">
                     Status
                   </label>
                   <select
@@ -353,7 +351,7 @@ const ApprovedOrders = () => {
                         status: e.target?.value,
                       })
                     }
-                    className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                    className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   >
                     <option value="Cutting Completed">Cutting Completed</option>
                     <option value="Sewing Started">Sewing Started</option>
@@ -366,7 +364,7 @@ const ApprovedOrders = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium  text-gray-500 mb-1">
                     Location
                   </label>
                   <input
@@ -379,12 +377,12 @@ const ApprovedOrders = () => {
                       })
                     }
                     placeholder="Enter location"
-                    className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                    className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium  text-gray-500 mb-1">
                     Note
                   </label>
                   <textarea
@@ -397,7 +395,7 @@ const ApprovedOrders = () => {
                     }
                     placeholder="Enter tracking note"
                     rows="3"
-                    className="w-full pl-4 pr-4 py-3 text-gray-800 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                    className="w-full pl-4 pr-4 py-3  text-gray-500 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   />
                 </div>
               </div>
@@ -427,7 +425,7 @@ const ApprovedOrders = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <p className="text-gray-900 font-bold">
+                  <p className="  font-bold">
                     Order Id #{selectedOrder?._id || "N/A"}
                   </p>
                 </div>
@@ -441,7 +439,7 @@ const ApprovedOrders = () => {
 
               <div className="mb-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h4 className="text-xl font-bold text-gray-800">
+                  <h4 className="text-xl font-bold  text-gray-500">
                     Production Tracking Timeline
                   </h4>
                   <span className="text-sm text-indigo-600 font-semibold flex items-center">
@@ -478,22 +476,22 @@ const ApprovedOrders = () => {
                               <div className="flex-1 pb-6">
                                 <div className="bg-gray-50 rounded-4xl p-5 border border-gray-200 hover:border-blue-200 transition-colors">
                                   <div className="flex items-center mb-3">
-                                    <span className="font-bold text-gray-900 text-lg">
+                                    <span className="font-bold   text-lg">
                                       {track?.step}
                                     </span>
                                     <span className="ml-auto text-sm font-semibold ">
                                       {formatDate(track?.date)}
                                     </span>
                                   </div>
-                                  <div className="flex items-center text-sm text-gray-700 mb-2">
+                                  <div className="flex items-center text-sm  text-gray-500 mb-2">
                                     <MdLocationOn className="mr-1 w-5 h-5 text-violet-500" />
                                     <span className="font-medium">
                                       {track?.location ||
                                         "Location not specified"}
                                     </span>
                                   </div>
-                                  <div className="mt-3 p-3 bg-white rounded-xl border-b-4 border-amber-400">
-                                    <p className="text-gray-900">
+                                  <div className="mt-3 p-3 bg-white rounded-4xl border-b-4 border-amber-400">
+                                    <p className=" ">
                                       "{track?.Note || "No additional details"}"
                                     </p>
                                   </div>
@@ -515,7 +513,7 @@ const ApprovedOrders = () => {
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
                       <FaClock className="h-8 w-8 text-blue-600" />
                     </div>
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    <h4 className="text-lg font-semibold  text-gray-500 mb-2">
                       Tracking Updates Pending
                     </h4>
                   </div>

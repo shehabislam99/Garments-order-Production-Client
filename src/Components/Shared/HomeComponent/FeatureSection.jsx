@@ -6,7 +6,7 @@ import {} from "react-icons/fa";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Loading from "../../../Components/Common/Loding/Loding";
 
-const HomeProduct = () => {
+const FeatureSection = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
@@ -65,9 +65,15 @@ const HomeProduct = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-10"
         >
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-medium mb-4"
+          >
             Our Collection
-          </div>
+          </motion.div>
           <h2 className="text-3xl lg:text-4xl font-bold  mb-4">
             Featured Products
           </h2>
@@ -93,7 +99,7 @@ const HomeProduct = () => {
                   key={product?._id}
                   variants={cardVariants}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="group bg-white rounded-3xl overflow-hidden shadow-md  hover:shadow-2xl transition-all duration-300"
+                  className="group bg-white rounded-4xl overflow-hidden shadow-md  hover:shadow-2xl transition-all duration-300"
                 >
                   <div className="relative h-64 overflow-hidden">
                     <img
@@ -122,11 +128,11 @@ const HomeProduct = () => {
                   </div>
 
                   <div className="p-6 custom-bg">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
+                    <h3 className="text-xl font-bold   mb-2 truncate">
                       {product?.product_name}
                     </h3>
 
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-500 text-sm mb-4 line-clamp-2">
                       {product?.description?.substring(0, 50)}...
                     </p>
 
@@ -172,4 +178,4 @@ const HomeProduct = () => {
   );
 };
 
-export default HomeProduct;
+export default FeatureSection;

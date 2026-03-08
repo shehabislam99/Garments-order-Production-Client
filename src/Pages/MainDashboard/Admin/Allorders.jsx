@@ -80,7 +80,7 @@ const AllOrders = () => {
       case "cancelled":
         return " bg-gray-800 text-white border-gray-200";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-100  text-gray-500 border-gray-200";
     }
   };
 
@@ -94,7 +94,7 @@ const AllOrders = () => {
   return (
     <div className="p-3 min-h-screen">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800">All Orders</h2>
+        <h2 className="text-2xl font-bold  text-gray-500">All Orders</h2>
         <button
           onClick={() => {
             fetchOrders();
@@ -123,7 +123,7 @@ const AllOrders = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Search */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Search Orders
             </label>
             <div className="relative">
@@ -138,14 +138,14 @@ const AllOrders = () => {
                   setCurrentPage(0);
                 }}
                 placeholder="Search by order ID, user, or product..."
-                className="pl-10 w-full px-3 py-2 border  placeholder-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 w-full px-3 py-2 border  placeholder-green-500 border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
 
           {/* Status Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium  text-gray-500 mb-2">
               Filter by Status
             </label>
             <select
@@ -154,7 +154,7 @@ const AllOrders = () => {
                 setFilterStatus(e.target.value);
                 setCurrentPage(0);
               }}
-              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border text-green-500 border-gray-300 rounded-4xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Status</option>
               {StatusOptions.map((status) => (
@@ -212,7 +212,7 @@ const AllOrders = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div>
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium  ">
                               #{order?._id?.substring(0, 12) || "N/A"}
                             </div>
                           </div>
@@ -226,7 +226,7 @@ const AllOrders = () => {
                             <MdEmail className="text-gray-600"></MdEmail>
                           </span>
 
-                          <div className="flex-shrink-0 text-gray-700 font-medium">
+                          <div className="flex-shrink-0  text-gray-500 font-medium">
                             {order?.CustomerEmail}
                           </div>
                         </div>
@@ -236,7 +236,7 @@ const AllOrders = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center whitespace-nowrap">
                           <div>
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium  ">
                               {order?.product_name || "Unknown Product"}
                             </div>
                           </div>
@@ -290,9 +290,7 @@ const AllOrders = () => {
                 <div className=" mb-4">
                   <HiOutlineClipboardList className="mx-auto h-12 w-12" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  No orders found
-                </h3>
+                <h3 className="text-lg font-medium   mb-2">No orders found</h3>
                 <p className="">Try adjusting your search or filter criteria</p>
               </div>
             )}
@@ -323,7 +321,7 @@ const AllOrders = () => {
                 renderOnZeroPageCount={null}
                 containerClassName="flex items-center justify-center space-x-1 md:space-x-2 mb-4 md:mb-0"
                 pageClassName="hidden sm:block"
-                pageLinkClassName="px-3 py-1 text-sm font-medium text-gray-700  rounded-full transition-colors"
+                pageLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500  rounded-full transition-colors"
                 activeClassName="hidden sm:block"
                 activeLinkClassName="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-full"
                 previousClassName="px-3 py-1 text-sm font-medium text-white bg-green-800 hover:bg-red-800 rounded-full border border-gray-300"
@@ -331,7 +329,7 @@ const AllOrders = () => {
                 nextClassName="px-3 py-1 text-sm font-medium text-white bg-green-800  hover:bg-red-800 rounded-full border border-gray-300"
                 nextLinkClassName="flex items-center px-2 py-1"
                 breakClassName="hidden sm:block"
-                breakLinkClassName="px-3 py-1 text-sm font-medium text-gray-700"
+                breakLinkClassName="px-3 py-1 text-sm font-medium  text-gray-500"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 disabledLinkClassName=" hover: hover:bg-transparent"
               />

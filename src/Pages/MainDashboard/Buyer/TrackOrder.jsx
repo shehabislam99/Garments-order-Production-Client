@@ -130,21 +130,21 @@ const TrackOrder = () => {
 
       <div className="flex justify-center items-center mb-8">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Order Tracking</h2>
-          <p className="text-gray-700 font-medium mt-2 text-center">
+          <h2 className="text-3xl font-bold  ">Order Tracking</h2>
+          <p className=" text-gray-500 font-medium mt-2 text-center">
             Here is summary of order and Production progress
           </p>
         </div>
       </div>
 
       <div className="custom-bg rounded-4xl shadow-md  p-6 mb-8">
-        <h3 className="font-semibold text-center text-xl mb-4 text-gray-900">
+        <h3 className="font-semibold text-center text-xl mb-4  ">
           Order Summary
         </h3>
         <div className="grid md:grid-cols-4 gap-6">
           <div>
             <p className="text-gray-600 mb-2 text-sm">Order ID</p>
-            <p className="font-medium text-lg text-gray-900">
+            <p className="font-medium text-lg  ">
               {orderId?.substring(0, 12) || "N/A"}
             </p>
           </div>
@@ -162,7 +162,7 @@ const TrackOrder = () => {
           </div>
           <div>
             <p className="text-gray-600 mb-2 text-sm">Order Date</p>
-            <p className="font-medium text-gray-900">
+            <p className="font-medium  ">
               {formatDate(order?.createdAt || new Date())}
             </p>
           </div>
@@ -170,7 +170,7 @@ const TrackOrder = () => {
 
         <div className="mt-8">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-gray-700 font-medium">Production Progress</p>
+            <p className=" text-gray-500 font-medium">Production Progress</p>
             <p className="text-blue-600 font-bold">
               {Math.round(progressPercentage)}%
             </p>
@@ -194,7 +194,7 @@ const TrackOrder = () => {
         <div className="lg:col-span-2">
           <div className="custom-bg rounded-4xl shadow-md  p-6 mb-6">
             <div className="text-center mb-6">
-              <h3 className="font-semibold text-xl text-gray-900 mb-1">
+              <h3 className="font-semibold text-xl   mb-1">
                 Production Tracking Timeline
               </h3>
             </div>
@@ -223,21 +223,21 @@ const TrackOrder = () => {
                           <div className="flex-1 pb-6">
                             <div className="bg-gray-50 rounded-4xl p-5 border border-gray-200 hover:border-blue-200 transition-colors">
                               <div className="flex items-center mb-3">
-                                <span className="font-bold text-gray-900 text-lg">
+                                <span className="font-bold   text-lg">
                                   {track?.step}
                                 </span>
                                 <span className="ml-auto text-sm font-semibold ">
                                   {formatDate(track?.date)}
                                 </span>
                               </div>
-                              <div className="flex items-center text-sm text-gray-700 mb-2">
+                              <div className="flex items-center text-sm  text-gray-500 mb-2">
                                 <MdLocationOn className="mr-1 w-5 h-5 text-violet-500" />
                                 <span className="font-medium">
                                   {track?.location || "Location not specified"}
                                 </span>
                               </div>
-                              <div className="mt-3 p-3 bg-white rounded-xl border-b-4 border-amber-400">
-                                <p className="text-gray-900">
+                              <div className="mt-3 p-3 bg-white rounded-4xl border-b-4 border-amber-400">
+                                <p className=" ">
                                   "{track?.Note || "No additional details"}"
                                 </p>
                               </div>
@@ -259,7 +259,7 @@ const TrackOrder = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
                   <FaClock className="h-8 w-8 text-blue-600" />
                 </div>
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                <h4 className="text-lg font-semibold  text-gray-500 mb-2">
                   Tracking Updates Pending
                 </h4>
               </div>
@@ -270,9 +270,7 @@ const TrackOrder = () => {
         <div className="space-y-6">
           <div className="custom-bg rounded-4xl shadow-md  p-6">
             <div className="flex justify-center items-center gap-3 mb-4">
-              <h3 className="font-semibold  text-lg text-gray-900">
-                Current Step
-              </h3>
+              <h3 className="font-semibold  text-lg  ">Current Step</h3>
             </div>
             {currentStep ?
               <div className="p-6">
@@ -308,7 +306,7 @@ const TrackOrder = () => {
           </div>
 
           <div className="custom-bg rounded-4xl shadow-md  p-6">
-            <h3 className="font-semibold text-center text-xl text-gray-900 mb-4">
+            <h3 className="font-semibold text-center text-xl   mb-4">
               Next Steps
             </h3>
             <div className="space-y-3">
@@ -327,12 +325,10 @@ const TrackOrder = () => {
                 .map((step, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl"
+                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-4xl"
                   >
                     <div>
-                      <p className="font-medium text-gray-900">
-                        {step || "N/A"}
-                      </p>
+                      <p className="font-medium  ">{step || "N/A"}</p>
                     </div>
                   </div>
                 ))}

@@ -99,7 +99,7 @@ const PaymentSuccess = () => {
           </div>
         </div>
         <div>
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">
+          <h1 className="text-5xl font-bold  text-gray-500 mb-4">
             Payment Successful!
           </h1>
           <p className="text-xl text-gray-600 ">
@@ -139,7 +139,7 @@ const PaymentSuccess = () => {
 
         <div className="flex flex-col gap-8">
           <div className="space-y-4 shadow-md bg-white p-6 rounded-4xl">
-            <h2 className="flex justify-center text-2xl font-bold text-gray-800">
+            <h2 className="flex justify-center text-2xl font-bold  text-gray-500">
               Payment Summary
             </h2>
             <div className="flex custom-bg px-3 rounded-lg  justify-between py-3 border-b border-gray-100">

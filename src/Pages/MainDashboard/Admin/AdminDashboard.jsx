@@ -42,7 +42,7 @@ const DashboardOverview = ({ stats }) => (
     </div>
 
     <div className="bg-white rounded-4xl shadow p-6 mb-8">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+      <h3 className="text-lg font-medium   mb-4">Quick Actions</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link to="/dashboard/admin/manage-users">
           <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-200">
@@ -50,7 +50,7 @@ const DashboardOverview = ({ stats }) => (
               <FaUsers />
             </div>
             <div className="text-left">
-              <p className="text-lg font-semibold text-gray-700">
+              <p className="text-lg font-semibold  text-gray-500">
                 Manage Users
               </p>
               <p className="text-lg  font-medium">View and manage all users</p>
@@ -64,7 +64,7 @@ const DashboardOverview = ({ stats }) => (
               <FaBox />
             </div>
             <div className="text-left">
-              <p className="text-lg font-semibold text-gray-700">
+              <p className="text-lg font-semibold  text-gray-500">
                 All Products
               </p>
               <p className="text-lg  font-medium">
@@ -80,7 +80,7 @@ const DashboardOverview = ({ stats }) => (
               <FaTasks />
             </div>
             <div className="text-left">
-              <p className="text-lg font-semibold text-gray-700">All Orders</p>
+              <p className="text-lg font-semibold  text-gray-500">All Orders</p>
               <p className="text-lg  font-medium">
                 Review, delete and approve orders
               </p>
@@ -130,7 +130,7 @@ const AdminDashBoard = () => {
         <header className="bg-white rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl  font-bold text-gray-800">Dashboard</h1>
+              <h1 className="text-xl  font-bold  text-gray-500">Dashboard</h1>
               <div className="items-center ">
                 <p className="text-sm text-gray-600">
                   Welcome, <span className="font-medium">{user?.email}</span>
