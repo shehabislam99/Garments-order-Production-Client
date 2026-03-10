@@ -24,13 +24,10 @@ const formatCurrency = (value) =>
     maximumFractionDigits: 0,
   })}`;
 
-const ChartCard = ({ title, subtitle, children }) => (
-  <div className="rounded-4xl bg-white p-6 shadow">
+const ChartCard = ({ title, children }) => (
+  <div className="rounded-4xl custom-bg p-6 shadow">
     <div className="mb-3">
-      <p className="text-xs uppercase tracking-[0.35em] text-gray-400">
-        {subtitle}
-      </p>
-      <h2 className="text-xl font-semibold text-gray-700">{title}</h2>
+      <h2 className="text-xl font-semibold ">{title}</h2>
     </div>
     <div className="h-64">{children}</div>
   </div>
@@ -235,8 +232,8 @@ const AdminAnalytics = () => {
           }
         </ChartCard>
 
-        <div className="rounded-4xl bg-base-200 p-6 shadow">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
+        <div className="rounded-4xl custom-bg p-6 shadow">
+          <h2 className="text-xl font-semibold  mb-4">
             Most recent Orders entries
           </h2>
           <div className="space-y-4">
@@ -251,7 +248,7 @@ const AdminAnalytics = () => {
                 className="flex items-center justify-between rounded-3xl border border-gray-100 p-4"
               >
                 <div>
-                  <p className="text-sm font-semibold text-gray-700">
+                  <p className="text-sm font-semibold ">
                     #{order?._id?.slice(0, 10) || "N/A"}
                   </p>
                   <p className="text-xs text-gray-500">

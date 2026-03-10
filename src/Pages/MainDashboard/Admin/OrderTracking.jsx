@@ -120,32 +120,32 @@ const OrderTracking = () => {
               <h2 className="text-lg font-semibold  ">Order Summary</h2>
             </div>
             <div className="p-6">
-              <div className=" p-4 bg-gray-50 rounded-4xl">
+              <div className=" p-4  rounded-4xl">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Order Id:</span>
+                  <span className="text-gray-500">Order Id:</span>
                   <span className="font-medium">{order?._id || "N/A"}</span>
                 </div>
               </div>
 
-              <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+              <div className="mt-4 p-4  rounded-4xl">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Status:</span>
+                  <span className="text-gray-500">Status:</span>
                   <span className="font-medium">{order?.status || "N/A"}</span>
                 </div>
               </div>
-              <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+              <div className="mt-4 p-4  rounded-4xl">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Payment Status:</span>
+                  <span className="text-gray-500">Payment Status:</span>
                   <span className="font-medium">
                     {order?.paymentStatus || "N/A"}
                   </span>
                 </div>
               </div>
 
-              <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+              <div className="mt-4 p-4  rounded-4xl">
                 {" "}
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Order At:</span>
+                  <span className="text-gray-500">Order At:</span>
                   <span className="font-medium">
                     {formatDate(order?.createdAt) || "N/A"}
                   </span>
@@ -158,29 +158,29 @@ const OrderTracking = () => {
               <h2 className="text-lg font-semibold  ">Product Summary</h2>
             </div>
             <div className="p-6">
-              <div className="p-4 bg-gray-50 rounded-4xl">
+              <div className="p-4  rounded-4xl">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Product Name:</span>
+                  <span className="text-gray-500">Product Name:</span>
                   <span className="font-medium">
                     {order?.product_name || "Unknown Product"}
                   </span>
                 </div>
               </div>
 
-              <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+              <div className="mt-4 p-4  rounded-4xl">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Price:</span>
+                  <span className="text-gray-500">Price:</span>
                   <span className="font-medium">{order?.price || 0}</span>
                 </div>
               </div>
-              <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+              <div className="mt-4 p-4  rounded-4xl">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Quantity:</span>
+                  <span className="text-gray-500">Quantity:</span>
                   <span className="font-medium">{order?.quantity || 0}</span>
                 </div>
               </div>
 
-              <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+              <div className="mt-4 p-4  rounded-4xl">
                 {" "}
                 <div className="flex justify-between">
                   <span className="text-lg font-semibold  ">Total</span>
@@ -204,17 +204,17 @@ const OrderTracking = () => {
             </div>
             <div className="p-6">
               <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-4xl">
+                <div className="p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Email :</span>
+                    <span className="text-gray-500">Email :</span>
                     <span className="font-medium">
                       {order?.CustomerEmail || "Unknown Email"}
                     </span>
                   </div>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-4xl">
+                <div className="p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Name :</span>
+                    <span className="text-gray-500">Name :</span>
                     <span className="font-medium">
                       {order?.customer?.firstName || "Unknown Name"}
                     </span>
@@ -222,17 +222,17 @@ const OrderTracking = () => {
                 </div>
 
                 <div>
-                  <div className="p-4 bg-gray-50 rounded-4xl">
+                  <div className="p-4  rounded-4xl">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Phone :</span>
+                      <span className="text-gray-500">Phone :</span>
                       <span className="font-medium">
                         {order?.customer?.contactNumber || "Unknown Phone"}
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-4xl">
-                  <span className="text-gray-600">Address: </span>
+                <div className="p-4  rounded-4xl">
+                  <span className="text-gray-500">Address: </span>
                   <span className=" font-medium">
                     {order?.customer?.address || "Unknown Address"}
                   </span>
@@ -249,33 +249,33 @@ const OrderTracking = () => {
             </div>
             <div className="p-6">
               <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-4xl">
+                <div className="p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Method :</span>
+                    <span className="text-gray-500">Method :</span>
                     <span className="font-medium">
                       {order?.payment_method || "N/A"}
                     </span>
                   </div>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-4xl">
+                <div className="p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Status :</span>
+                    <span className="text-gray-500">Status :</span>
                     <span className="font-medium">
                       {order?.paymentStatus || "N/A"}
                     </span>
                   </div>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-4xl">
+                <div className="p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-xs text-gray-600"> Trasn ID :</span>
+                    <span className="text-xs text-gray-500"> Trasn ID :</span>
                     <span className="text-xs font-medium ">
                       {order?.transactionId || "N/A"}
                     </span>
                   </div>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-4xl">
+                <div className="p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Paid At :</span>
+                    <span className="text-sm text-gray-500">Paid At :</span>
                     <span className="text-xs font-medium">
                       {formatDate(order?.paidAt) || "N/A"}
                     </span>
@@ -287,7 +287,7 @@ const OrderTracking = () => {
         </div>
       </div>
 
-      <div className="custom-bg rounded-4xl shadow-md  p-6 mb-6">
+      <div className="custom-bg rounded-4xl shadow-md mt-4 p-6 mb-6">
         <div className="text-center mb-6">
           <h3 className="font-semibold text-xl   mb-1">Tracking History</h3>
         </div>
@@ -314,7 +314,7 @@ const OrderTracking = () => {
                   <div className="ml-12 w-full">
                     <div>
                       <div className="flex-1 pb-6">
-                        <div className="bg-gray-50 rounded-4xl p-5 border border-gray-200 hover:border-blue-200 transition-colors">
+                        <div className=" rounded-4xl p-5 border border-gray-200 hover:border-blue-200 transition-colors">
                           <div className="flex items-center mb-3">
                             <span className="font-bold   text-lg">
                               {track?.step}
@@ -329,7 +329,7 @@ const OrderTracking = () => {
                               {track?.location || "Location not specified"}
                             </span>
                           </div>
-                          <div className="mt-3 p-3 bg-white rounded-4xl border-b-4 border-amber-400">
+                          <div className="mt-3 p-3 bg-base-200 rounded-4xl border-b-4 border-amber-400">
                             <p className=" ">
                               "{track?.Note || "No additional details"}"
                             </p>

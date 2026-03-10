@@ -83,34 +83,34 @@ const OrderDetails = () => {
                 <h2 className="text-lg font-semibold  ">Order Summary</h2>
               </div>
               <div className="p-6">
-                <div className=" p-4 bg-gray-50 rounded-4xl">
+                <div className=" p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Order Id:</span>
+                    <span className="">Order Id:</span>
                     <span className="font-medium">{order?._id || "N/A"}</span>
                   </div>
                 </div>
 
-                <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+                <div className="mt-4 p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Status:</span>
+                    <span className="">Status:</span>
                     <span className="font-medium">
                       {order?.status || "N/A"}
                     </span>
                   </div>
                 </div>
-                <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+                <div className="mt-4 p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Payment Status:</span>
+                    <span className="">Payment Status:</span>
                     <span className="font-medium">
                       {order?.paymentStatus || "N/A"}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+                <div className="mt-4 p-4  rounded-4xl">
                   {" "}
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Order At:</span>
+                    <span className="">Order At:</span>
                     <span className="font-medium">
                       {formatDate(order?.createdAt) || "N/A"}
                     </span>
@@ -123,29 +123,29 @@ const OrderDetails = () => {
                 <h2 className="text-lg font-semibold  ">Product Summary</h2>
               </div>
               <div className="p-6">
-                <div className="p-4 bg-gray-50 rounded-4xl">
+                <div className="p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Product Name:</span>
+                    <span className="">Product Name:</span>
                     <span className="font-medium">
                       {order?.product_name || "Unknown Product"}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+                <div className="mt-4 p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Price:</span>
+                    <span className="">Price:</span>
                     <span className="font-medium">{order?.price || 0}</span>
                   </div>
                 </div>
-                <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+                <div className="mt-4 p-4  rounded-4xl">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Quantity:</span>
+                    <span className="">Quantity:</span>
                     <span className="font-medium">{order?.quantity || 0}</span>
                   </div>
                 </div>
 
-                <div className="mt-4 p-4 bg-gray-50 rounded-4xl">
+                <div className="mt-4 p-4  rounded-4xl">
                   {" "}
                   <div className="flex justify-between">
                     <span className="text-lg font-semibold  ">Total</span>
@@ -169,17 +169,17 @@ const OrderDetails = () => {
               </div>
               <div className="p-6">
                 <div className="space-y-4">
-                  <div className="p-4 bg-gray-50 rounded-4xl">
+                  <div className="p-4  rounded-4xl">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Email :</span>
+                      <span className="">Email :</span>
                       <span className="font-medium">
                         {order?.CustomerEmail || "Unknown Email"}
                       </span>
                     </div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-4xl">
+                  <div className="p-4  rounded-4xl">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Name :</span>
+                      <span className="">Name :</span>
                       <span className="font-medium">
                         {order?.customer?.firstName || "Unknown Name"}
                       </span>
@@ -187,17 +187,17 @@ const OrderDetails = () => {
                   </div>
 
                   <div>
-                    <div className="p-4 bg-gray-50 rounded-4xl">
+                    <div className="p-4  rounded-4xl">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Phone :</span>
+                        <span className="">Phone :</span>
                         <span className="font-medium">
                           {order?.customer?.contactNumber || "Unknown Phone"}
                         </span>
                       </div>
                     </div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-4xl">
-                    <span className="text-gray-600">Address: </span>
+                  <div className="p-4  rounded-4xl">
+                    <span className="">Address: </span>
                     <span className=" font-medium">
                       {order?.customer?.address || "Unknown Address"}
                     </span>
@@ -216,33 +216,33 @@ const OrderDetails = () => {
               </div>
               <div className="p-6">
                 <div className="space-y-4">
-                  <div className="p-4 bg-gray-50 rounded-4xl">
+                  <div className="p-4  rounded-4xl">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Method :</span>
+                      <span className="">Method :</span>
                       <span className="font-medium">
                         {order?.payment_method || "N/A"}
                       </span>
                     </div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-4xl">
+                  <div className="p-4  rounded-4xl">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Status :</span>
+                      <span className="">Status :</span>
                       <span className="font-medium">
                         {order?.paymentStatus || "N/A"}
                       </span>
                     </div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-4xl">
+                  <div className="p-4  rounded-4xl">
                     <div className="flex justify-between">
-                      <span className="text-xs text-gray-600"> Trasn ID :</span>
+                      <span className="text-xs "> Trasn ID :</span>
                       <span className="text-xs font-medium ">
                         {order?.transactionId || "N/A"}
                       </span>
                     </div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-4xl">
+                  <div className="p-4  rounded-4xl">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Paid At :</span>
+                      <span className="text-sm ">Paid At :</span>
                       <span className="text-xs font-medium">
                         {formatDate(order?.paidAt) || "N/A"}
                       </span>
