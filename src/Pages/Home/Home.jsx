@@ -10,7 +10,7 @@ import CallItAction from "../../Components/Shared/HomeComponent/CallItAction";
 
 const Home = () => {
   return (
-    <div >
+    <div className="  mx-auto px-4 sm:px-6 lg:px-8" >
       <HeroSection></HeroSection>
       <FeatureSection></FeatureSection>
       <HowWorks></HowWorks>

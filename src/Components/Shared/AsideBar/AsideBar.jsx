@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   FaTasks,
   FaUsers,
@@ -7,27 +7,34 @@ import {
   FaBox,
   FaUser,
   FaShoppingCart,
+  FaTimes,
+  FaChartLine,
 } from "react-icons/fa";
-import { TbSquareToggle } from "react-icons/tb";
 import { MdAddShoppingCart } from "react-icons/md";
 import { BsClockHistory } from "react-icons/bs";
 import { SiGoogletasks } from "react-icons/si";
 import useAuth from "../../../Hooks/useAuth";
 import useRole from "../../../Hooks/useRole";
 import Loading from "../../Common/Loding/Loding";
+import { TbSquareToggle } from "react-icons/tb";
 
 const roleConfig = {
-  admin: {
-    title: "Admin Panel",
-    badgeColor: "badge-error",
-    links: [
-      { path: "/dashboard/admin", title: "My Dashboard", icon: FaHome },
-      { path: "/dashboard/all-product", title: "All Products", icon: FaBox },
-      { path: "/dashboard/all-orders", title: "All Orders", icon: FaTasks },
-      { path: "/dashboard/manage-users", title: "Manage Users", icon: FaUsers },
-      { path: "/dashboard/profile", title: "Profile", icon: FaUser },
-      { path: "/dashboard/settings", title: "Settings", icon: TbSquareToggle },
-    ],
+    admin: {
+      title: "Admin Panel",
+      badgeColor: "badge-error",
+      links: [
+        { path: "/dashboard/admin", title: "My Dashboard", icon: FaHome },
+        { path: "/dashboard/all-product", title: "All Products", icon: FaBox },
+        { path: "/dashboard/all-orders", title: "All Orders", icon: FaTasks },
+        {
+          path: "/dashboard/admin/analytics",
+          title: "Analytics",
+          icon: FaChartLine,
+        },
+        { path: "/dashboard/manage-users", title: "Manage Users", icon: FaUsers },
+        { path: "/dashboard/profile", title: "Profile", icon: FaUser },
+        { path: "/dashboard/settings", title: "Settings", icon: TbSquareToggle },
+      ],
   },
   manager: {
     title: "Manager Panel",
@@ -78,15 +85,19 @@ const roleConfig = {
   },
 };
 
-const Asidebar = () => {
+const Asidebar = ({ isOpen, onClose }) => {
   const { user } = useAuth();
   const { role, loading } = useRole();
-  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    onClose?.();
+  }, [location.pathname, onClose]);
 
   if (!user) return null;
   if (loading) {
     return (
-      <aside className="fixed left-0 -top-2 h-full w-64 bg-base-200 p-6">
+      <aside className="hidden w-72 shrink-0 border-r border-base-200 bg-base-200 p-6 lg:block">
         <Loading />
       </aside>
     );
@@ -96,69 +107,116 @@ const Asidebar = () => {
 
   return (
     <>
-      <button
-        className="bg-base-300 fixed top-4 left-4 z-40 p-2 rounded-md shadow lg:hidden"
-        onClick={() => setOpen(!open)}
-      >
-        <TbSquareToggle className="text-2xl" />
-      </button>
-      {open && (
+      {isOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-20 lg:hidden"
-          onClick={() => setOpen(false)}
+          onClick={onClose}
         />
       )}
-      <aside
-        className={`
-    bg-base-300 border-r border-base-200
-    fixed top-0 left-0 h-full z-30
-    transition-all duration-300 overflow-hidden
-    ${open ? "translate-x-0 w-64" : "-translate-x-full w-64"}
-    lg:translate-x-0
-  `}
-      >
-        <div className="p-6 flex justify-center border-b border-gray-300">
-          <h1 className="mt-1 font-bold text-3xl">{config.title}</h1>
-        </div>
 
-        <div className="p-6 border-b border-gray-300">
-          <div className="flex text-center space-x-4">
-            <div className="flex-1">
-              <h2 className="font-bold text-lg truncate">
-                {user.displayName || "Unknown"}
-              </h2>
-              <div className={`badge ${config.badgeColor} mt-1`}>
-                {role.toUpperCase()}
+      <aside className="hidden w-72 shrink-0 border-r border-base-200 bg-base-300 lg:block">
+        <div className="sticky top-0 h-[calc(100vh-80px)] overflow-y-auto">
+          <div className="flex justify-center border-b border-gray-300 p-6">
+            <h1 className="mt-1 text-3xl font-bold">{config.title}</h1>
+          </div>
+
+          <div className="border-b border-gray-300 p-6">
+            <div className="flex text-center space-x-4">
+              <div className="flex-1">
+                <h2 className="truncate text-lg font-bold">
+                  {user.displayName || "Unknown"}
+                </h2>
+                <div className={`badge ${config.badgeColor} mt-1`}>
+                  {role.toUpperCase()}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <nav className="flex-1 overflow-y-auto p-4">
-          <ul className="px-4 py-2 text-xl space-y-3 font-medium w-full">
-            {config.links.map((link) => {
-              const Icon = link.icon;
-              return (
-                <li
-                  key={link.path}
-                  className="hover:bg-red-800 hover:rounded-4xl hover:px-2 hover:py-2"
-                >
-                  <NavLink
-                    to={link.path}
-                    end={link.path === `/dashboard/${role}`}
-                    onClick={() => setOpen(false)}
-                    className={({ isActive }) =>
-                      `flex items-center ${isActive ? "active" : ""}`
-                    }
+          <nav className="flex-1 overflow-y-auto p-4">
+            <ul className="w-full space-y-3 px-4 py-2 text-xl font-medium">
+              {config.links.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <li
+                    key={link.path}
+                    className="hover:rounded-4xl hover:bg-red-800 hover:px-2 hover:py-2"
                   >
-                    <Icon className="w-5 h-5" />
-                    <span className="ml-3">{link.title}</span>
-                  </NavLink>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                    <NavLink
+                      to={link.path}
+                      end={link.path === `/dashboard/${role}`}
+                      className={({ isActive }) =>
+                        `flex items-center ${isActive ? "active" : ""}`
+                      }
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span className="ml-3">{link.title}</span>
+                    </NavLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <aside
+        className={`fixed left-0 top-0 z-30 h-full w-72 border-r border-base-200 bg-base-300 transition-transform duration-300 lg:hidden ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex h-full flex-col overflow-y-auto">
+          <div className="flex items-center justify-between border-b border-gray-300 p-6">
+            <h1 className="mt-1 text-2xl font-bold">{config.title}</h1>
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full p-2 text-xl hover:bg-base-200"
+              aria-label="Close dashboard menu"
+            >
+              <FaTimes />
+            </button>
+          </div>
+
+          <div className="border-b border-gray-300 p-6">
+            <div className="flex text-center space-x-4">
+              <div className="flex-1">
+                <h2 className="truncate text-lg font-bold">
+                  {user.displayName || "Unknown"}
+                </h2>
+                <div className={`badge ${config.badgeColor} mt-1`}>
+                  {role.toUpperCase()}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto p-4">
+            <ul className="w-full space-y-3 px-4 py-2 text-xl font-medium">
+              {config.links.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <li
+                    key={link.path}
+                    className="hover:rounded-4xl hover:bg-red-800 hover:px-2 hover:py-2"
+                  >
+                    <NavLink
+                      to={link.path}
+                      end={link.path === `/dashboard/${role}`}
+                      onClick={onClose}
+                      className={({ isActive }) =>
+                        `flex items-center ${isActive ? "active" : ""}`
+                      }
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span className="ml-3">{link.title}</span>
+                    </NavLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
       </aside>
     </>
   );

@@ -269,7 +269,7 @@ const ManageUsers = () => {
     <div className="p-3 min-h-screen">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold  text-gray-500">Manage Users</h2>
+          <h2 className="text-2xl font-bold ">Manage Users</h2>
         </div>
         <button
           onClick={() => {
@@ -375,7 +375,7 @@ const ManageUsers = () => {
           <div className="mt-4 bg-white rounded-4xl shadow overflow-hidden ">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-base-200">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       User

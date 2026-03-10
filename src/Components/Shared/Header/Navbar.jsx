@@ -66,7 +66,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 navbar custom-bg py-4 z-50 shadow-md border-b app-border">
+      <nav className="sticky top-0 navbar custom-bg py-4 px-8 z-50 shadow-md border-b app-border">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-20">
             {/* Mobile menu button */}
@@ -106,20 +106,25 @@ const Navbar = () => {
             </button>
 
             {user ?
-              <div className="flex relative gap-4">
-                <button className="font-medium hover:text-red-800 hover:underline">
-                  <Link to={`/dashboard/${role}`}>Dashboard</Link>
-                </button>
+              <div className="flex relative items-center gap-4">
+                <div>
+                  <button className="font-medium hover:text-red-800 hover:underline">
+                    <Link to={`/dashboard/${role}`}>Dashboard</Link>
+                  </button>
+                </div>
                 <div className="dropdown dropdown-end">
                   <div tabIndex={0} role="button" className="cursor-pointer">
                     <img
                       src={user?.photoURL || "https://via.placeholder.com/40"}
                       alt="user"
-                      className="w-18 h-8 rounded-full border-2 border-indigo-500 hover:scale-105 transition duration-200"
+                      className="w-8 h-8 rounded-full border-2 border-indigo-500 hover:scale-105 transition duration-200"
                     />
                   </div>
 
-                  <ul tabIndex={0} className="dropdown-content menu app-surface rounded-box w-40 p-2 shadow">
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu app-surface rounded-box  shadow"
+                  >
                     <li>
                       <button
                         className="hover:text-red-800 font-semibold"
@@ -139,12 +144,14 @@ const Navbar = () => {
                   </ul>
                 </div>
 
-                <button
-                  onClick={handleLogout}
-                  className="w-full font-medium hover:underline  hover:text-red-800 text-red-600"
-                >
-                  Logout
-                </button>
+                <div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full font-medium hover:underline  hover:text-red-800 text-red-600"
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
             : <div className="flex gap-2">
                 <Link

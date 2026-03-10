@@ -184,7 +184,7 @@ const AllProductAdmin = () => {
   return (
     <div className="p-3 min-h-screen">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold  text-gray-500">All Products</h2>
+        <h2 className="text-2xl font-bold">All Products</h2>
         <button
           onClick={() => {
             fetchProducts();
@@ -289,7 +289,7 @@ const AllProductAdmin = () => {
           <div className="mt-4  rounded-4xl shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-base-200">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Product

@@ -85,7 +85,7 @@ const PartnershipWith = () => {
 
   return (
     <section className="mt-10 lg:mt-15">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="  mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -155,9 +155,7 @@ const PartnershipWith = () => {
                   <div className="text-2xl">{benefit.icon}</div>
                 </div>
 
-                <h3 className="text-xl font-bold mb-3">
-                  {benefit.title}
-                </h3>
+                <h3 className="text-xl font-bold mb-3">{benefit.title}</h3>
                 <p className="text-center font-medium  text-gray-500">
                   {benefit.description}
                 </p>

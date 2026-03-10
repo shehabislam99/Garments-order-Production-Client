@@ -93,7 +93,7 @@ const Login = () => {
             <Link className="flex justify-center hover:underline " to="/">
               <Logo></Logo>
             </Link>
-            <h2 className=" text-2xl font-bold  text-gray-500">
+            <h2 className="text-2xl font-bold">
               Welcome Back!
             </h2>
             <p className="text-gray-600 text-base mt-2">
@@ -105,7 +105,7 @@ const Login = () => {
             <div>
               <label
                 htmlFor="email"
-                className="text-sm text-black font-medium mb-1 block"
+                className="text-sm  font-medium mb-1 block"
               >
                 Email Address
               </label>
@@ -125,7 +125,7 @@ const Login = () => {
                   required
                   value={loginData.email}
                   onChange={handleChange}
-                  className="w-full px-9 py-2  text-gray-500 bg-gray-200 border border-gray-400 rounded-full 
+                  className="w-full px-9 py-2  border border-gray-500 rounded-full 
                     focus:outline-none focus:ring-2 focus:ring-green-500
                      focus:border-transparent"
                   placeholder="Enter your email"
@@ -137,7 +137,7 @@ const Login = () => {
             <div>
               <label
                 htmlFor="password"
-                className="text-sm text-black  font-medium mb-1 block"
+                className="text-sm font-medium mb-1 block"
               >
                 Password
               </label>
@@ -156,7 +156,7 @@ const Login = () => {
                   value={loginData.password}
                   onChange={handleChange}
                   required
-                  className="w-full px-9 py-2  text-gray-500 bg-gray-200 border border-gray-400 rounded-full 
+                  className="w-full px-9 py-2 border border-gray-500 rounded-full 
                     focus:outline-none focus:ring-2 focus:ring-green-500
                      focus:border-transparent"
                   placeholder="Enter your password"
@@ -210,7 +210,7 @@ const Login = () => {
               </span>
             </div>
             <SocialLogin></SocialLogin>
-            <p className="text-center text-sm text-gray-600 mt-4">
+            <p className="text-center text-sm  mt-4">
               Don’t have an account?{" "}
               <button
                 className="text-blue-600 

@@ -7,9 +7,9 @@ import { axiosInstance } from "../../Hooks/useAxios";
 const PAGE_SIZE = 8;
 
 const ProductSkeleton = () => (
-  <div className="rounded-4xl border app-border app-surface overflow-hidden min-h-[420px]">
+  <div className="min-h-[420px] overflow-hidden rounded-4xl border app-border app-surface">
     <div className="skeleton h-56 w-full" />
-    <div className="p-4 space-y-3">
+    <div className="space-y-3 p-4">
       <div className="skeleton h-4 w-1/3 rounded" />
       <div className="skeleton h-6 w-3/4 rounded" />
       <div className="skeleton h-4 w-full rounded" />
@@ -109,17 +109,20 @@ const AllProducts = () => {
   }, [searchTerm, category, stockFilter, sortBy]);
 
   return (
-    <section className="py-10 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold">Explore Products</h1>
-          <p className="app-muted mt-2">
+    <section className="min-h-screen px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <div className="mx-auto px-6">
+        <div className="mb-12 text-center">
+          <div className="mb-4 inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-blue-600 font-medium">
+            Our Collection
+          </div>
+          <h1 className="text-4xl font-bold lg:text-5xl">Explore Products</h1>
+          <p className="mx-auto mt-3 max-w-3xl text-lg app-muted">
             Search, filter, and sort production-ready garments by business
             needs.
           </p>
         </div>
 
-        <div className="custom-bg rounded-4xl border app-border p-4 mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="mb-8 grid grid-cols-1 gap-3 rounded-4xl border app-border custom-bg p-5 shadow-md md:grid-cols-2 lg:grid-cols-4">
           <div className="relative">
             <FaSearch className="absolute left-3 top-3 app-muted" />
             <input
@@ -127,14 +130,14 @@ const AllProducts = () => {
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               placeholder="Search products..."
-              className="w-full pl-9 pr-3 py-2 rounded-4xl border app-border app-surface"
+              className="w-full rounded-4xl border app-border app-surface py-2 pl-9 pr-3"
             />
           </div>
 
           <select
             value={category}
             onChange={(event) => setCategory(event.target.value)}
-            className="w-full px-3 py-2 rounded-4xl border app-border app-surface"
+            className="w-full rounded-4xl border app-border app-surface px-3 py-2"
           >
             {categories.map((item) => (
               <option key={item} value={item}>
@@ -146,7 +149,7 @@ const AllProducts = () => {
           <select
             value={stockFilter}
             onChange={(event) => setStockFilter(event.target.value)}
-            className="w-full px-3 py-2 rounded-4xl border app-border app-surface"
+            className="w-full rounded-4xl border app-border app-surface px-3 py-2"
           >
             <option value="all">All Stock Levels</option>
             <option value="in-stock">In Stock</option>
@@ -156,7 +159,7 @@ const AllProducts = () => {
           <select
             value={sortBy}
             onChange={(event) => setSortBy(event.target.value)}
-            className="w-full px-3 py-2 rounded-4xl border app-border app-surface"
+            className="w-full rounded-4xl border app-border app-surface px-3 py-2"
           >
             <option value="newest">Newest</option>
             <option value="price-asc">Price: Low to High</option>
@@ -166,18 +169,18 @@ const AllProducts = () => {
         </div>
 
         {loading ?
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, index) => (
               <ProductSkeleton key={index} />
             ))}
           </div>
         : <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {paginatedProducts.map((product) => (
                 <motion.article
                   key={product?._id}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="group bg-white rounded-4xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 min-h-[420px] flex flex-col"
+                  className="group flex min-h-[420px] flex-col overflow-hidden rounded-4xl bg-white shadow-md transition-all duration-300 hover:shadow-2xl"
                 >
                   <div className="relative h-64 overflow-hidden">
                     <img
@@ -186,10 +189,10 @@ const AllProducts = () => {
                         "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
                       }
                       alt={product?.product_name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-80">
                       {product?.demo_video_link && (
                         <a
                           href={product?.demo_video_link}
@@ -197,33 +200,37 @@ const AllProducts = () => {
                           rel="noopener noreferrer"
                           className="p-2"
                         >
-                          <FaRegPlayCircle className="w-12 h-12 text-red-600" />
+                          <FaRegPlayCircle className="h-12 w-12 text-red-600" />
                         </a>
                       )}
                     </div>
                   </div>
-                  <div className="p-6 custom-bg flex flex-col flex-1">
-                    <h3 className="text-xl font-bold   mb-2 truncate">
+
+                  <div className="custom-bg flex flex-1 flex-col p-6">
+                    <div className="mb-3 inline-flex w-fit items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-indigo-600">
+                      {product?.category || "General"}
+                    </div>
+                    <h3 className="mb-2 truncate text-xl font-bold">
                       {product?.product_name || "Product"}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p className="mb-4 line-clamp-2 text-sm text-gray-600">
                       {(
                         product?.description || "No description available."
-                      ).substring(0, 50)}
+                      ).substring(0, 70)}
                       ...
                     </p>
                     <div className="mt-auto space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-lg font-bold text-violet-700 bg-violet-100 px-2 py-1 rounded-4xl">
+                        <span className="rounded-4xl bg-violet-100 px-2 py-1 text-lg font-bold text-violet-700">
                           ${Number(product?.price || 0).toFixed(2)}
                         </span>
-                        <span className="text-sm  text-gray-500">
+                        <span className="text-sm text-gray-500">
                           Stock: {product?.available_quantity || 0}
                         </span>
                       </div>
                       <Link
                         to={`/products/${product?._id}`}
-                        className="w-full inline-flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold py-2 rounded-full hover:bg-red-800 transform hover:scale-105 transition-all duration-300"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-indigo-600 py-2 text-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-red-800"
                       >
                         <FaEye />
                         View Details
@@ -235,7 +242,7 @@ const AllProducts = () => {
             </div>
 
             {paginatedProducts.length === 0 && (
-              <p className="text-center py-10 app-muted">
+              <p className="py-10 text-center app-muted">
                 No products found for the selected filters.
               </p>
             )}
@@ -243,7 +250,7 @@ const AllProducts = () => {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
               <button
                 type="button"
-                className="px-3 py-2 rounded-4xl border app-border"
+                className="rounded-4xl border app-border px-4 py-2"
                 disabled={page === 1}
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
               >
@@ -254,7 +261,7 @@ const AllProducts = () => {
                   key={index}
                   type="button"
                   onClick={() => setPage(index + 1)}
-                  className={`px-3 py-2 rounded-4xl border app-border ${
+                  className={`rounded-4xl border app-border px-4 py-2 ${
                     page === index + 1 ? "bg-blue-600 text-white" : ""
                   }`}
                 >
@@ -263,7 +270,7 @@ const AllProducts = () => {
               ))}
               <button
                 type="button"
-                className="px-3 py-2 rounded-4xl border app-border"
+                className="rounded-4xl border app-border px-4 py-2"
                 disabled={page === totalPages}
                 onClick={() =>
                   setPage((prev) => Math.min(prev + 1, totalPages))

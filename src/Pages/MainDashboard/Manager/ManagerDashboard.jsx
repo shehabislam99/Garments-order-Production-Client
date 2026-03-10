@@ -19,7 +19,7 @@ const DashboardOverview = ({ stats }) => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div className="custom-bg rounded-4xl shadow p-6">
         <div className="ml-4 text-center">
-          <p className="text-xl font-medium text-gray-600">My Products</p>
+          <p className="text-xl font-medium">My Products</p>
           <p className="text-2xl mt-1 font-semibold text-blue-600">
             {stats?.allProducts || 0}
           </p>
@@ -28,7 +28,7 @@ const DashboardOverview = ({ stats }) => (
 
       <div className="custom-bg rounded-4xl shadow p-6">
         <div className="ml-4 text-center">
-          <p className="text-xl font-medium text-gray-600">Pending Orders</p>
+          <p className="text-xl font-medium">Pending Orders</p>
           <p className="text-2xl mt-1 font-semibold text-red-600">
             {stats?.pendingOrders || 0}
           </p>
@@ -37,7 +37,7 @@ const DashboardOverview = ({ stats }) => (
 
       <div className="custom-bg rounded-4xl shadow p-6">
         <div className="ml-4 text-center">
-          <p className="text-xl font-medium text-gray-600">Approved Orders</p>
+          <p className="text-xl font-medium">Approved Orders</p>
           <p className="text-2xl mt-1 font-semibold text-purple-600">
             {stats?.approvedOrders || 0}
           </p>
@@ -45,7 +45,7 @@ const DashboardOverview = ({ stats }) => (
       </div>
     </div>
 
-    <div className="bg-white rounded-4xl shadow p-6 mb-8">
+    <div className=" p-6 ">
       <h3 className="text-lg font-bold   text-center">Quick Actions</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 p-6">
         <Link to="/dashboard/manage-products">
@@ -133,12 +133,12 @@ const ManagerDashboard = () => {
   return (
     <div className="flex h-screen ">
       <div className="flex flex-col flex-1 overflow-hidden">
-        <header className="bg-white rounded-4xl shadow">
+        <header className="custom-bg rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl  font-bold  text-gray-500">Dashboard</h1>
+              <h1 className="text-xl  font-bold">Dashboard</h1>
               <div className="items-center ">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm">
                   Welcome, <span className="font-medium">{user?.email}</span>
                 </p>
               </div>

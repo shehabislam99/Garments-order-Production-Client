@@ -14,7 +14,7 @@ const DashboardOverview = ({ stats }) => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div className="custom-bg rounded-4xl  shadow p-6">
         <div className="ml-4 text-center">
-          <p className="text-xl font-medium text-gray-600">Total Orders</p>
+          <p className="text-xl font-medium">Total Orders</p>
           <p className="text-2xl mt-1 font-semibold text-blue-500">
             {stats?.totalOrders || 0}
           </p>
@@ -23,7 +23,7 @@ const DashboardOverview = ({ stats }) => (
 
       <div className="custom-bg rounded-4xl shadow p-6">
         <div className="ml-4 text-center">
-          <p className="text-xl font-medium text-gray-600">Payment Pending</p>
+          <p className="text-xl font-medium">Payment Pending</p>
           <p className="text-2xl mt-1 font-semibold text-purple-900">
             {stats?.pendingPayment || 0}
           </p>
@@ -32,14 +32,14 @@ const DashboardOverview = ({ stats }) => (
 
       <div className="custom-bg rounded-4xl shadow p-6">
         <div className="ml-4 text-center">
-          <p className="text-xl font-medium text-gray-600">Total Spent</p>
+          <p className="text-xl font-medium">Total Spent</p>
           <p className="text-2xl mt-1 font-semibold text-green-600">
             ${stats?.totalSpent?.toFixed(2) || "0.00"}
           </p>
         </div>
       </div>
     </div>
-    <div className="bg-white rounded-4xl shadow p-6 mb-8">
+    <div className=" p-6">
       <h3 className="text-lg font-bold    text-center">Quick Actions</h3>
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-3">
         <Link to="/dashboard/my-orders">
@@ -54,14 +54,14 @@ const DashboardOverview = ({ stats }) => (
           </button>
         </Link>
 
-        <Link to="/dashboard/track-order/:orderId">
+        <Link to="/dashboard/all-products">
           <button className="flex items-center custom-bg p-3 rounded-4xl hover:bg-red-400">
             <div className="flex-shrink-0 text-green-500 bg-green-100 rounded-lg p-3 mr-4">
               <FaMapMarkerAlt className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-lg font-semibold  ">Track Order</p>
-              <p className="text-lg ">Tracking your order status</p>
+              <p className="text-lg font-semibold  ">Explore Product</p>
+              <p className="text-lg ">Creat your new order</p>
             </div>
           </button>
         </Link>
@@ -105,12 +105,12 @@ const BuyerDashboard = () => {
   return (
     <div className="flex h-screen">
       <div className="flex flex-col flex-1 overflow-hidden">
-        <header className="bg-white rounded-4xl shadow">
+        <header className="custom-bg rounded-4xl shadow">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl  font-bold  text-gray-500">Dashboard</h1>
+              <h1 className="text-xl  font-bold ">Dashboard</h1>
               <div className="items-center ">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm">
                   Welcome, <span className="font-medium">{user?.email}</span>
                 </p>
               </div>

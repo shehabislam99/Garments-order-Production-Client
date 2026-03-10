@@ -7,6 +7,7 @@ import AllProducts from "../Pages/Products/AllProducts";
 import About from "../Pages/Additional Page/About";
 import Contact from "../Pages/Additional Page/Contact";
 import AdminDashboard from "../Pages/MainDashboard/Admin/AdminDashboard";
+import AdminAnalytics from "../Pages/MainDashboard/Admin/AdminAnalytics";
 import ManageUsers from "../Pages/MainDashboard/Admin/ManageUsers";
 import AllProductAdmin from "../Pages/MainDashboard/Admin/AllProductAdmin";
 import ManagerDashboard from "../Pages/MainDashboard/Manager/ManagerDashboard";
@@ -34,8 +35,9 @@ import OrderDetails from "../Pages/MainDashboard/Manager/OrderDetails";
 import AdminManagerRout from "./AdminManagerRout";
 import OrderTracking from "../Pages/MainDashboard/Admin/OrderTracking";
 import TermCondition from "../Pages/Additional Page/TermCondition";
-import PrivacyPolicy from "../Pages/Additional Page/PrivacyPolicy";
+
 import Settings from "../Pages/MainDashboard/Shared/Settings";
+import PrivacyPolicy from "../Pages/Additional Page/PrivacyPolicy";
 
 const router = createBrowserRouter([
   {
@@ -115,6 +117,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRout>
             <AdminDashboard />
+          </AdminRout>
+        ),
+      },
+      {
+        path: "/dashboard/admin/analytics",
+        element: (
+          <AdminRout>
+            <AdminAnalytics />
           </AdminRout>
         ),
       },

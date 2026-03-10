@@ -235,7 +235,7 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-8 px-4 ">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8">
         <div className="w-1/2 custom-bg p-8 rounded-4xl shadow-xl border border-gray-200">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -245,10 +245,10 @@ const Register = () => {
                   <Logo></Logo>
                 </Link>
               </p>
-              <p className="text-xl  text-gray-500 font-bold mt-2">
-                Create Your Account
+              <p className="text-xl  font-bold mt-2">Create Your Account</p>
+              <p className="text-gray-500 text-sm mt-1">
+                Join our community today
               </p>
-              <p className=" text-sm mt-1">Join our community today</p>
             </div>
 
             <div className="space-y-4">
@@ -256,7 +256,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="firstName"
-                    className="block text-sm font-medium  text-gray-500 mb-1"
+                    className="block text-sm font-medium  mb-1"
                   >
                     First Name
                   </label>
@@ -271,7 +271,7 @@ const Register = () => {
                       required
                       value={registerData.firstName}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3  text-gray-500 bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3   border border-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="First Name"
                     />
                   </div>
@@ -280,7 +280,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="lastName"
-                    className="block text-sm font-medium  text-gray-500 mb-1"
+                    className="block text-sm font-medium  mb-1"
                   >
                     Last Name
                   </label>
@@ -295,7 +295,7 @@ const Register = () => {
                       required
                       value={registerData.lastName}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3  text-gray-500 bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3   border border-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Last Name"
                     />
                   </div>
@@ -304,7 +304,7 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium  text-gray-500 mb-1"
+                  className="block text-sm font-medium  mb-1"
                 >
                   Email Address
                 </label>
@@ -319,7 +319,7 @@ const Register = () => {
                     required
                     value={registerData.email}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3  text-gray-500 bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 text  border border-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -327,7 +327,7 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium  text-gray-500 mb-1"
+                  className="block text-sm font-medium  mb-1"
                 >
                   Password
                 </label>
@@ -342,13 +342,13 @@ const Register = () => {
                     required
                     value={registerData.password}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-12 py-3  text-gray-500 bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-12 py-3   border border-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Create a strong password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover: text-gray-500 transition-colors duration-300"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover: transition-colors duration-300"
                   >
                     {showPassword ?
                       <FaEyeSlash size={18} />
@@ -358,7 +358,7 @@ const Register = () => {
               </div>
               {registerData.password && (
                 <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-4xl border border-gray-200 space-y-2">
-                  <p className="text-sm font-semibold  text-gray-500 mb-2">
+                  <p className="text-sm font-semibold  mb-2">
                     Password Requirements:
                   </p>
                   <PasswordRequirement
@@ -395,7 +395,7 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="photoFile"
-                  className="block text-sm font-medium  text-gray-500 mb-1"
+                  className="block text-sm font-medium  mb-1"
                 >
                   Profile Photo
                 </label>
@@ -411,7 +411,7 @@ const Register = () => {
                     />
                     <label
                       htmlFor="photoFile"
-                      className="flex items-center justify-center w-full pl-10 pr-4 py-3  text-gray-500 bg-gray-100 border border-gray-300 rounded-full hover:bg-red-800 cursor-pointer"
+                      className="flex items-center justify-center w-full pl-10 pr-4 py-3   border border-gray-500 rounded-full hover:bg-red-800 cursor-pointer"
                     >
                       <div className="absolute inset-y-0 left-3 flex items-center">
                         <MdAddAPhoto className="h-4 w-4 text-gray-600" />
@@ -426,9 +426,7 @@ const Register = () => {
                   </div>
                   {selectedFile && imagePreview && (
                     <div className="mt-4">
-                      <p className="text-sm font-medium  text-gray-500 mb-2">
-                        Preview:
-                      </p>
+                      <p className="text-sm font-medium  mb-2">Preview:</p>
                       <div className="w-32 h-32 mx-auto border-4 border-blue-200 rounded-full overflow-hidden shadow-md ">
                         <img
                           src={imagePreview}
@@ -441,10 +439,7 @@ const Register = () => {
                 </div>
               </div>
             </div>
-            <label
-              htmlFor="role"
-              className="block text-sm font-medium  text-gray-500 mb-1"
-            >
+            <label htmlFor="role" className="block text-sm font-medium  mb-1">
               Role
             </label>
             <select
@@ -454,7 +449,7 @@ const Register = () => {
               value={registerData.role}
               onChange={handleChange}
               className="w-full pl-10 pr-12 py-3
-                text-gray-500 bg-gray-100 border border-gray-300
+                border border-gray-500 bg-base-200
                 rounded-full focus:outline-none 
                  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
@@ -474,11 +469,11 @@ const Register = () => {
               {loading ? "Creating Account..." : "Create Account"}
             </button>
             <div className="relative ">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
+              <div className="absolute inset-0 flex items-center"></div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4  font-medium">Or continue with</span>
+                <span className="px-4 text-gray-500 text-sm">
+                  Or continue with
+                </span>
               </div>
             </div>
             <SocialLogin></SocialLogin>
@@ -487,7 +482,7 @@ const Register = () => {
               className="flex sm:flex-row space-y-2 flex-col 
             justify-between items-center"
             >
-              <p className="text-gray-600 text-sm">
+              <p className="text-sm">
                 Already have an account?{" "}
                 <Link
                   to="/login"
